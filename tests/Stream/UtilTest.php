@@ -64,7 +64,7 @@ class UtilTest extends \PHPUnit_Framework_TestCase
 
     public function testToStringNotReadable()
     {
-        $handle = fopen(PSX_PATH_CACHE . '/StreamUtilTest.txt', 'w');
+        $handle = fopen(__DIR__ . '/StreamUtilTest.txt', 'w');
         fwrite($handle, 'foobar');
 
         $stream = new TempStream($handle);

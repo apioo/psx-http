@@ -33,7 +33,7 @@ class TempStreamReadOnlyTest extends StreamTestCase
 {
     protected function getStream()
     {
-        $file = PSX_PATH_CACHE . '/StreamTestReadOnly.txt';
+        $file = __DIR__ . '/StreamTestReadOnly.txt';
         file_put_contents($file, 'foobar');
         $resource = fopen($file, 'r');
 

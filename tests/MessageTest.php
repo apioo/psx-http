@@ -87,28 +87,6 @@ class MessageTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($message->hasHeader('bar'));
     }
 
-    /**
-     * @expectedException \ErrorException
-     */
-    public function testSetHeadersObject()
-    {
-        $message = new Message();
-        $message->setHeaders(array(
-            'foo' => new \stdClass(),
-        ));
-    }
-
-    /**
-     * @expectedException \ErrorException
-     */
-    public function testSetHeadersArrayObject()
-    {
-        $message = new Message();
-        $message->setHeaders(array(
-            'foo' => [new \stdClass()],
-        ));
-    }
-
     public function testHasHeader()
     {
         $message = new Message();

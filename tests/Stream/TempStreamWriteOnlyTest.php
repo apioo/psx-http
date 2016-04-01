@@ -33,7 +33,7 @@ class TempStreamWriteOnlyTest extends StreamTestCase
 {
     protected function getStream()
     {
-        $resource = fopen(PSX_PATH_CACHE . '/StreamTestWriteOnly.txt', 'w');
+        $resource = fopen(__DIR__ . '/StreamTestWriteOnly.txt', 'w');
         fwrite($resource, 'foobar');
         rewind($resource);
 
