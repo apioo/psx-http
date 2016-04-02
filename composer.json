@@ -13,20 +13,13 @@
   ],
   "require": {
     "php": ">=5.5",
-    "psx/uri": "dev-master",
+    "psx/uri": "^0.1",
     "psr/http-message": "^1.0",
     "zendframework/zend-diactoros": "^1.3"
   },
   "require-dev": {
     "phpunit/phpunit": "^4.8",
-    "psx/json": "dev-master",
-
-    "psx/data": "dev-master",
-    "psx/datetime": "dev-master",
-    "psx/model": "dev-master",
-    "psx/schema": "dev-master",
-    "psx/uri": "dev-master",
-    "psx/validate": "dev-master"
+    "psx/json": "^0.1"
   },
   "autoload": {
     "psr-4": {
