@@ -124,7 +124,7 @@ abstract class HandlerTestCase extends \PHPUnit_Framework_TestCase
 
     public function testPostRequestStream()
     {
-        $file     = __DIR__ . '/../../../Framework/Tests/Template/files/foo.htm';
+        $file     = __DIR__ . '/foo.htm';
         $request  = new PostRequest(new Url(self::URL . '/post'), array('Content-Type' => 'text/plain', 'Content-Length' => filesize($file)), new TempStream(fopen($file, 'r+')));
         $response = $this->client->request($request);
 
@@ -134,12 +134,12 @@ abstract class HandlerTestCase extends \PHPUnit_Framework_TestCase
 
         $body = Parser::decode((string) $response->getBody(), true);
 
-        $this->assertEquals(array('success' => true, 'method' => 'POST', 'request' => 'Hello <?php echo $foo; ?>'), $body);
+        $this->assertEquals(array('success' => true, 'method' => 'POST', 'request' => 'body'), $body);
     }
 
     public function testPostRequestStreamChunkedTransfer()
     {
-        $file     = __DIR__ . '/../../../Framework/Tests/Template/files/foo.htm';
+        $file     = __DIR__ . '/foo.htm';
         $request  = new PostRequest(new Url(self::URL . '/post'), array('Content-Type' => 'text/plain', 'Transfer-Encoding' => 'chunked'), new TempStream(fopen($file, 'r+')));
         $response = $this->client->request($request);
 
@@ -149,7 +149,7 @@ abstract class HandlerTestCase extends \PHPUnit_Framework_TestCase
 
         $body = Parser::decode((string) $response->getBody(), true);
 
-        $this->assertEquals(array('success' => true, 'method' => 'POST', 'request' => 'Hello <?php echo $foo; ?>'), $body);
+        $this->assertEquals(array('success' => true, 'method' => 'POST', 'request' => 'body'), $body);
     }
 
     public function testPutRequest()
@@ -168,7 +168,7 @@ abstract class HandlerTestCase extends \PHPUnit_Framework_TestCase
 
     public function testPutRequestStream()
     {
-        $file     = __DIR__ . '/../../../Framework/Tests/Template/files/foo.htm';
+        $file     = __DIR__ . '/foo.htm';
         $request  = new PutRequest(new Url(self::URL . '/put'), array('Content-Type' => 'text/plain', 'Content-Length' => filesize($file)), new TempStream(fopen($file, 'r+')));
         $response = $this->client->request($request);
 
@@ -178,7 +178,7 @@ abstract class HandlerTestCase extends \PHPUnit_Framework_TestCase
 
         $body = Parser::decode((string) $response->getBody(), true);
 
-        $this->assertEquals(array('success' => true, 'method' => 'PUT', 'request' => 'Hello <?php echo $foo; ?>'), $body);
+        $this->assertEquals(array('success' => true, 'method' => 'PUT', 'request' => 'body'), $body);
     }
 
     public function testDeleteRequest()
@@ -197,7 +197,7 @@ abstract class HandlerTestCase extends \PHPUnit_Framework_TestCase
 
     public function testDeleteRequestStream()
     {
-        $file     = __DIR__ . '/../../../Framework/Tests/Template/files/foo.htm';
+        $file     = __DIR__ . '/foo.htm';
         $request  = new DeleteRequest(new Url(self::URL . '/delete'), array('Content-Type' => 'text/plain', 'Content-Length' => filesize($file)), new TempStream(fopen($file, 'r+')));
         $response = $this->client->request($request);
 
@@ -207,7 +207,7 @@ abstract class HandlerTestCase extends \PHPUnit_Framework_TestCase
 
         $body = Parser::decode((string) $response->getBody(), true);
 
-        $this->assertEquals(array('success' => true, 'method' => 'DELETE', 'request' => 'Hello <?php echo $foo; ?>'), $body);
+        $this->assertEquals(array('success' => true, 'method' => 'DELETE', 'request' => 'body'), $body);
     }
 
     public function testFollowRedirects()
