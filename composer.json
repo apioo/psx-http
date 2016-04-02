@@ -18,7 +18,8 @@
     "zendframework/zend-diactoros": "^1.3"
   },
   "require-dev": {
-    "phpunit/phpunit": "^4.8"
+    "phpunit/phpunit": "^4.8",
+    "psx/json": "dev-master"
   },
   "autoload": {
     "psr-4": {
