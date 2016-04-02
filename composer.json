@@ -19,7 +19,15 @@
   },
   "require-dev": {
     "phpunit/phpunit": "^4.8",
-    "psx/json": "dev-master"
+    "psx/json": "dev-master",
+
+    "psx/data": "dev-master",
+    "psx/datetime": "dev-master",
+    "psx/http": "dev-master",
+    "psx/model": "dev-master",
+    "psx/schema": "dev-master",
+    "psx/uri": "dev-master",
+    "psx/validate": "dev-master"
   },
   "autoload": {
     "psr-4": {
