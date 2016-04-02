@@ -12,6 +12,5 @@
     </filter>
     <php>
         <ini name="date.timezone" value="UTC" />
-        <ini name="always_populate_raw_post_data" value="-1" />
     </php>
 </phpunit>
