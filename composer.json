@@ -23,7 +23,6 @@
 
     "psx/data": "dev-master",
     "psx/datetime": "dev-master",
-    "psx/http": "dev-master",
     "psx/model": "dev-master",
     "psx/schema": "dev-master",
     "psx/uri": "dev-master",
