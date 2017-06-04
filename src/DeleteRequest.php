@@ -32,7 +32,7 @@ use PSX\Uri\Url;
 class DeleteRequest extends Request
 {
     /**
-     * @param \PSX\Url|string $url
+     * @param \PSX\Uri\Url|string $url
      * @param array $headers
      * @param \PSX\Http\StreamInterface|string $body
      */
