@@ -26,6 +26,7 @@ namespace PSX\Http\Stream;
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    http://phpsx.org
+ * @deprecated
  */
 class FileStream extends TempStream
 {
