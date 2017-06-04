@@ -139,6 +139,10 @@ abstract class ParserAbstract
         }
     }
 
+    /**
+     * @param string $message
+     * @return boolean|string
+     */
     protected function getStatusLine($message)
     {
         if ($this->mode == self::MODE_STRICT) {

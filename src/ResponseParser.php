@@ -57,6 +57,11 @@ class ResponseParser extends ParserAbstract
         return $response;
     }
 
+    /**
+     * @param string $response
+     * @return array
+     * @throws ParseException
+     */
     protected function getStatus($response)
     {
         $line = $this->getStatusLine($response);
@@ -78,6 +83,10 @@ class ResponseParser extends ParserAbstract
         }
     }
 
+    /**
+     * @param array $headers
+     * @return \PSX\Http\ResponseInterface
+     */
     public static function buildResponseFromHeader(array $headers)
     {
         $line = array_shift($headers);
