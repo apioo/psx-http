@@ -20,23 +20,23 @@
 
 namespace PSX\Http\Tests;
 
-use PSX\Http\PostRequest;
+use PSX\Http\PatchRequest;
 use PSX\Uri\Url;
 
 /**
- * PostRequestTest
+ * PatchRequestTest
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    http://phpsx.org
  */
-class PostRequestTest extends \PHPUnit_Framework_TestCase
+class PatchRequestTest extends \PHPUnit_Framework_TestCase
 {
     public function testConstruct()
     {
-        $request = new PostRequest(new Url('http://localhost.com/foo'), array('X-Foo' => 'bar'), 'foo');
+        $request = new PatchRequest(new Url('http://localhost.com/foo'), array('X-Foo' => 'bar'), 'foo');
 
-        $this->assertEquals('POST', $request->getMethod());
+        $this->assertEquals('PATCH', $request->getMethod());
         $this->assertEquals('localhost.com', $request->getHeader('Host'));
         $this->assertEquals('bar', $request->getHeader('X-Foo'));
         $this->assertEquals('foo', (string) $request->getBody());
@@ -44,33 +44,26 @@ class PostRequestTest extends \PHPUnit_Framework_TestCase
 
     public function testConstructUrlHeader()
     {
-        $request = new PostRequest(new Url('http://localhost.com/foo'), array('X-Foo' => 'bar'));
+        $request = new PatchRequest(new Url('http://localhost.com/foo'), array('X-Foo' => 'bar'));
 
-        $this->assertEquals('POST', $request->getMethod());
+        $this->assertEquals('PATCH', $request->getMethod());
         $this->assertEquals('localhost.com', $request->getHeader('Host'));
         $this->assertEquals('bar', $request->getHeader('X-Foo'));
     }
 
     public function testConstructUrl()
     {
-        $request = new PostRequest(new Url('http://localhost.com/foo'));
+        $request = new PatchRequest(new Url('http://localhost.com/foo'));
 
-        $this->assertEquals('POST', $request->getMethod());
+        $this->assertEquals('PATCH', $request->getMethod());
         $this->assertEquals('localhost.com', $request->getHeader('Host'));
     }
 
     public function testConstructUrlString()
     {
-        $request = new PostRequest('http://localhost.com/foo');
+        $request = new PatchRequest('http://localhost.com/foo');
 
-        $this->assertEquals('POST', $request->getMethod());
+        $this->assertEquals('PATCH', $request->getMethod());
         $this->assertEquals('localhost.com', $request->getHeader('Host'));
-    }
-
-    public function testArrayBody()
-    {
-        $request = new PostRequest(new Url('http://localhost.com/foo'), array(), array('foo' => 'bar'));
-
-        $this->assertEquals('foo=bar', (string) $request->getBody());
     }
 }

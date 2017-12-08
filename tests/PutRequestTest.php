@@ -58,4 +58,12 @@ class PutRequestTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('PUT', $request->getMethod());
         $this->assertEquals('localhost.com', $request->getHeader('Host'));
     }
+
+    public function testConstructUrlString()
+    {
+        $request = new PutRequest('http://localhost.com/foo');
+
+        $this->assertEquals('PUT', $request->getMethod());
+        $this->assertEquals('localhost.com', $request->getHeader('Host'));
+    }
 }

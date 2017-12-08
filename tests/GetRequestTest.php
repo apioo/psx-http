@@ -48,4 +48,12 @@ class GetRequestTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('GET', $request->getMethod());
         $this->assertEquals('localhost.com', $request->getHeader('Host'));
     }
+
+    public function testConstructUrlString()
+    {
+        $request = new GetRequest('http://localhost.com/foo');
+
+        $this->assertEquals('GET', $request->getMethod());
+        $this->assertEquals('localhost.com', $request->getHeader('Host'));
+    }
 }

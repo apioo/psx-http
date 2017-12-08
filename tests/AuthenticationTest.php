@@ -20,40 +20,44 @@
 
 namespace PSX\Http\Tests;
 
-use PSX\Http\HeadRequest;
-use PSX\Uri\Url;
+use PSX\Http\Authentication;
 
 /**
- * HeadRequestTest
+ * AuthenticationTest
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    http://phpsx.org
  */
-class HeadRequestTest extends \PHPUnit_Framework_TestCase
+class AuthenticationTest extends \PHPUnit_Framework_TestCase
 {
-    public function testConstruct()
+    /**
+     * @dataProvider decodeParametersProvider
+     */
+    public function testDecodeParameters($data, $expected)
     {
-        $request = new HeadRequest(new Url('http://localhost.com/foo'), array('X-Foo' => 'bar'));
-
-        $this->assertEquals('HEAD', $request->getMethod());
-        $this->assertEquals('localhost.com', $request->getHeader('Host'));
-        $this->assertEquals('bar', $request->getHeader('X-Foo'));
+        $this->assertEquals($expected, Authentication::decodeParameters($data));
     }
 
-    public function testConstructUrl()
+    public function decodeParametersProvider()
     {
-        $request = new HeadRequest(new Url('http://localhost.com/foo'));
-
-        $this->assertEquals('HEAD', $request->getMethod());
-        $this->assertEquals('localhost.com', $request->getHeader('Host'));
+        return [
+            ['realm="http-auth@example.org", qop="auth", algorithm=SHA-256', ['realm' => 'http-auth@example.org', 'qop' => 'auth', 'algorithm' => 'SHA-256']],
+        ];
     }
 
-    public function testConstructUrlString()
+    /**
+     * @dataProvider encodeParametersProvider
+     */
+    public function testEncodeParameters($data, $expected)
     {
-        $request = new HeadRequest('http://localhost.com/foo');
+        $this->assertEquals($expected, Authentication::encodeParameters($data));
+    }
 
-        $this->assertEquals('HEAD', $request->getMethod());
-        $this->assertEquals('localhost.com', $request->getHeader('Host'));
+    public function encodeParametersProvider()
+    {
+        return [
+            [['realm' => 'http-auth@example.org', 'qop' => 'auth', 'algorithm' => 'SHA-256'], 'realm="http-auth@example.org", qop="auth", algorithm="SHA-256"'],
+        ];
     }
 }

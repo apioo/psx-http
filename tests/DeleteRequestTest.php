@@ -58,4 +58,12 @@ class DeleteRequestTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('DELETE', $request->getMethod());
         $this->assertEquals('localhost.com', $request->getHeader('Host'));
     }
+
+    public function testConstructUrlString()
+    {
+        $request = new DeleteRequest('http://localhost.com/foo');
+
+        $this->assertEquals('DELETE', $request->getMethod());
+        $this->assertEquals('localhost.com', $request->getHeader('Host'));
+    }
 }
