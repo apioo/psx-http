@@ -20,7 +20,7 @@
 
 namespace PSX\Http;
 
-use PSX\Uri\Url;
+use PSX\Uri\Uri;
 
 /**
  * PostRequest
@@ -32,13 +32,13 @@ use PSX\Uri\Url;
 class PostRequest extends Request
 {
     /**
-     * @param \PSX\Url|string $url
+     * @param \PSX\Uri\Uri|string $uri
      * @param array $headers
      * @param \PSX\Http\StreamInterface|string|array $body
      */
-    public function __construct($url, array $headers = array(), $body = null)
+    public function __construct($uri, array $headers = array(), $body = null)
     {
-        $url = $url instanceof Url ? $url : new Url((string) $url);
+        $uri = $uri instanceof Uri ? $uri : new Uri((string) $uri);
 
         if (is_array($body)) {
             $headers['Content-Type'] = 'application/x-www-form-urlencoded';
@@ -46,8 +46,11 @@ class PostRequest extends Request
             $body = http_build_query($body, '', '&');
         }
 
-        parent::__construct($url, 'POST', $headers, $body);
+        parent::__construct($uri, 'POST', $headers, $body);
 
-        $this->setHeader('Host', $url->getHost());
+        $host = $uri->getHost();
+        if (!empty($host) && !$this->hasHeader('Host')) {
+            $this->setHeader('Host', $uri->getHost());
+        }
     }
 }

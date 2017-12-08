@@ -20,7 +20,7 @@
 
 namespace PSX\Http;
 
-use PSX\Uri\Url;
+use PSX\Uri\Uri;
 
 /**
  * HeadRequest
@@ -32,15 +32,18 @@ use PSX\Uri\Url;
 class HeadRequest extends Request
 {
     /**
-     * @param \PSX\Url|string $url
+     * @param \PSX\Uri\Uri|string $uri
      * @param array $headers
      */
-    public function __construct($url, array $headers = array())
+    public function __construct($uri, array $headers = array())
     {
-        $url = $url instanceof Url ? $url : new Url((string) $url);
+        $uri = $uri instanceof Uri ? $uri : new Uri((string) $uri);
 
-        parent::__construct($url, 'HEAD', $headers);
+        parent::__construct($uri, 'HEAD', $headers);
 
-        $this->setHeader('Host', $url->getHost());
+        $host = $uri->getHost();
+        if (!empty($host) && !$this->hasHeader('Host')) {
+            $this->setHeader('Host', $uri->getHost());
+        }
     }
 }

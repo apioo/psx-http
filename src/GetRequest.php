@@ -20,7 +20,7 @@
 
 namespace PSX\Http;
 
-use PSX\Uri\Url;
+use PSX\Uri\Uri;
 
 /**
  * GetRequest
@@ -32,15 +32,18 @@ use PSX\Uri\Url;
 class GetRequest extends Request
 {
     /**
-     * @param \PSX\Uri\Url|string $url
+     * @param \PSX\Uri\Uri|string $url
      * @param array $headers
      */
-    public function __construct($url, array $headers = array())
+    public function __construct($uri, array $headers = array())
     {
-        $url = $url instanceof Url ? $url : new Url((string) $url);
+        $uri = $uri instanceof Uri ? $uri : new Uri((string) $uri);
 
-        parent::__construct($url, 'GET', $headers);
+        parent::__construct($uri, 'GET', $headers);
 
-        $this->setHeader('Host', $url->getHost());
+        $host = $uri->getHost();
+        if (!empty($host) && !$this->hasHeader('Host')) {
+            $this->setHeader('Host', $uri->getHost());
+        }
     }
 }

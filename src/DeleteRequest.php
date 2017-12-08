@@ -20,7 +20,7 @@
 
 namespace PSX\Http;
 
-use PSX\Uri\Url;
+use PSX\Uri\Uri;
 
 /**
  * DeleteRequest
@@ -32,16 +32,19 @@ use PSX\Uri\Url;
 class DeleteRequest extends Request
 {
     /**
-     * @param \PSX\Uri\Url|string $url
+     * @param \PSX\Uri\Uri|string $uri
      * @param array $headers
      * @param \PSX\Http\StreamInterface|string $body
      */
-    public function __construct($url, array $headers = array(), $body = null)
+    public function __construct($uri, array $headers = array(), $body = null)
     {
-        $url = $url instanceof Url ? $url : new Url((string) $url);
+        $uri = $uri instanceof Uri ? $uri : new Uri((string) $uri);
 
-        parent::__construct($url, 'DELETE', $headers, $body);
+        parent::__construct($uri, 'DELETE', $headers, $body);
 
-        $this->setHeader('Host', $url->getHost());
+        $host = $uri->getHost();
+        if (!empty($host) && !$this->hasHeader('Host')) {
+            $this->setHeader('Host', $uri->getHost());
+        }
     }
 }
