@@ -8,6 +8,7 @@ class_alias(\PSX\Http\Client\DeleteRequest::class, 'PSX\Http\DeleteRequest');
 class_alias(\PSX\Http\Client\GetRequest::class, 'PSX\Http\GetRequest');
 class_alias(\PSX\Http\Client\HandlerException::class, 'PSX\Http\HandlerException');
 class_alias(\PSX\Http\Client\HandlerInterface::class, 'PSX\Http\HandlerInterface');
+class_alias(\PSX\Http\Client\HeadRequest::class, 'PSX\Http\HeadRequest');
 class_alias(\PSX\Http\Client\NotSupportedException::class, 'PSX\Http\NotSupportedException');
 class_alias(\PSX\Http\Client\Options::class, 'PSX\Http\Options');
 class_alias(\PSX\Http\Client\PatchRequest::class, 'PSX\Http\PatchRequest');
