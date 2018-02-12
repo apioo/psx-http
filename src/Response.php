@@ -29,7 +29,14 @@ namespace PSX\Http;
  */
 class Response extends Message implements ResponseInterface
 {
+    /**
+     * @var integer
+     */
     protected $code;
+
+    /**
+     * @var string
+     */
     protected $reasonPhrase;
 
     /**
@@ -90,8 +97,8 @@ class Response extends Message implements ResponseInterface
      */
     public function toString()
     {
-        $response = ResponseParser::buildStatusLine($this) . Http::NEW_LINE;
-        $headers  = ResponseParser::buildHeaderFromMessage($this);
+        $response = Parser\ResponseParser::buildStatusLine($this) . Http::NEW_LINE;
+        $headers  = Parser\ResponseParser::buildHeaderFromMessage($this);
 
         foreach ($headers as $header) {
             $response.= $header . Http::NEW_LINE;

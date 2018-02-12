@@ -31,9 +31,24 @@ use PSX\Uri\Uri;
  */
 class Request extends Message implements RequestInterface
 {
+    /**
+     * @var string
+     */
     protected $requestTarget;
+
+    /**
+     * @var string
+     */
     protected $method;
+
+    /**
+     * @var \PSX\Uri\Uri
+     */
     protected $uri;
+
+    /**
+     * @var array
+     */
     protected $attributes;
 
     /**
@@ -42,7 +57,7 @@ class Request extends Message implements RequestInterface
      * @param array $headers
      * @param string $body
      */
-    public function __construct(Uri $uri, $method, array $headers = array(), $body = null)
+    public function __construct(Uri $uri, $method, array $headers = [], $body = null)
     {
         parent::__construct($headers, $body);
 
@@ -131,8 +146,8 @@ class Request extends Message implements RequestInterface
      */
     public function toString()
     {
-        $request = RequestParser::buildStatusLine($this) . Http::NEW_LINE;
-        $headers = RequestParser::buildHeaderFromMessage($this);
+        $request = Parser\RequestParser::buildStatusLine($this) . Http::NEW_LINE;
+        $headers = Parser\RequestParser::buildHeaderFromMessage($this);
 
         foreach ($headers as $header) {
             $request.= $header . Http::NEW_LINE;

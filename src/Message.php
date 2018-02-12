@@ -33,8 +33,19 @@ use PSX\Http\Stream;
  */
 class Message implements MessageInterface
 {
+    /**
+     * @var array
+     */
     protected $headers;
+
+    /**
+     * @var \Psr\Http\Message\StreamInterface
+     */
     protected $body;
+
+    /**
+     * @var string
+     */
     protected $protocol;
 
     /**
