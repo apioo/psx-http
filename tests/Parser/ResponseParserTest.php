@@ -221,7 +221,7 @@ class ResponseParserTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \PSX\Http\ParseException
+     * @expectedException \PSX\Http\Parser\ParseException
      */
     public function testBuildResponseFromHeaderEmptyStatusLine()
     {
