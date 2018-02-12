@@ -27,6 +27,7 @@ use PSX\Http\Client\HeadRequest;
 use PSX\Http\Client\Options;
 use PSX\Http\Client\PostRequest;
 use PSX\Http\Client\PutRequest;
+use PSX\Http\RequestInterface;
 use PSX\Http\ResponseInterface;
 use PSX\Http\Stream\TempStream;
 use PSX\Uri\Url;
@@ -45,7 +46,7 @@ abstract class HandlerTestCase extends \PHPUnit_Framework_TestCase
     protected static $isConnected;
 
     /**
-     * @var \PSX\Http\Client
+     * @var \PSX\Http\Client\ClientInterface
      */
     protected $client;
 
@@ -78,7 +79,7 @@ abstract class HandlerTestCase extends \PHPUnit_Framework_TestCase
     /**
      * Returns the handler which gets tested
      *
-     * @return \PSX\Http\HandlerInterface
+     * @return \PSX\Http\Client\HandlerInterface
      */
     abstract protected function getHandler();
 
@@ -227,7 +228,7 @@ abstract class HandlerTestCase extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \PSX\Http\RedirectException
+     * @expectedException \PSX\Http\Client\RedirectException
      */
     public function testMaxRedirect()
     {
@@ -236,7 +237,7 @@ abstract class HandlerTestCase extends \PHPUnit_Framework_TestCase
 
         $request = new GetRequest(new Url(self::URL . '/redirect'));
 
-        $response = $this->client->request($request, $options);
+        $this->client->request($request, $options);
     }
 
     /**
@@ -265,12 +266,10 @@ abstract class HandlerTestCase extends \PHPUnit_Framework_TestCase
         $called   = false;
         $options  = new Options();
         $options->setCallback(function ($resource, $request) use ($testCase, &$called) {
-
             $this->assertTrue(is_resource($resource));
-            $this->assertInstanceOf('PSX\Http\RequestInterface', $request);
+            $this->assertInstanceOf(RequestInterface::class, $request);
 
             $called = true;
-
         });
 
         $request  = new GetRequest(new Url(self::URL . '/get'));
@@ -290,7 +289,7 @@ abstract class HandlerTestCase extends \PHPUnit_Framework_TestCase
      * We have an endpoint which sleeps 8 seconds after 2 seconds the timeout
      * gets triggered
      *
-     * @expectedException \PSX\Http\HandlerException
+     * @expectedException \PSX\Http\Client\HandlerException
      */
     public function testTimeout()
     {
