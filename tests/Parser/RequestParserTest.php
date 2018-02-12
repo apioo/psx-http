@@ -18,11 +18,12 @@
  * limitations under the License.
  */
 
-namespace PSX\Http\Tests;
+namespace PSX\Http\Tests\Parser;
 
 use PSX\Http\Http;
+use PSX\Http\Parser\RequestParser;
 use PSX\Http\Request;
-use PSX\Http\RequestParser;
+use PSX\Http\RequestInterface;
 use PSX\Uri\Url;
 
 /**
@@ -45,7 +46,7 @@ class RequestParserTest extends \PHPUnit_Framework_TestCase
         $parser  = new RequestParser(new Url('http://localhost.com'), RequestParser::MODE_STRICT);
         $request = $parser->parse($request);
 
-        $this->assertInstanceOf('PSX\Http\Request', $request);
+        $this->assertInstanceOf(RequestInterface::class, $request);
         $this->assertEquals('GET', $request->getMethod());
         $this->assertEquals('http://localhost.com/foobar?foo=bar#fragment', $request->getUri()->toString());
         $this->assertEquals('HTTP/1.1', $request->getProtocolVersion());
@@ -70,7 +71,7 @@ class RequestParserTest extends \PHPUnit_Framework_TestCase
 
             $request = $parser->parse($request);
 
-            $this->assertInstanceOf('PSX\Http\Request', $request);
+            $this->assertInstanceOf(RequestInterface::class, $request);
             $this->assertEquals('GET', $request->getMethod());
             $this->assertEquals('http://localhost.com/foobar?foo=bar#fragment', $request->getUri()->toString());
             $this->assertEquals('HTTP/1.1', $request->getProtocolVersion());
@@ -93,7 +94,7 @@ class RequestParserTest extends \PHPUnit_Framework_TestCase
         $parser  = new RequestParser();
         $request = $parser->parse($request);
 
-        $this->assertInstanceOf('PSX\Http\Request', $request);
+        $this->assertInstanceOf(RequestInterface::class, $request);
         $this->assertEquals('GET', $request->getMethod());
         $this->assertEquals('/foobar?foo=bar#fragment', $request->getUri()->toString());
         $this->assertEquals('HTTP/1.1', $request->getProtocolVersion());
@@ -105,7 +106,7 @@ class RequestParserTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \PSX\Http\ParseException
+     * @expectedException \PSX\Http\Parser\ParseException
      */
     public function testParseInvalidStatusLine()
     {
@@ -128,7 +129,7 @@ class RequestParserTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \PSX\Http\ParseException
+     * @expectedException \PSX\Http\Parser\ParseException
      */
     public function testParseNoLineEnding()
     {

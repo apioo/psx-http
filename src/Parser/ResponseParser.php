@@ -18,9 +18,11 @@
  * limitations under the License.
  */
 
-namespace PSX\Http;
+namespace PSX\Http\Parser;
 
-use PSX\Exception;
+use PSX\Http\Http;
+use PSX\Http\Response;
+use PSX\Http\ResponseInterface;
 use PSX\Http\Stream\StringStream;
 
 /**
@@ -36,7 +38,8 @@ class ResponseParser extends ParserAbstract
      * Converts an raw http response into an PSX\Http\Response object
      *
      * @param string $content
-     * @return \PSX\Http\Response
+     * @return \PSX\Http\ResponseInterface
+     * @throws \PSX\Http\Parser\ParseException
      */
     public function parse($content)
     {
@@ -60,7 +63,7 @@ class ResponseParser extends ParserAbstract
     /**
      * @param string $response
      * @return array
-     * @throws ParseException
+     * @throws \PSX\Http\Parser\ParseException
      */
     protected function getStatus($response)
     {
@@ -86,6 +89,7 @@ class ResponseParser extends ParserAbstract
     /**
      * @param array $headers
      * @return \PSX\Http\ResponseInterface
+     * @throws \PSX\Http\Parser\ParseException
      */
     public static function buildResponseFromHeader(array $headers)
     {
@@ -157,7 +161,8 @@ class ResponseParser extends ParserAbstract
      *
      * @param string $content
      * @param integer $mode
-     * @return \PSX\Http\Response
+     * @return \PSX\Http\ResponseInterface
+     * @throws \PSX\Http\Parser\ParseException
      */
     public static function convert($content, $mode = ParserAbstract::MODE_STRICT)
     {

@@ -18,9 +18,11 @@
  * limitations under the License.
  */
 
-namespace PSX\Http;
+namespace PSX\Http\Parser;
 
 use InvalidArgumentException;
+use PSX\Http\Http;
+use PSX\Http\MessageInterface;
 
 /**
  * ParserAbstract
@@ -57,7 +59,7 @@ abstract class ParserAbstract
      * Converts an raw http message into an PSX\Http\Message object
      *
      * @param string $content
-     * @return \PSX\Http\Message
+     * @return \PSX\Http\MessageInterface
      */
     abstract public function parse($content);
 
@@ -119,11 +121,10 @@ abstract class ParserAbstract
     /**
      * Parses an raw http header string into an Message object
      *
-     * @param \PSX\Http\Message $message
+     * @param \PSX\Http\MessageInterface $message
      * @param string $header
-     * @return array
      */
-    protected function headerToArray(Message $message, $header)
+    protected function headerToArray(MessageInterface $message, $header)
     {
         $lines = explode(Http::NEW_LINE, $header);
 

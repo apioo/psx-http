@@ -18,8 +18,10 @@
  * limitations under the License.
  */
 
-namespace PSX\Http;
+namespace PSX\Http\Parser;
 
+use PSX\Http\Request;
+use PSX\Http\RequestInterface;
 use PSX\Http\Stream\StringStream;
 use PSX\Uri\Uri;
 use PSX\Uri\UriResolver;
@@ -48,6 +50,7 @@ class RequestParser extends ParserAbstract
      *
      * @param string $content
      * @return \PSX\Http\Request
+     * @throws \PSX\Http\Parser\ParseException
      */
     public function parse($content)
     {
@@ -74,6 +77,11 @@ class RequestParser extends ParserAbstract
         return $request;
     }
 
+    /**
+     * @param string $request
+     * @return array
+     * @throws \PSX\Http\Parser\ParseException
+     */
     protected function getStatus($request)
     {
         $line = $this->getStatusLine($request);
@@ -122,7 +130,8 @@ class RequestParser extends ParserAbstract
      * @param string $content
      * @param \PSX\Uri\Url $baseUrl
      * @param integer $mode
-     * @return \PSX\Http\Request
+     * @return \PSX\Http\RequestInterface
+     * @throws \PSX\Http\Parser\ParseException
      */
     public static function convert($content, Url $baseUrl = null, $mode = ParserAbstract::MODE_STRICT)
     {

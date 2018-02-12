@@ -18,11 +18,11 @@
  * limitations under the License.
  */
 
-namespace PSX\Http\Tests;
+namespace PSX\Http\Tests\Parser;
 
 use PSX\Http\Http;
+use PSX\Http\Parser\ResponseParser;
 use PSX\Http\Response;
-use PSX\Http\ResponseParser;
 
 /**
  * ResponseParserTest
@@ -119,7 +119,7 @@ class ResponseParserTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \PSX\Http\ParseException
+     * @expectedException \PSX\Http\Parser\ParseException
      */
     public function testParseInvalidStatusLine()
     {
@@ -142,7 +142,7 @@ class ResponseParserTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \PSX\Http\ParseException
+     * @expectedException \PSX\Http\Parser\ParseException
      */
     public function testParseNoLineEnding()
     {
@@ -202,7 +202,7 @@ class ResponseParserTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \PSX\Http\ParseException
+     * @expectedException \PSX\Http\Parser\ParseException
      */
     public function testBuildResponseFromHeaderInvalidStatusLine()
     {
@@ -213,7 +213,7 @@ class ResponseParserTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \PSX\Http\ParseException
+     * @expectedException \PSX\Http\Parser\ParseException
      */
     public function testBuildResponseFromHeaderEmpty()
     {

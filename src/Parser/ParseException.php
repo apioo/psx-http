@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-namespace PSX\Http;
+namespace PSX\Http\Parser;
 
 /**
  * ParseException
