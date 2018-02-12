@@ -20,7 +20,7 @@
 
 namespace PSX\Http\Tests\Client\Handler;
 
-use PSX\Http\Handler\Curl;
+use PSX\Http\Client\Handler\Curl;
 
 /**
  * CurlTest
