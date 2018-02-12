@@ -21,7 +21,6 @@
     "phpunit/phpunit": "^4.8"
   },
   "autoload": {
-    "files": ["alias.php"],
     "psr-4": {
       "PSX\\Http\\": "src/"
     }
