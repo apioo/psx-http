@@ -14,13 +14,14 @@
   "require": {
     "php": ">=7.0",
     "psx/uri": "^1.0",
+    "psr/log": "^1.0",
     "psr/http-message": "^1.0"
   },
   "require-dev": {
-    "phpunit/phpunit": "^4.8",
-    "psx/json": "^1.0"
+    "phpunit/phpunit": "^4.8"
   },
   "autoload": {
+    "files": ["alias.php"],
     "psr-4": {
       "PSX\\Http\\": "src/"
     }
