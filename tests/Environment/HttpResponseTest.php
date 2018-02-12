@@ -18,33 +18,28 @@
  * limitations under the License.
  */
 
-namespace PSX\Http\Tests\Server;
+namespace PSX\Http\Tests\Environment;
 
-use PSX\Http\Request;
-use PSX\Http\Server\HttpContext;
-use PSX\Http\Server\HttpContextInterface;
-use PSX\Uri\Uri;
+use PSX\Http\Environment\HttpResponse;
+use PSX\Http\Environment\HttpResponseInterface;
 
 /**
- * HttpContextTest
+ * HttpResponseTest
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    http://phpsx.org
  */
-class HttpContextTest extends \PHPUnit_Framework_TestCase
+class HttpResponseTest extends \PHPUnit_Framework_TestCase
 {
-    public function testContext()
+    public function testResponse()
     {
-        $request = new Request(new Uri('/foo?baz=foo'), 'GET', ['X-Foo' => 'bar']);
-        $context = new HttpContext($request, ['bar' => 'foo']);
+        $response = new HttpResponse(200, ['X-Foo' => 'bar'], 'foobar');
 
-        $this->assertInstanceOf(HttpContextInterface::class, $context);
-        $this->assertEquals('bar', $context->getHeader('X-Foo'));
-        $this->assertEquals(['x-foo' => ['bar']], $context->getHeaders());
-        $this->assertEquals('foo', $context->getParameter('baz'));
-        $this->assertEquals(['baz' => 'foo'], $context->getParameters());
-        $this->assertEquals('foo', $context->getUriFragment('bar'));
-        $this->assertEquals(['bar' => 'foo'], $context->getUriFragments());
+        $this->assertInstanceOf(HttpResponseInterface::class, $response);
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals('bar', $response->getHeader('X-Foo'));
+        $this->assertEquals(['x-foo' => 'bar'], $response->getHeaders());
+        $this->assertEquals('foobar', $response->getBody());
     }
 }

@@ -18,28 +18,46 @@
  * limitations under the License.
  */
 
-namespace PSX\Http\Tests\Server;
-
-use PSX\Http\Server\HttpResponse;
-use PSX\Http\Server\HttpResponseInterface;
+namespace PSX\Http\Environment;
 
 /**
- * HttpResponseTest
+ * Represents an HTTP response which is generated i.e. by a controller
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    http://phpsx.org
  */
-class HttpResponseTest extends \PHPUnit_Framework_TestCase
+interface HttpResponseInterface
 {
-    public function testResponse()
-    {
-        $response = new HttpResponse(200, ['X-Foo' => 'bar'], 'foobar');
+    /**
+     * Returns the status code of the HTTP response
+     *
+     * @see https://tools.ietf.org/html/rfc7231#section-6
+     * @return integer
+     */
+    public function getStatusCode();
 
-        $this->assertInstanceOf(HttpResponseInterface::class, $response);
-        $this->assertEquals(200, $response->getStatusCode());
-        $this->assertEquals('bar', $response->getHeader('X-Foo'));
-        $this->assertEquals(['x-foo' => 'bar'], $response->getHeaders());
-        $this->assertEquals('foobar', $response->getBody());
-    }
+    /**
+     * Returns all available headers of the response. The header keys are all
+     * lowercased
+     *
+     * @return array
+     */
+    public function getHeaders();
+
+    /**
+     * Returns a single header based on the provided header name or null if the
+     * header does not exist. The name is case insensitive
+     *
+     * @param string $name
+     * @return string|null
+     */
+    public function getHeader($name);
+
+    /**
+     * Returns the body of the response
+     *
+     * @return mixed
+     */
+    public function getBody();
 }

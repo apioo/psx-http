@@ -20,74 +20,42 @@
 
 namespace PSX\Http\Server;
 
+use PSX\Http\Response;
+use PSX\Http\Stream\TempStream;
+
 /**
- * HttpResponse
+ * ResponseFactory
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    http://phpsx.org
  */
-class HttpResponse implements HttpResponseInterface
+class ResponseFactory implements ResponseFactoryInterface
 {
-    /**
-     * @var integer
-     */
-    protected $statusCode;
-
     /**
      * @var array
      */
-    protected $headers;
+    protected $server;
 
     /**
-     * @var mixed
+     * @param array|null $server
      */
-    protected $body;
-
-    /**
-     * @param integer $statusCode
-     * @param array $headers
-     * @param mixed $body
-     */
-    public function __construct($statusCode, array $headers, $body)
+    public function __construct(array $server = null)
     {
-        $this->statusCode = $statusCode;
-        $this->headers    = array_change_key_case($headers, CASE_LOWER);
-        $this->body       = $body;
+        $this->server = $server === null ? $_SERVER : $server;
     }
 
     /**
      * @inheritdoc
      */
-    public function getStatusCode()
+    public function createResponse()
     {
-        return $this->statusCode;
-    }
+        $protocol = isset($this->server['SERVER_PROTOCOL']) ? $this->server['SERVER_PROTOCOL'] : 'HTTP/1.1';
+        $response = new Response();
+        $response->setProtocolVersion($protocol);
+        $response->setHeader('X-Powered-By', 'psx');
+        $response->setBody(new TempStream(fopen('php://temp', 'r+')));
 
-    /**
-     * @inheritdoc
-     */
-    public function getHeaders()
-    {
-        return $this->headers;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getHeader($name)
-    {
-        $name  = strtolower($name);
-        $value = isset($this->headers[$name]) ? $this->headers[$name] : null;
-
-        return $value;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getBody()
-    {
-        return $this->body;
+        return $response;
     }
 }

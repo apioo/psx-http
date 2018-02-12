@@ -18,53 +18,51 @@
  * limitations under the License.
  */
 
-namespace PSX\Http\Server;
-
-use PSX\Http\RequestInterface;
+namespace PSX\Http\Environment;
 
 /**
- * HttpContext
+ * HTTP response object which contains all needed parameters to produce an HTTP
+ * response 
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    http://phpsx.org
  */
-class HttpContext implements HttpContextInterface
+class HttpResponse implements HttpResponseInterface
 {
     /**
-     * @var \PSX\Http\RequestInterface
+     * @var integer
      */
-    protected $request;
+    protected $statusCode;
 
     /**
      * @var array
      */
-    protected $uriFragments;
+    protected $headers;
 
     /**
-     * @param \PSX\Http\RequestInterface $request
-     * @param array $uriFragments
+     * @var mixed
      */
-    public function __construct(RequestInterface $request, array $uriFragments)
+    protected $body;
+
+    /**
+     * @param integer $statusCode
+     * @param array $headers
+     * @param mixed $body
+     */
+    public function __construct($statusCode, array $headers, $body)
     {
-        $this->request      = $request;
-        $this->uriFragments = $uriFragments;
+        $this->statusCode = $statusCode;
+        $this->headers    = array_change_key_case($headers, CASE_LOWER);
+        $this->body       = $body;
     }
 
     /**
      * @inheritdoc
      */
-    public function getMethod()
+    public function getStatusCode()
     {
-        return $this->request->getMethod();
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getHeader($name)
-    {
-        return $this->request->getHeader($name);
+        return $this->statusCode;
     }
 
     /**
@@ -72,38 +70,25 @@ class HttpContext implements HttpContextInterface
      */
     public function getHeaders()
     {
-        return $this->request->getHeaders();
+        return $this->headers;
     }
 
     /**
      * @inheritdoc
      */
-    public function getUriFragment($name)
+    public function getHeader($name)
     {
-        return $this->uriFragments[$name] ?? null;
+        $name  = strtolower($name);
+        $value = isset($this->headers[$name]) ? $this->headers[$name] : null;
+
+        return $value;
     }
 
     /**
      * @inheritdoc
      */
-    public function getUriFragments()
+    public function getBody()
     {
-        return $this->uriFragments;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getParameter($name)
-    {
-        return $this->request->getUri()->getParameter($name);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getParameters()
-    {
-        return $this->request->getUri()->getParameters();
+        return $this->body;
     }
 }

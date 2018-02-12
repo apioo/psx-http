@@ -20,44 +20,21 @@
 
 namespace PSX\Http\Server;
 
+use PSX\Http\ResponseInterface;
+
 /**
- * HttpResponseInterface
+ * SenderInterface
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    http://phpsx.org
  */
-interface HttpResponseInterface
+interface SenderInterface
 {
     /**
-     * Returns the status code of the HTTP response
+     * Method to send the response which was created to the browser
      *
-     * @see https://tools.ietf.org/html/rfc7231#section-6
-     * @return integer
+     * @param \PSX\Http\ResponseInterface $response
      */
-    public function getStatusCode();
-
-    /**
-     * Returns all available headers of the response. The header keys are all
-     * lowercased
-     *
-     * @return array
-     */
-    public function getHeaders();
-
-    /**
-     * Returns a single header based on the provided header name or null if the
-     * header does not exist. The name is case insensitive
-     *
-     * @param string $name
-     * @return string|null
-     */
-    public function getHeader($name);
-
-    /**
-     * Returns the body of the response
-     *
-     * @return mixed
-     */
-    public function getBody();
+    public function send(ResponseInterface $response);
 }

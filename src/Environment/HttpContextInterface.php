@@ -18,10 +18,12 @@
  * limitations under the License.
  */
 
-namespace PSX\Http\Server;
+namespace PSX\Http\Environment;
 
 /**
- * HttpContextInterface
+ * HTTP context which provides all needed parameters outside of the request 
+ * body. This can be used as facade if you dont want to pass the raw HTTP 
+ * request object to user-land functions
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
