@@ -27,126 +27,84 @@ namespace PSX\Http\Client;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    http://phpsx.org
  */
-class Options
+class Options implements OptionsInterface
 {
-    protected $callback;
-    protected $timeout;
-    protected $followLocation = false;
-    protected $maxRedirects   = 8;
-    protected $ssl;
-    protected $caPath;
+    /**
+     * @var boolean
+     */
+    protected $allowRedirects;
+
+    /**
+     * @var string
+     */
+    protected $cert;
+
+    /**
+     * @var string
+     */
     protected $proxy;
 
     /**
-     * Sets an callback which is called before the request is made. The first
-     * argument is the resource of the handler thus the client can configure
-     * i.e. the curl resource
-     *
-     * @param \Closure $callback
+     * @var string
      */
-    public function setCallback(\Closure $callback)
+    protected $sslKey;
+
+    /**
+     * @var boolean
+     */
+    protected $verify;
+
+    /**
+     * @var float
+     */
+    protected $timeout;
+
+    /**
+     * @var float
+     */
+    protected $version;
+
+    /**
+     * @inheritdoc
+     */
+    public function getAllowRedirects()
     {
-        $this->callback = $callback;
+        return $this->allowRedirects;
     }
 
     /**
-     * @return \Closure
+     * @param boolean $allowRedirects
      */
-    public function getCallback()
+    public function setAllowRedirects($allowRedirects)
     {
-        return $this->callback;
+        $this->allowRedirects = $allowRedirects;
     }
 
     /**
-     * Sets the timeout in seconds
-     *
-     * @param integer $timeout
-     * @return void
+     * @inheritdoc
      */
-    public function setTimeout($timeout)
+    public function getCert()
     {
-        $this->timeout = (int) $timeout;
+        return $this->cert;
     }
 
     /**
-     * Returns the timeout in seconds
-     *
-     * @return integer
+     * @param string $cert
      */
-    public function getTimeout()
+    public function setCert($cert)
     {
-        return $this->timeout;
+        $this->cert = $cert;
     }
 
     /**
-     * Sets whether the request should follow redirection headers
-     *
-     * @param boolean $location
-     * @param integer $maxRedirects
-     * @return void
+     * @inheritdoc
      */
-    public function setFollowLocation($location, $maxRedirects = 8)
+    public function getProxy()
     {
-        $this->followLocation = (bool) $location;
-        $this->maxRedirects   = (int) $maxRedirects;
+        return $this->proxy;
     }
 
     /**
-     * Returns whether the request follows redirection headers
-     *
-     * @return boolean
-     */
-    public function getFollowLocation()
-    {
-        return $this->followLocation;
-    }
-
-    /**
-     * Returns how many redirects the request should follow
-     *
-     * @return integer
-     */
-    public function getMaxRedirects()
-    {
-        return $this->maxRedirects;
-    }
-
-    /**
-     * Sets whether the request should be made through ssl
-     *
-     * @param boolean $ssl
-     * @param string $caPath
-     */
-    public function setSsl($ssl, $caPath = null)
-    {
-        $this->ssl    = (bool) $ssl;
-        $this->caPath = $caPath;
-    }
-
-    /**
-     * Returns whether the request should use ssl
-     *
-     * @return boolean
-     */
-    public function getSsl()
-    {
-        return $this->ssl;
-    }
-
-    /**
-     * Returns the CA path
-     *
-     * @return string
-     */
-    public function getCaPath()
-    {
-        return $this->caPath;
-    }
-
-    /**
-     * Sets whether an specific proxy should be used. The proxy should be in the
-     * format [ip]:[port]
-     *
      * @param string $proxy
      */
     public function setProxy($proxy)
@@ -155,12 +113,66 @@ class Options
     }
 
     /**
-     * Returns the given proxy
-     *
-     * @return string
+     * @inheritdoc
      */
-    public function getProxy()
+    public function getSslKey()
     {
-        return $this->proxy;
+        return $this->sslKey;
+    }
+
+    /**
+     * @param string $sslKey
+     */
+    public function setSslKey($sslKey)
+    {
+        $this->sslKey = $sslKey;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getVerify()
+    {
+        return $this->verify;
+    }
+
+    /**
+     * @param boolean $verify
+     */
+    public function setVerify($verify)
+    {
+        $this->verify = $verify;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getTimeout()
+    {
+        return $this->timeout;
+    }
+
+    /**
+     * @param float $timeout
+     */
+    public function setTimeout($timeout)
+    {
+        $this->timeout = $timeout;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getVersion()
+    {
+        return $this->version;
+    }
+
+    /**
+     * @param float $version
+     */
+    public function setVersion(float $version)
+    {
+        $this->version = $version;
     }
 }

@@ -35,9 +35,8 @@ interface ClientInterface
      * Sends the request through the given handler and returns the response
      *
      * @param \PSX\Http\RequestInterface $request
-     * @param \PSX\Http\Client\Options $options
-     * @param integer $count
+     * @param \PSX\Http\Client\OptionsInterface $options
      * @return \PSX\Http\ResponseInterface
      */
-    public function request(RequestInterface $request, Options $options = null, $count = 0);
+    public function request(RequestInterface $request, OptionsInterface $options = null);
 }

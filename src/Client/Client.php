@@ -20,24 +20,20 @@
 
 namespace PSX\Http\Client;
 
-use InvalidArgumentException;
-use PSX\Http\Client\Handler\Curl;
 use PSX\Http\RequestInterface;
-use PSX\Uri\Uri;
-use PSX\Uri\UriResolver;
+use PSX\Http\Response;
 
 /**
- * This class offers a simple way to make http requests. It can use either curl
- * or fsockopen handler to send the request. Here an example of an basic GET
- * request
+ * This class is a simple wrapper around guzzle to offer a simple way to send
+ * http requests
+ * 
  * <code>
- * $http     = new Client();
+ * $client   = new Client();
  * $request  = new GetRequest('http://google.com');
- * $response = $http->request($request);
+ * $response = $client->request($request);
  *
- * if($response->getStatusCode() == 200)
- * {
- *   echo (string) $response->getBody();
+ * if ($response->getStatusCode() == 200) {
+ *     echo (string) $response->getBody();
  * }
  * </code>
  *
@@ -48,148 +44,45 @@ use PSX\Uri\UriResolver;
 class Client implements ClientInterface
 {
     /**
-     * @var \PSX\Http\Client\HandlerInterface
+     * @var \GuzzleHttp\Client
      */
-    protected $handler;
+    protected $client;
 
     /**
-     * @var \PSX\Http\Client\CookieStoreInterface
+     * @param array $options
      */
-    protected $cookieStore;
-
-    /**
-     * If no handler is defined the curl handler is used as fallback
-     *
-     * @param \PSX\Http\Client\HandlerInterface $handler
-     */
-    public function __construct(HandlerInterface $handler = null)
+    public function __construct(array $options = [])
     {
-        $this->handler = $handler !== null ? $handler : new Curl();
+        $this->client = new \GuzzleHttp\Client($options);
     }
 
     /**
      * @inheritdoc
      */
-    public function request(RequestInterface $request, Options $options = null, $count = 0)
+    public function request(RequestInterface $request, OptionsInterface $options = null)
     {
-        if (!$request->getUri()->isAbsolute()) {
-            throw new InvalidArgumentException('Request url must be absolute');
-        }
-
-        // set cookie headers
-        if ($this->cookieStore !== null) {
-            $cookies = $this->cookieStore->load($request->getUri()->getHost());
-
-            if (!empty($cookies)) {
-                $kv = array();
-
-                foreach ($cookies as $cookie) {
-                    $path = ltrim($cookie->getPath(), '/');
-
-                    if ($cookie->getExpires() !== null && $cookie->getExpires()->getTimestamp() < time()) {
-                        $this->cookieStore->remove($request->getUri()->getHost(), $cookie);
-                    } elseif ($cookie->getPath() !== null && substr($request->getUri()->getPath(), 0, strlen($path)) != $path) {
-                        // path does not fit
-                    } else {
-                        $kv[] = $cookie->getName() . '=' . $cookie->getValue();
-                    }
-                }
-
-                $request->addHeader('Cookie', implode('; ', $kv));
-            }
-        }
-
-        // set content length
-        $body = $request->getBody();
-
-        if ($body !== null && $request->hasHeader('Transfer-Encoding') != 'chunked' && !in_array($request->getMethod(), array('HEAD', 'GET'))) {
-            $size = $body->getSize();
-
-            if ($size !== false) {
-                $request->setHeader('Content-Length', $size);
-            }
-        }
-
-        // set default options
         if ($options === null) {
             $options = new Options();
         }
 
-        // make request
-        $response = $this->handler->request($request, $options);
+        $opt = [
+            'allow_redirects' => $options->getAllowRedirects(),
+            'cert' => $options->getCert(),
+            'headers' => $request->getHeaders(),
+            'http_errors' => false,
+            'proxy' => $options->getProxy(),
+            'ssl_key' => $options->getSslKey(),
+            'verify' => $options->getVerify(),
+            'timeout' => $options->getTimeout(),
+            'version' => $options->getVersion(),
+        ];
 
-        // store cookies
-        if ($this->cookieStore !== null) {
-            $cookies = $response->getHeaderLines('Set-Cookie');
-
-            foreach ($cookies as $rawCookie) {
-                try {
-                    $cookie = new Cookie($rawCookie);
-                    $domain = $cookie->getDomain() !== null ? $cookie->getDomain() : $request->getUri()->getHost();
-
-                    $this->cookieStore->store($domain, $cookie);
-                } catch (InvalidArgumentException $e) {
-                    // invalid cookies
-                }
-            }
+        if (!in_array($request->getMethod(), ['HEAD', 'GET'])) {
+            $opt['body'] = $request->getBody();
         }
 
-        // check follow location
-        if ($options->getFollowLocation() && ($response->getStatusCode() >= 300 && $response->getStatusCode() < 400)) {
-            $location = (string) $response->getHeader('Location');
+        $response = $this->client->request($request->getMethod(), $request->getUri(), $opt);
 
-            if (!empty($location) && $location != $request->getUri()->toString()) {
-                if ($options->getMaxRedirects() > $count) {
-                    $location = UriResolver::resolve($request->getUri(), new Uri($location));
-
-                    return $this->request(new GetRequest($location), $options, ++$count);
-                } else {
-                    throw new RedirectException('Max redirection reached');
-                }
-            }
-        }
-
-        return $response;
-    }
-
-    /**
-     * Sets the handler
-     *
-     * @param \PSX\Http\Client\HandlerInterface $handler
-     * @return void
-     */
-    public function setHandler(HandlerInterface $handler)
-    {
-        $this->handler = $handler;
-    }
-
-    /**
-     * Returns the handler
-     *
-     * @return \PSX\Http\Client\HandlerInterface
-     */
-    public function getHandler()
-    {
-        return $this->handler;
-    }
-
-    /**
-     * Sets an cookie store
-     *
-     * @param \PSX\Http\Client\CookieStoreInterface
-     */
-    public function setCookieStore(CookieStoreInterface $cookieStore)
-    {
-        $this->cookieStore = $cookieStore;
-    }
-
-    /**
-     * Returns the cookie store
-     *
-     * @return \PSX\Http\Client\CookieStoreInterface
-     */
-    public function getCookieStore()
-    {
-        return $this->cookieStore;
+        return new Response($response->getStatusCode(), $response->getHeaders(), $response->getBody());
     }
 }
