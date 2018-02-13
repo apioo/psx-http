@@ -4,9 +4,8 @@ PSX Http
 ## About
 
 This library contains well designed and tested HTTP interfaces and 
-implementations. It has interfaces to abstract HTTP requests from the PHP 
-globals (`$_GET`, `$_POST`, etc.) and to build middleware applications. They are 
-currently used by the [PSX](http://phpsx.org/) framework and 
+implementations. It has interfaces to describe a HTTP message, middleware and 
+client. They are currently used by the [PSX](http://phpsx.org/) framework and 
 [Fusio](https://www.fusio-project.org/) but the implementations can also be used
 independently.
 
