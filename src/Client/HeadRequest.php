@@ -22,6 +22,7 @@ namespace PSX\Http\Client;
 
 use PSX\Http\Request;
 use PSX\Uri\Uri;
+use PSX\Uri\UriInterface;
 
 /**
  * HeadRequest
@@ -33,12 +34,14 @@ use PSX\Uri\Uri;
 class HeadRequest extends Request
 {
     /**
-     * @param \PSX\Uri\Uri|string $uri
+     * @param \PSX\Uri\UriInterface|string $uri
      * @param array $headers
      */
     public function __construct($uri, array $headers = array())
     {
-        $uri = $uri instanceof Uri ? $uri : new Uri((string) $uri);
+        if (!$uri instanceof UriInterface) {
+            $uri = new Uri((string) $uri);
+        }
 
         parent::__construct($uri, 'HEAD', $headers);
 

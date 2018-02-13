@@ -22,6 +22,7 @@ namespace PSX\Http\Client;
 
 use PSX\Http\Request;
 use PSX\Uri\Uri;
+use PSX\Uri\UriInterface;
 
 /**
  * PostRequest
@@ -33,13 +34,15 @@ use PSX\Uri\Uri;
 class PostRequest extends Request
 {
     /**
-     * @param \PSX\Uri\Uri|string $uri
+     * @param \PSX\Uri\UriInterface|string $uri
      * @param array $headers
      * @param \PSX\Http\StreamInterface|string|array $body
      */
     public function __construct($uri, array $headers = array(), $body = null)
     {
-        $uri = $uri instanceof Uri ? $uri : new Uri((string) $uri);
+        if (!$uri instanceof UriInterface) {
+            $uri = new Uri((string) $uri);
+        }
 
         if (is_array($body)) {
             $headers['Content-Type'] = 'application/x-www-form-urlencoded';
