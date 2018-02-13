@@ -6,9 +6,6 @@ php:
 sudo: false
 before_install:
   - phpenv config-rm xdebug.ini
-before_script:
-  - php -d always_populate_raw_post_data=-1 -S 127.0.0.1:8000 tests/Server.php &
-  - sleep 4
 install:
   - composer install
 script:

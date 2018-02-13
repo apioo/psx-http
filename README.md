@@ -10,10 +10,10 @@ currently used by the [PSX](http://phpsx.org/) framework and
 [Fusio](https://www.fusio-project.org/) but the implementations can also be used
 independently.
 
-We are aware that this can be done also with PSR-7 and PSR-15 but we think that 
-those specs have made some bad design decisions and this project is here to 
-provide an alternative. It is always good to have diversity and evolution will 
-show which is the better design. Also we should note the fitting [XKDC](https://xkcd.com/927/).
+We are aware that this overlaps with PSR-7 and PSR-15 but we think that those 
+specs have made some bad design decisions and this project is here to provide an 
+alternative. It is always good to have diversity and evolution will show which 
+is the better design. Also we should note the fitting [XKDC](https://xkcd.com/927/).
 
 ### HTTP
 
@@ -93,7 +93,27 @@ show which is the better design. Also we should note the fitting [XKDC](https://
 + handle(RequestInterface $request, ResponseInterface $response)
 ```
 
-## Server
+### HTTP Client
+
+#### `ClientInterface`
+
+```
++ request(RequestInterface $request, OptionsInterface $options = null)
+```
+
+#### `OptionsInterface`
+
+```
++ getAllowRedirects(): boolean
++ getCert(): string
++ getProxy(): string
++ getSslKey(): string
++ getVerify(): boolean
++ getTimeout(): float
++ getVersion(): float
+```
+
+## Middleware
 
 The following shows a simple middleware which always returns the response body
 `Hello World!`:

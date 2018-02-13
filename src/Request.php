@@ -20,7 +20,7 @@
 
 namespace PSX\Http;
 
-use PSX\Uri\Uri;
+use PSX\Uri\UriInterface;
 
 /**
  * Request
@@ -42,22 +42,22 @@ class Request extends Message implements RequestInterface
     protected $method;
 
     /**
-     * @var \PSX\Uri\Uri
+     * @var \PSX\Uri\UriInterface
      */
     protected $uri;
 
     /**
      * @var array
      */
-    protected $attributes;
+    protected $attributes = [];
 
     /**
-     * @param \PSX\Uri\Uri $uri
+     * @param \PSX\Uri\UriInterface $uri
      * @param string $method
      * @param array $headers
      * @param string $body
      */
-    public function __construct(Uri $uri, $method, array $headers = [], $body = null)
+    public function __construct(UriInterface $uri, $method, array $headers = [], $body = null)
     {
         parent::__construct($headers, $body);
 
@@ -122,7 +122,7 @@ class Request extends Message implements RequestInterface
     /**
      * Returns the request uri
      *
-     * @return \PSX\Uri\Uri
+     * @return \PSX\Uri\UriInterface
      */
     public function getUri()
     {
@@ -132,9 +132,9 @@ class Request extends Message implements RequestInterface
     /**
      * Sets the request uri
      *
-     * @param \PSX\Uri\Uri $uri
+     * @param \PSX\Uri\UriInterface $uri
      */
-    public function setUri(Uri $uri)
+    public function setUri(UriInterface $uri)
     {
         $this->uri = $uri;
     }
