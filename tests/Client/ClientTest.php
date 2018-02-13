@@ -20,120 +20,47 @@
 
 namespace PSX\Http\Tests\Client;
 
+use GuzzleHttp\Handler\MockHandler;
+use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Middleware;
+use GuzzleHttp\Psr7\Response;
 use PSX\Http\Client\Client;
-use PSX\Http\Client\CookieStore;
 use PSX\Http\Client\GetRequest;
-use PSX\Http\Client\Handler;
-use PSX\Http\Parser\ResponseParser;
-use PSX\Uri\Uri;
 use PSX\Uri\Url;
 
 /**
- * HttpTest
+ * ClientTest
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    http://phpsx.org
  */
-class HttpTest extends \PHPUnit_Framework_TestCase
+class ClientTest extends \PHPUnit_Framework_TestCase
 {
-    public function testCookieStore()
+    public function testRequest()
     {
-        $store  = new CookieStore\Memory();
-        $client = new Client(new Handler\Callback(function ($request) {
+        $mock = new MockHandler([
+            new Response(200, ['X-Foo' => 'Bar'], 'foobar'),
+        ]);
 
-            $response = <<<TEXT
-HTTP/1.1 200 OK
-Content-Encoding: gzip
-Content-Type: text/html; charset=utf-8
-Date: Sat, 04 Jan 2014 18:19:45 GMT
-ETag: "815832758"
-Set-Cookie: webmaker.sid=s%3Aj%3A%7B%22_csrfSecret%22%3A%22uMs5W0M2tR2ewHNiJQye7lpe%22%7D.wSMQqQeiDgatt0Smv2Nbq5g92lX04%2FmOBiiRdPZIuro; Path=/; Expires=Tue, 04 Feb 2024 18:19:45 GMT; HttpOnly; Secure
-Strict-Transport-Security: max-age=15768000
-Vary: Accept-Encoding
-X-Content-Type-Options: nosniff
-X-XSS-Protection: 1; mode=block
-transfer-encoding: chunked
-Connection: keep-alive
+        $container = [];
+        $history = Middleware::history($container);
 
-foobar
-TEXT;
+        $stack = HandlerStack::create($mock);
+        $stack->push($history);
 
-            return ResponseParser::convert($response, ResponseParser::MODE_LOOSE)->toString();
-
-        }));
-
-        $client->setCookieStore($store);
-
+        $client   = new Client(['handler' => $stack]);
         $request  = new GetRequest(new Url('http://localhost.com'));
         $response = $client->request($request);
-        $cookies  = $store->load('localhost.com');
 
-        $this->assertTrue(isset($cookies['webmaker.sid']));
-        $this->assertEquals('webmaker.sid', $cookies['webmaker.sid']->getName());
-        $this->assertEquals('s%3Aj%3A%7B%22_csrfSecret%22%3A%22uMs5W0M2tR2ewHNiJQye7lpe%22%7D.wSMQqQeiDgatt0Smv2Nbq5g92lX04%2FmOBiiRdPZIuro', $cookies['webmaker.sid']->getValue());
-        $this->assertEquals(new \DateTime('Tue, 04 Feb 2024 18:19:45 GMT'), $cookies['webmaker.sid']->getExpires());
-        $this->assertEquals('/', $cookies['webmaker.sid']->getPath());
-        $this->assertEquals(null, $cookies['webmaker.sid']->getDomain());
-        $this->assertEquals(true, $cookies['webmaker.sid']->getSecure());
-        $this->assertEquals(true, $cookies['webmaker.sid']->getHttpOnly());
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals('Bar', (string) $response->getHeader('X-Foo'));
+        $this->assertEquals('foobar', (string) $response->getBody());
 
-        // now we have stored the cookie we check whether we get it on the next
-        // request
-        $testCase = $this;
-        $client   = new Client(new Handler\Callback(function ($request) use ($testCase) {
+        $this->assertEquals(1, count($container));
+        $transaction = array_shift($container);
 
-            $cookie = $request->getHeader('Cookie');
-            $testCase->assertEquals('webmaker.sid=s%3Aj%3A%7B%22_csrfSecret%22%3A%22uMs5W0M2tR2ewHNiJQye7lpe%22%7D.wSMQqQeiDgatt0Smv2Nbq5g92lX04%2FmOBiiRdPZIuro', (string) $cookie);
-
-            $response = <<<TEXT
-HTTP/1.1 200 OK
-Content-Type: text/html; charset=utf-8
-Date: Sat, 04 Jan 2014 18:19:45 GMT
-
-foobar
-TEXT;
-
-            return ResponseParser::convert($response, ResponseParser::MODE_LOOSE)->toString();
-
-        }));
-
-        $client->setCookieStore($store);
-
-        $request  = new GetRequest(new Url('http://localhost.com'));
-        $response = $client->request($request);
-    }
-
-    /**
-     * @expectedException \InvalidArgumentException
-     */
-    public function testRelativeUrl()
-    {
-        $client    = new Client();
-        $request = new GetRequest(new Uri('/foo/bar'));
-
-        $client->request($request);
-    }
-
-    public function testSetGetHandler()
-    {
-        $client = new Client();
-
-        $this->assertInstanceOf(Handler\Curl::class, $client->getHandler());
-
-        $client->setHandler(new Handler\Socks());
-
-        $this->assertInstanceOf(Handler\Socks::class, $client->getHandler());
-    }
-
-    public function testSetGetCookieStore()
-    {
-        $client = new Client();
-
-        $this->assertEmpty($client->getCookieStore());
-
-        $client->setCookieStore(new CookieStore\Memory());
-
-        $this->assertInstanceOf(CookieStore\Memory::class, $client->getCookieStore());
+        $this->assertEquals('GET', $transaction['request']->getMethod());
+        $this->assertEquals(['localhost.com'], $transaction['request']->getHeader('Host'));
     }
 }

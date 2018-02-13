@@ -33,34 +33,34 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
 {
     public function testOptions()
     {
-        $callback = function () {};
-        $options  = new Options();
+        $options = new Options();
+        $options->setAllowRedirects(true);
+        $options->setCert('foo');
+        $options->setProxy('foo');
+        $options->setSslKey('foo');
+        $options->setVerify(true);
+        $options->setTimeout(1.23);
+        $options->setVersion(1.1);
 
-        $options->setCallback($callback);
-        $options->setTimeout(3);
-        $options->setFollowLocation(true, 4);
-        $options->setSsl(true, '/foo/bar.pem');
-        $options->setProxy('127.0.0.1:8080');
-
-        $this->assertEquals($callback, $options->getCallback());
-        $this->assertEquals(3, $options->getTimeout());
-        $this->assertEquals(true, $options->getFollowLocation());
-        $this->assertEquals(4, $options->getMaxRedirects());
-        $this->assertEquals(true, $options->getSsl());
-        $this->assertEquals('/foo/bar.pem', $options->getCaPath());
-        $this->assertEquals('127.0.0.1:8080', $options->getProxy());
+        $this->assertSame(true, $options->getAllowRedirects());
+        $this->assertSame('foo', $options->getCert());
+        $this->assertSame('foo', $options->getProxy());
+        $this->assertSame('foo', $options->getSslKey());
+        $this->assertSame(true, $options->getVerify());
+        $this->assertSame(1.23, $options->getTimeout());
+        $this->assertSame(1.1, $options->getVersion());
     }
 
     public function testOptionsDefault()
     {
         $options = new Options();
 
-        $this->assertEquals(null, $options->getCallback());
-        $this->assertEquals(null, $options->getTimeout());
-        $this->assertEquals(false, $options->getFollowLocation());
-        $this->assertEquals(8, $options->getMaxRedirects());
-        $this->assertEquals(false, $options->getSsl());
-        $this->assertEquals(null, $options->getCaPath());
-        $this->assertEquals(null, $options->getProxy());
+        $this->assertNull($options->getAllowRedirects());
+        $this->assertNull($options->getCert());
+        $this->assertNull($options->getProxy());
+        $this->assertNull($options->getSslKey());
+        $this->assertNull($options->getVerify());
+        $this->assertNull($options->getTimeout());
+        $this->assertNull($options->getVersion());
     }
 }
