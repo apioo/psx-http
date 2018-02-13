@@ -26,6 +26,7 @@ use GuzzleHttp\Middleware;
 use GuzzleHttp\Psr7\Response;
 use PSX\Http\Client\Client;
 use PSX\Http\Client\GetRequest;
+use PSX\Http\Client\PostRequest;
 use PSX\Uri\Url;
 
 /**
@@ -62,5 +63,33 @@ class ClientTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals('GET', $transaction['request']->getMethod());
         $this->assertEquals(['localhost.com'], $transaction['request']->getHeader('Host'));
+    }
+
+    public function testRequestPost()
+    {
+        $mock = new MockHandler([
+            new Response(200, ['X-Foo' => 'Bar'], 'foobar'),
+        ]);
+
+        $container = [];
+        $history = Middleware::history($container);
+
+        $stack = HandlerStack::create($mock);
+        $stack->push($history);
+
+        $client   = new Client(['handler' => $stack]);
+        $request  = new PostRequest(new Url('http://localhost.com'), [], 'foobar');
+        $response = $client->request($request);
+
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals('Bar', (string) $response->getHeader('X-Foo'));
+        $this->assertEquals('foobar', (string) $response->getBody());
+
+        $this->assertEquals(1, count($container));
+        $transaction = array_shift($container);
+
+        $this->assertEquals('POST', $transaction['request']->getMethod());
+        $this->assertEquals(['localhost.com'], $transaction['request']->getHeader('Host'));
+        $this->assertEquals('foobar', (string) $transaction['request']->getBody());
     }
 }
