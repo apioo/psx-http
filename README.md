@@ -3,11 +3,10 @@ PSX Http
 
 ## About
 
-This library contains well designed and tested HTTP interfaces and 
-implementations. It has interfaces to describe a HTTP message, middleware and 
-client. They are currently used by the [PSX](http://phpsx.org/) framework and 
-[Fusio](https://www.fusio-project.org/) but the implementations can also be used
-independently.
+This library contains well designed interfaces to describe HTTP message, 
+middleware and client objects. It contains also corresponding reference 
+implementations. They are used by the [PSX](http://phpsx.org/) framework and 
+[Fusio](https://www.fusio-project.org/).
 
 We are aware that this overlaps with PSR-7 and PSR-15 but we think that those 
 specs have made some bad design decisions and this project is here to provide an 
