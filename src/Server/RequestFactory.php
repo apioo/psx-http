@@ -102,14 +102,24 @@ class RequestFactory implements RequestFactoryInterface
         $body    = null;
 
         // create body
-        if (in_array($method, array('POST', 'PUT', 'DELETE', 'PATCH'))) {
+        if (in_array($method, ['POST', 'PUT', 'DELETE', 'PATCH'])) {
             // apparently also in 5.6 and 7 it is not possible to read the
             // php://input stream multiple times therefore we use the
             // buffered stream
             $body = new BufferedStream(new TempStream(fopen('php://input', 'r')));
         }
 
-        return new Request($uri, $method, $headers, $body);
+        $request = new Request($uri, $method, $headers, $body);
+
+        // set specific request attributes
+        $keys = ['SERVER_ADDR', 'SERVER_NAME', 'REQUEST_TIME', 'REQUEST_TIME_FLOAT', 'DOCUMENT_ROOT', 'HTTPS', 'REMOTE_ADDR', 'REMOTE_PORT'];
+        foreach ($keys as $key) {
+            if (isset($this->server[$key])) {
+                $request->setAttribute($key, $this->server[$key]);
+            }
+        }
+
+        return $request;
     }
 
     /**
