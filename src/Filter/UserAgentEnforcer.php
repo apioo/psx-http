@@ -3,7 +3,7 @@
  * PSX is a open source PHP framework to develop RESTful APIs.
  * For the current version and informations visit <http://phpsx.org>
  *
- * Copyright 2010-2018 Christoph Kappestein <christoph.kappestein@gmail.com>
+ * Copyright 2010-2017 Christoph Kappestein <christoph.kappestein@gmail.com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,26 +18,31 @@
  * limitations under the License.
  */
 
-namespace PSX\Http\Tests\Filter;
+namespace PSX\Http\Filter;
 
+use PSX\Http\Exception\BadRequestException;
 use PSX\Http\FilterChainInterface;
 use PSX\Http\FilterInterface;
 use PSX\Http\RequestInterface;
 use PSX\Http\ResponseInterface;
 
 /**
- * TestFilter
+ * UserAgentEnforcer
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    http://phpsx.org
  */
-class TestFilter implements FilterInterface
+class UserAgentEnforcer implements FilterInterface
 {
     public function handle(RequestInterface $request, ResponseInterface $response, FilterChainInterface $filterChain)
     {
-        $request->setAttribute('class', true);
+        $userAgent = $request->getHeader('User-Agent');
 
-        $filterChain->handle($request, $response);
+        if (!empty($userAgent)) {
+            $filterChain->handle($request, $response);
+        } else {
+            throw new BadRequestException('Request must contain an User-Agent header');
+        }
     }
 }

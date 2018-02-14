@@ -3,7 +3,7 @@
  * PSX is a open source PHP framework to develop RESTful APIs.
  * For the current version and informations visit <http://phpsx.org>
  *
- * Copyright 2010-2018 Christoph Kappestein <christoph.kappestein@gmail.com>
+ * Copyright 2010-2017 Christoph Kappestein <christoph.kappestein@gmail.com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-namespace PSX\Http\Tests\Filter;
+namespace PSX\Http\Filter;
 
 use PSX\Http\FilterChainInterface;
 use PSX\Http\FilterInterface;
@@ -26,18 +26,33 @@ use PSX\Http\RequestInterface;
 use PSX\Http\ResponseInterface;
 
 /**
- * TestFilter
+ * Inspired by rubys rack backstage. If the specified file exists it gets
+ * written as response i.e. to show an maintenance message else the next filter
+ * gets called. Note the message gets only displayed for text/html visitors all
+ * other requests get passed to the application
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    http://phpsx.org
  */
-class TestFilter implements FilterInterface
+class Backstage implements FilterInterface
 {
+    protected $file;
+
+    public function __construct($file)
+    {
+        $this->file = $file;
+    }
+
     public function handle(RequestInterface $request, ResponseInterface $response, FilterChainInterface $filterChain)
     {
-        $request->setAttribute('class', true);
+        $accept = $request->getHeader('Accept');
 
-        $filterChain->handle($request, $response);
+        if (stripos($accept, 'text/html') !== false && is_file($this->file)) {
+            $response->setHeader('Content-Type', 'text/html');
+            $response->getBody()->write(file_get_contents($this->file));
+        } else {
+            $filterChain->handle($request, $response);
+        }
     }
 }

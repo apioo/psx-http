@@ -42,7 +42,7 @@ class FilterChain implements FilterChainInterface, LoggerAwareInterface
     protected $filters;
 
     /**
-     * @var \PSX\Framework\Filter\FilterChainInterface
+     * @var \PSX\Http\FilterChainInterface
      */
     protected $filterChain;
 

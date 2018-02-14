@@ -3,7 +3,7 @@
  * PSX is a open source PHP framework to develop RESTful APIs.
  * For the current version and informations visit <http://phpsx.org>
  *
- * Copyright 2010-2018 Christoph Kappestein <christoph.kappestein@gmail.com>
+ * Copyright 2010-2017 Christoph Kappestein <christoph.kappestein@gmail.com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,26 +18,41 @@
  * limitations under the License.
  */
 
-namespace PSX\Http\Tests\Filter;
+namespace PSX\Http\Filter;
 
+use PSX\Http\Exception\ForbiddenException;
 use PSX\Http\FilterChainInterface;
 use PSX\Http\FilterInterface;
 use PSX\Http\RequestInterface;
 use PSX\Http\ResponseInterface;
 
 /**
- * TestFilter
+ * Filters an incoming request based on the request IP. Only IPs which are
+ * listed in the $allowedIps array can access the application. Note if the IP is
+ * not available in the REMOTE_ADDR field of the environment variables (cli) the
+ * request can access the application
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    http://phpsx.org
  */
-class TestFilter implements FilterInterface
+class IpFirewall implements FilterInterface
 {
+    protected $allowedIps;
+
+    public function __construct(array $allowedIps)
+    {
+        $this->allowedIps = $allowedIps;
+    }
+
     public function handle(RequestInterface $request, ResponseInterface $response, FilterChainInterface $filterChain)
     {
-        $request->setAttribute('class', true);
+        $ip = $request->getAttribute('REMOTE_ADDR');
 
-        $filterChain->handle($request, $response);
+        if ($ip === null || in_array($ip, $this->allowedIps)) {
+            $filterChain->handle($request, $response);
+        } else {
+            throw new ForbiddenException('Access not allowed');
+        }
     }
 }

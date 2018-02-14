@@ -20,23 +20,60 @@
 
 namespace PSX\Http\Tests\Filter;
 
+use PSX\Http\Filter\FilterChain;
+use PSX\Http\Filter\Group;
 use PSX\Http\FilterChainInterface;
 use PSX\Http\FilterInterface;
+use PSX\Http\Request;
 use PSX\Http\RequestInterface;
+use PSX\Http\Response;
 use PSX\Http\ResponseInterface;
+use PSX\Uri\Url;
 
 /**
- * TestFilter
+ * GroupTest
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    http://phpsx.org
  */
-class TestFilter implements FilterInterface
+class GroupTest extends \PHPUnit_Framework_TestCase
 {
+    public function testGroup()
+    {
+        $request  = new Request(new Url('http://localhost'), 'GET');
+        $response = new Response();
+
+        $subFilters[] = new DummyFilter(3);
+        $subFilters[] = new DummyFilter(4);
+
+        $filters[] = new DummyFilter(1);
+        $filters[] = new DummyFilter(2);
+        $filters[] = new Group($subFilters);
+        $filters[] = new DummyFilter(5);
+        $filters[] = new DummyFilter(6);
+
+        $filterChain = new FilterChain($filters);
+        $filterChain->handle($request, $response);
+
+        $this->assertEquals(array(1, 2, 3, 4, 5, 6), DummyFilter::$calls);
+    }
+}
+
+class DummyFilter implements FilterInterface
+{
+    public static $calls = array();
+
+    protected $id;
+
+    public function __construct($id)
+    {
+        $this->id = $id;
+    }
+
     public function handle(RequestInterface $request, ResponseInterface $response, FilterChainInterface $filterChain)
     {
-        $request->setAttribute('class', true);
+        self::$calls[] = $this->id;
 
         $filterChain->handle($request, $response);
     }

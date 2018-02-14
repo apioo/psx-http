@@ -3,7 +3,7 @@
  * PSX is a open source PHP framework to develop RESTful APIs.
  * For the current version and informations visit <http://phpsx.org>
  *
- * Copyright 2010-2018 Christoph Kappestein <christoph.kappestein@gmail.com>
+ * Copyright 2010-2017 Christoph Kappestein <christoph.kappestein@gmail.com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-namespace PSX\Http\Tests\Filter;
+namespace PSX\Http\Filter\Condition;
 
 use PSX\Http\FilterChainInterface;
 use PSX\Http\FilterInterface;
@@ -26,18 +26,30 @@ use PSX\Http\RequestInterface;
 use PSX\Http\ResponseInterface;
 
 /**
- * TestFilter
+ * Applies a filter only for specific request methods. This is useful if you
+ * want i.e. authentication only for specific request methods
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    http://phpsx.org
  */
-class TestFilter implements FilterInterface
+class RequestMethodChoice implements FilterInterface
 {
+    protected $requestMethods;
+    protected $filter;
+
+    public function __construct(array $requestMethods, FilterInterface $filter)
+    {
+        $this->requestMethods = $requestMethods;
+        $this->filter         = $filter;
+    }
+
     public function handle(RequestInterface $request, ResponseInterface $response, FilterChainInterface $filterChain)
     {
-        $request->setAttribute('class', true);
-
-        $filterChain->handle($request, $response);
+        if (in_array($request->getMethod(), $this->requestMethods)) {
+            $this->filter->handle($request, $response, $filterChain);
+        } else {
+            $filterChain->handle($request, $response);
+        }
     }
 }
