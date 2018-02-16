@@ -46,17 +46,12 @@ class Util
         }
 
         if ($stream->isSeekable()) {
-            $pos = $stream->tell();
-
-            if ($pos > 0) {
-                $stream->seek(0);
-            }
-
-            $content = $stream->getContents();
+            $pos     = $stream->tell();
+            $content = $stream->__toString();
 
             $stream->seek($pos);
         } else {
-            $content = $stream->getContents();
+            $content = $stream->__toString();
         }
 
         return $content;
