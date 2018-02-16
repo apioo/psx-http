@@ -20,31 +20,23 @@
 
 namespace PSX\Http\Tests\Stream;
 
-use PSX\Http\Stream\TempStream;
+use PSX\Http\Stream\Stream;
 
 /**
- * TempStreamTest
+ * StreamWriteOnlyTest
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    http://phpsx.org
  */
-class TempStreamTest extends StreamTestCase
+class StreamWriteOnlyTest extends StreamTestCase
 {
     protected function getStream()
     {
-        $resource = fopen('php://memory', 'r+');
+        $resource = fopen(__DIR__ . '/StreamTestWriteOnly.txt', 'w');
         fwrite($resource, 'foobar');
         rewind($resource);
 
-        return new TempStream($resource);
-    }
-
-    /**
-     * @expectedException \InvalidArgumentException
-     */
-    public function testConstructor()
-    {
-        new TempStream('foo');
+        return new Stream($resource);
     }
 }

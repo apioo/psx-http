@@ -23,8 +23,8 @@ namespace PSX\Http\Stream;
 use PSX\Http\StreamInterface;
 
 /**
- * Stream wich works on an string therefore the size of the stream is limited to
- * the available memory
+ * Stream which works on an string therefore the size of the stream is limited 
+ * to the available memory
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
@@ -35,7 +35,7 @@ class StringStream implements StreamInterface
     protected $data;
     protected $length;
 
-    protected $_pointer = 0;
+    protected $pointer = 0;
 
     public function __construct($data = '')
     {
@@ -71,13 +71,13 @@ class StringStream implements StreamInterface
 
     public function tell()
     {
-        return $this->_pointer;
+        return $this->pointer;
     }
 
     public function eof()
     {
         if ($this->data !== null) {
-            return $this->_pointer >= $this->length;
+            return $this->pointer >= $this->length;
         }
 
         return true;
@@ -86,7 +86,7 @@ class StringStream implements StreamInterface
     public function rewind()
     {
         if ($this->data !== null) {
-            $this->_pointer = 0;
+            $this->pointer = 0;
         }
 
         return true;
@@ -101,11 +101,11 @@ class StringStream implements StreamInterface
     {
         if ($this->isSeekable()) {
             if ($whence === SEEK_SET) {
-                $this->_pointer = $offset;
+                $this->pointer = $offset;
             } elseif ($whence === SEEK_CUR) {
-                $this->_pointer+= $offset;
+                $this->pointer+= $offset;
             } elseif ($whence === SEEK_END) {
-                $this->_pointer = $this->length + $offset;
+                $this->pointer = $this->length + $offset;
             }
         }
 
@@ -120,13 +120,13 @@ class StringStream implements StreamInterface
     public function write($string)
     {
         if ($this->isWritable()) {
-            $length  = strlen($string);
-            $pre  = substr($this->data, 0, $this->_pointer);
-            $post = substr($this->data, $this->_pointer + $length);
+            $length = strlen($string);
+            $pre    = substr($this->data, 0, $this->pointer);
+            $post   = substr($this->data, $this->pointer + $length);
 
             $this->data = $pre . $string . $post;
 
-            $this->_pointer+= $length;
+            $this->pointer+= $length;
 
             return $length;
         }
@@ -142,9 +142,9 @@ class StringStream implements StreamInterface
     public function read($maxLength)
     {
         if ($this->isReadable()) {
-            $data = substr($this->data, $this->_pointer, $maxLength);
+            $data = substr($this->data, $this->pointer, $maxLength);
 
-            $this->_pointer+= $maxLength;
+            $this->pointer+= $maxLength;
 
             return $data;
         }
@@ -152,21 +152,15 @@ class StringStream implements StreamInterface
         return false;
     }
 
-    public function getContents($maxLength = -1)
+    public function getContents()
     {
         if ($this->data === null) {
             return null;
         }
 
-        if ($maxLength == -1) {
-            $data = substr($this->data, $this->_pointer);
+        $data = substr($this->data, $this->pointer);
 
-            $this->_pointer = $this->length;
-        } else {
-            $data = substr($this->data, $this->_pointer, $maxLength);
-
-            $this->_pointer+= $maxLength;
-        }
+        $this->pointer = $this->length;
 
         return $data;
     }
@@ -178,7 +172,7 @@ class StringStream implements StreamInterface
 
     public function __toString()
     {
-        $this->_pointer = $this->length;
+        $this->pointer = $this->length;
 
         return $this->data === null ? '' : $this->data;
     }

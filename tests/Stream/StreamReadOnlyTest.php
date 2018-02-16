@@ -18,36 +18,25 @@
  * limitations under the License.
  */
 
-namespace PSX\Http\Stream;
+namespace PSX\Http\Tests\Stream;
+
+use PSX\Http\Stream\Stream;
 
 /**
- * FileStream
+ * StreamReadOnlyTest
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    http://phpsx.org
- * @deprecated
  */
-class FileStream extends Stream
+class StreamReadOnlyTest extends StreamTestCase
 {
-    protected $fileName;
-    protected $contentType;
-
-    public function __construct($resource, $fileName, $contentType = null)
+    protected function getStream()
     {
-        parent::__construct($resource);
+        $file = __DIR__ . '/StreamTestReadOnly.txt';
+        file_put_contents($file, 'foobar');
+        $resource = fopen($file, 'r');
 
-        $this->fileName    = $fileName;
-        $this->contentType = $contentType;
-    }
-
-    public function getFileName()
-    {
-        return $this->fileName;
-    }
-
-    public function getContentType()
-    {
-        return $this->contentType;
+        return new Stream($resource);
     }
 }

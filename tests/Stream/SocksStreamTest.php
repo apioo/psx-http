@@ -62,7 +62,7 @@ class SocksStreamTest extends StreamTestCase
 
         do {
             $size    = $stream->getChunkSize();
-            $content.= $stream->getContents($size);
+            $content.= $stream->read($size);
 
             $stream->readLine();
         } while ($size > 0);

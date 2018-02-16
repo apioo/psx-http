@@ -20,7 +20,7 @@
 
 namespace PSX\Http\Tests\Stream;
 
-use PSX\Http\Stream\TempStream;
+use PSX\Http\Stream\Stream;
 use PSX\Http\Stream\Util;
 
 /**
@@ -38,7 +38,7 @@ class UtilTest extends \PHPUnit_Framework_TestCase
         fwrite($handle, 'foobar');
         fseek($handle, 0);
 
-        $stream = new TempStream($handle);
+        $stream = new Stream($handle);
 
         $this->assertEquals(0, $stream->tell());
         $this->assertEquals('foobar', Util::toString($stream));
@@ -53,7 +53,7 @@ class UtilTest extends \PHPUnit_Framework_TestCase
         fwrite($handle, 'foobar');
         fseek($handle, 4);
 
-        $stream = new TempStream($handle);
+        $stream = new Stream($handle);
 
         $this->assertEquals(4, $stream->tell());
         $this->assertEquals('foobar', Util::toString($stream));
@@ -67,7 +67,7 @@ class UtilTest extends \PHPUnit_Framework_TestCase
         $handle = fopen(__DIR__ . '/StreamUtilTest.txt', 'w');
         fwrite($handle, 'foobar');
 
-        $stream = new TempStream($handle);
+        $stream = new Stream($handle);
 
         $this->assertFalse($stream->isReadable());
         $this->assertEquals(6, $stream->tell());

@@ -21,7 +21,7 @@
 namespace PSX\Http\Tests\Stream;
 
 use PSX\Http\Stream\BufferedStream;
-use PSX\Http\Stream\TempStream;
+use PSX\Http\Stream\Stream;
 
 /**
  * BufferedStreamTest
@@ -38,6 +38,6 @@ class BufferedStreamTest extends StreamTestCase
         fwrite($resource, 'foobar');
         rewind($resource);
 
-        return new BufferedStream(new TempStream($resource));
+        return new BufferedStream(new Stream($resource));
     }
 }

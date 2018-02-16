@@ -98,7 +98,6 @@ abstract class StreamTestCase extends \PHPUnit_Framework_TestCase
     {
         if ($this->stream->isReadable()) {
             $content = '';
-
             while (!$this->stream->eof()) {
                 $content.= $this->stream->read(5);
             }
@@ -181,19 +180,32 @@ abstract class StreamTestCase extends \PHPUnit_Framework_TestCase
             $this->assertEquals(0, $this->stream->tell());
             $this->assertEquals('fo', $this->stream->read(2));
             $this->assertEquals(2, $this->stream->tell());
+            $this->assertEquals('obar', $this->stream->getContents());
+            $this->assertEquals(6, $this->stream->tell());
+
+            if ($this->stream->isSeekable()) {
+                $this->stream->seek(0);
+                $this->assertEquals(0, $this->stream->tell());
+                $this->assertEquals('foob', $this->stream->read(4));
+                $this->assertEquals(4, $this->stream->tell());
+            }
         }
     }
 
     public function testGetContents()
     {
-        if ($this->stream->isReadable() && $this->stream->isSeekable()) {
+        if ($this->stream->isReadable()) {
             $this->assertEquals(0, $this->stream->tell());
             $this->assertEquals('foobar', $this->stream->getContents());
             $this->assertEquals(6, $this->stream->tell());
-            $this->stream->seek(2);
-            $this->assertEquals(2, $this->stream->tell());
-            $this->assertEquals('obar', $this->stream->getContents());
-            $this->assertEquals(6, $this->stream->tell());
+            $this->assertEquals('', $this->stream->getContents());
+
+            if ($this->stream->isSeekable()) {
+                $this->stream->seek(2);
+                $this->assertEquals(2, $this->stream->tell());
+                $this->assertEquals('obar', $this->stream->getContents());
+                $this->assertEquals(6, $this->stream->tell());
+            }
         }
     }
 
@@ -205,7 +217,7 @@ abstract class StreamTestCase extends \PHPUnit_Framework_TestCase
             $this->assertEquals(6, $this->stream->tell());
             $this->stream->seek(2);
             $this->assertEquals(2, $this->stream->tell());
-            $this->assertEquals('ob', $this->stream->getContents(2));
+            $this->assertEquals('ob', $this->stream->read(2));
             $this->assertEquals(4, $this->stream->tell());
         }
     }
@@ -220,17 +232,27 @@ abstract class StreamTestCase extends \PHPUnit_Framework_TestCase
         $this->assertEmpty($this->stream->getMetadata('foo'));
 
         // call an key which exists in the metadata
-        $uri = $this->stream->getMetadata('uri');
+        $this->stream->getMetadata('uri');
     }
 
     public function testToString()
     {
         if ($this->stream->isReadable()) {
             $this->assertEquals(0, $this->stream->tell());
-            $this->assertEquals('foobar', (string) $this->stream);
+            $this->assertEquals('foobar', $this->stream->__toString());
             $this->assertEquals(6, $this->stream->tell());
+
+            $this->assertEquals('foobar', $this->stream->__toString());
+            $this->assertEquals(6, $this->stream->tell());
+
+            if ($this->stream->isSeekable()) {
+                $this->stream->seek(2);
+                $this->assertEquals('foobar', $this->stream->__toString());
+                $this->assertEquals(6, $this->stream->tell());
+            }
         } else {
-            $this->assertEquals('', (string) $this->stream);
+            $this->assertEquals('', $this->stream->__toString());
+            $this->assertEquals('', $this->stream->__toString());
         }
     }
 }

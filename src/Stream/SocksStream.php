@@ -27,7 +27,7 @@ namespace PSX\Http\Stream;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    http://phpsx.org
  */
-class SocksStream extends TempStream
+class SocksStream extends Stream
 {
     protected $resource;
     protected $contentLength;
@@ -59,29 +59,6 @@ class SocksStream extends TempStream
         return false;
     }
 
-    public function getContents($length = -1)
-    {
-        if (!$this->resource) {
-            return '';
-        }
-
-        if ($length !== -1) {
-            $content = '';
-            $read    = 0;
-            $buffer  = $length;
-
-            do {
-                $content.= stream_get_contents($this->resource, $buffer);
-                $read   += strlen($content);
-                $buffer  = $buffer - $read;
-            } while ($read < $length);
-
-            return $content;
-        } else {
-            return stream_get_contents($this->resource);
-        }
-    }
-
     public function isChunkEncoded()
     {
         return $this->chunkedEncoding;
@@ -103,14 +80,16 @@ class SocksStream extends TempStream
             return '';
         }
 
+        $this->seek(0);
+
         if ($this->contentLength > 0) {
-            $body = $this->getContents($this->contentLength);
+            $body = $this->read($this->contentLength);
         } elseif ($this->chunkedEncoding) {
             $body = '';
 
             do {
                 $size = $this->getChunkSize();
-                $body.= $this->getContents($size);
+                $body.= $this->read($size);
 
                 $this->readLine();
             } while ($size > 0);

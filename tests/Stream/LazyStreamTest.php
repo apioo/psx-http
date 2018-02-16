@@ -20,23 +20,19 @@
 
 namespace PSX\Http\Tests\Stream;
 
-use PSX\Http\Stream\TempStream;
+use PSX\Http\Stream\LazyStream;
 
 /**
- * TempStreamWriteOnlyTest
+ * LazyStreamTest
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    http://phpsx.org
  */
-class TempStreamWriteOnlyTest extends StreamTestCase
+class LazyStreamTest extends StreamTestCase
 {
     protected function getStream()
     {
-        $resource = fopen(__DIR__ . '/StreamTestWriteOnly.txt', 'w');
-        fwrite($resource, 'foobar');
-        rewind($resource);
-
-        return new TempStream($resource);
+        return new LazyStream(__DIR__ . '/StreamTestReadOnly.txt');
     }
 }

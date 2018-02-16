@@ -20,145 +20,138 @@
 
 namespace PSX\Http\Stream;
 
-use PSX\Http\StreamInterface;
-
 /**
- * Buffers the complete content of the stream into an string and works from
- * there on with the buffered data
+ * Stream which opens the stream only on actual usage
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    http://phpsx.org
  */
-class BufferedStream extends Stream
+class LazyStream extends Stream
 {
-    protected $source;
-    protected $filled = false;
+    protected $uri;
+    protected $mode;
+    protected $opened = false;
 
-    public function __construct(StreamInterface $stream)
+    public function __construct($uri, $mode = 'rb')
     {
-        $this->source = $stream;
+        $this->uri  = $uri;
+        $this->mode = $mode;
     }
 
     public function close()
     {
-        $this->fill();
+        $this->open();
 
         parent::close();
     }
 
     public function detach()
     {
-        $this->fill();
+        $this->open();
 
         return parent::detach();
     }
 
     public function getSize()
     {
-        $this->fill();
+        $this->open();
 
         return parent::getSize();
     }
 
     public function tell()
     {
-        $this->fill();
+        $this->open();
 
         return parent::tell();
     }
 
     public function eof()
     {
-        $this->fill();
+        $this->open();
 
         return parent::eof();
     }
 
     public function rewind()
     {
-        $this->fill();
+        $this->open();
 
         return parent::rewind();
     }
 
     public function isSeekable()
     {
-        $this->fill();
+        $this->open();
 
         return parent::isSeekable();
     }
 
     public function seek($offset, $whence = SEEK_SET)
     {
-        $this->fill();
+        $this->open();
 
         return parent::seek($offset, $whence);
     }
 
     public function isWritable()
     {
-        $this->fill();
+        $this->open();
 
         return parent::isWritable();
     }
 
     public function write($string)
     {
-        $this->fill();
+        $this->open();
 
         return parent::write($string);
     }
 
     public function isReadable()
     {
-        $this->fill();
+        $this->open();
 
         return parent::isReadable();
     }
 
     public function read($length)
     {
-        $this->fill();
+        $this->open();
 
         return parent::read($length);
     }
 
     public function getContents()
     {
-        $this->fill();
+        $this->open();
 
         return parent::getContents();
     }
 
     public function getMetadata($key = null)
     {
-        $this->fill();
+        $this->open();
 
         return parent::getMetadata($key);
     }
 
     public function __toString()
     {
-        $this->fill();
+        $this->open();
 
         return parent::__toString();
     }
 
-    private function fill()
+    private function open()
     {
-        if ($this->filled) {
+        if ($this->opened) {
             return;
         }
 
-        $source = $this->source->detach();
-        $buffer = fopen('php://temp', 'r+');
+        $this->setResource(fopen($this->uri, $this->mode));
 
-        stream_copy_to_stream($source, $buffer, -1, 0);
-        rewind($buffer);
-
-        $this->setResource($buffer);
-
-        $this->filled = true;
+        $this->opened = true;
     }
 }
