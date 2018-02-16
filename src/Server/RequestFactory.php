@@ -23,6 +23,7 @@ namespace PSX\Http\Server;
 use PSX\Http\Request;
 use PSX\Http\Stream\BufferedStream;
 use PSX\Http\Stream\LazyStream;
+use PSX\Http\Stream\MultipartStream;
 use PSX\Uri\Uri;
 
 /**
@@ -103,9 +104,14 @@ class RequestFactory implements RequestFactoryInterface
 
         // create body
         if (in_array($method, ['POST', 'PUT', 'DELETE', 'PATCH'])) {
-            // use lazy stream to open the stream only and usage and buffer the
-            // response to read multiple times from the same stream
-            $body = new BufferedStream(new LazyStream('php://input'));
+            if (isset($headers['CONTENT-TYPE']) && strpos($headers['CONTENT-TYPE'], 'multipart/form-data') === 0) {
+                // in case of file uploads use multipart stream
+                $body = new MultipartStream($_FILES);
+            } else {
+                // use lazy stream to open the stream only and usage and buffer the
+                // response to read multiple times from the same stream
+                $body = new BufferedStream(new LazyStream('php://input'));
+            }
         }
 
         $request = new Request($uri, $method, $headers, $body);
