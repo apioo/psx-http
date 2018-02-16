@@ -20,34 +20,127 @@
 
 namespace PSX\Http\Stream;
 
+use PSX\Http\StreamInterface;
+
 /**
- * FileStream
+ * Stream which represents an uploaded file
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    http://phpsx.org
- * @deprecated
  */
-class FileStream extends Stream
+class FileStream implements StreamInterface
 {
-    protected $fileName;
-    protected $contentType;
+    use StreamWrapperTrait;
 
-    public function __construct($resource, $fileName, $contentType = null)
+    /**
+     * @var string
+     */
+    protected $tmpName;
+
+    /**
+     * @var string
+     */
+    protected $name;
+
+    /**
+     * @var string
+     */
+    protected $type;
+
+    /**
+     * @var integer
+     */
+    protected $size;
+
+    /**
+     * @var integer
+     */
+    protected $error;
+
+    /**
+     * @param \PSX\Http\StreamInterface $stream
+     * @param string $tmpName
+     * @param string $name
+     * @param string $type
+     * @param integer $size
+     * @param integer $error
+     */
+    public function __construct(StreamInterface $stream, $tmpName, $name, $type, $size, $error)
     {
-        parent::__construct($resource);
-
-        $this->fileName    = $fileName;
-        $this->contentType = $contentType;
+        $this->stream  = $stream;
+        $this->tmpName = $tmpName;
+        $this->name    = $name;
+        $this->type    = $type;
+        $this->size    = $size;
+        $this->error   = $error;
     }
 
-    public function getFileName()
+    /**
+     * @return string
+     */
+    public function getTmpName()
     {
-        return $this->fileName;
+        return $this->tmpName;
     }
 
-    public function getContentType()
+    /**
+     * @return string
+     */
+    public function getName()
     {
-        return $this->contentType;
+        return $this->name;
+    }
+
+    /**
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * @return int
+     */
+    public function getSize()
+    {
+        return $this->size;
+    }
+
+    /**
+     * @return int
+     */
+    public function getError()
+    {
+        return $this->error;
+    }
+
+    /**
+     * Moves the uploaded file to a new location
+     * 
+     * @param string $toFile
+     * @return boolean
+     */
+    public function move($toFile)
+    {
+        if ($this->error == UPLOAD_ERR_OK) {
+            return move_uploaded_file($this->tmpName, $toFile);
+        } else {
+            return false;
+        }
+    }
+
+    public function detach()
+    {
+        $this->call();
+
+        $this->tmpName = null;
+        $this->name    = null;
+        $this->type    = null;
+        $this->size    = null;
+        $this->error   = null;
+
+        return $this->stream->detach();
     }
 }
