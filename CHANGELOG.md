@@ -1,4 +1,9 @@
 
+### 2.0.2 (2018-02-16)
+
+* Add additional middlewares
+* Improve streams
+
 ### 2.0.1 (2018-02-13)
 
 * Remove client handler in favor of guzzle
