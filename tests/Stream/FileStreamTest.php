@@ -21,6 +21,7 @@
 namespace PSX\Http\Tests\Stream;
 
 use PSX\Http\Stream\FileStream;
+use PSX\Http\Stream\StringStream;
 
 /**
  * FileStreamTest
@@ -33,27 +34,17 @@ class FileStreamTest extends StreamTestCase
 {
     protected function getStream()
     {
-        $resource = fopen('php://memory', 'r+');
-        fwrite($resource, 'foobar');
-        rewind($resource);
-
-        return new FileStream($resource, 'foo.txt', 'text/plain');
+        return new FileStream(new StringStream('foobar'), '/tmp/tmp_file', 'name', 'text/plain', 6, UPLOAD_ERR_OK);
     }
 
-    public function testGetFileName()
+    public function testGetter()
     {
-        $resource = fopen('php://memory', 'r+');
-        fwrite($resource, 'foobar');
-        rewind($resource);
+        $file = new FileStream(new StringStream('foobar'), '/tmp/tmp_file', 'name', 'text/plain', 6, UPLOAD_ERR_OK);
 
-        $file = new FileStream($resource, 'foo.txt', 'text/plain');
-
-        $this->assertEquals('foo.txt', $file->getFileName());
-        $this->assertEquals('text/plain', $file->getContentType());
-
-        $file = new FileStream($resource, 'foo.txt');
-
-        $this->assertEquals('foo.txt', $file->getFileName());
-        $this->assertEquals(null, $file->getContentType());
+        $this->assertEquals('/tmp/tmp_file', $file->getTmpName());
+        $this->assertEquals('name', $file->getName());
+        $this->assertEquals('text/plain', $file->getType());
+        $this->assertEquals(6, $file->getSize());
+        $this->assertEquals(UPLOAD_ERR_OK, $file->getError());
     }
 }
