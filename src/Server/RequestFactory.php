@@ -104,7 +104,7 @@ class RequestFactory implements RequestFactoryInterface
 
         // create body
         if (in_array($method, ['POST', 'PUT', 'DELETE', 'PATCH'])) {
-            if (isset($headers['CONTENT-TYPE']) && strpos($headers['CONTENT-TYPE'], 'multipart/form-data') === 0) {
+            if ($method == 'POST' && !empty($_FILES) && isset($headers['CONTENT-TYPE']) && strpos($headers['CONTENT-TYPE'], 'multipart/form-data') === 0) {
                 // in case of file uploads use multipart stream
                 $body = new MultipartStream($_FILES);
             } else {
