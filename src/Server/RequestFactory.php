@@ -22,7 +22,7 @@ namespace PSX\Http\Server;
 
 use PSX\Http\Request;
 use PSX\Http\Stream\BufferedStream;
-use PSX\Http\Stream\TempStream;
+use PSX\Http\Stream\LazyStream;
 use PSX\Uri\Uri;
 
 /**
@@ -103,10 +103,9 @@ class RequestFactory implements RequestFactoryInterface
 
         // create body
         if (in_array($method, ['POST', 'PUT', 'DELETE', 'PATCH'])) {
-            // apparently also in 5.6 and 7 it is not possible to read the
-            // php://input stream multiple times therefore we use the
-            // buffered stream
-            $body = new BufferedStream(new TempStream(fopen('php://input', 'r')));
+            // use lazy stream to open the stream only and usage and buffer the
+            // response to read multiple times from the same stream
+            $body = new BufferedStream(new LazyStream('php://input'));
         }
 
         $request = new Request($uri, $method, $headers, $body);
