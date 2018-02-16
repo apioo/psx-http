@@ -130,7 +130,7 @@ $chain->on(new Http\Filter\UserAgentEnforcer());
 // display maintenance file if available
 $chain->on(new Http\Filter\Backstage(__DIR__ . '/.maintenance.html'));
 
-// call custom closure
+// closure middleware
 $chain->on(function(Http\RequestInterface $request, Http\ResponseInterface $response, Http\FilterChainInterface $filterChain){
     // get query parameter
     $request->getUri()->getParameter('foo');
@@ -173,6 +173,51 @@ if ($response->getStatusCode() == 200) {
 } else {
     // something goes wrong
 }
+```
+
+## Uploads
+
+Example how to handle file uploads:
+
+```php
+<?php
+
+use PSX\Http;
+use PSX\Http\Server;
+
+$chain = new Http\Filter\FilterChain();
+
+// closure middleware
+$chain->on(function(Http\RequestInterface $request, Http\ResponseInterface $response, Http\FilterChainInterface $filterChain){
+    // get body
+    $body = $request->getBody();
+
+    if ($body instanceof Http\Stream\MultipartStream) {
+        // move uploaded file to a new location
+        $body->getPart('userfile')->move('/home/new/file.txt');
+
+        // access the file through the normal stream functions
+        $body->getPart('userfile')->read(32);
+
+        // write data to the body
+        $response->getBody()->write('Upload successful!');
+    } else {
+        // no multipart upload
+        $response->getBody()->write('No upload!');
+    }
+
+    $filterChain->handle($request, $response);
+});
+
+// create global HTTP request and response
+$request  = (new Server\RequestFactory())->createRequest();
+$response = (new Server\ResponseFactory())->createResponse();
+
+// start middleware chain
+$chain->handle($request, $response);
+
+// send response
+(new Server\Sender())->send($response);
 ```
 
 ## Distinction
