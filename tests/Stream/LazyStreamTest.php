@@ -33,6 +33,6 @@ class LazyStreamTest extends StreamTestCase
 {
     protected function getStream()
     {
-        return new LazyStream(__DIR__ . '/StreamTestReadOnly.txt');
+        return new LazyStream('data://text/plain;base64,' . base64_encode('foobar'), 'r+');
     }
 }
