@@ -23,16 +23,25 @@ namespace PSX\Http\Stream;
 use PSX\Http\StreamInterface;
 
 /**
- * Buffers the complete content of the stream into an string and works from
+ * Buffers the complete content of the stream into a string and works from
  * there on with the buffered data
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    http://phpsx.org
  */
-class BufferedStream extends Stream
+class BufferedStream implements StreamInterface
 {
+    use StreamWrapperTrait;
+
+    /**
+     * @var \PSX\Http\StreamInterface
+     */
     protected $source;
+
+    /**
+     * @var boolean
+     */
     protected $filled = false;
 
     public function __construct(StreamInterface $stream)
@@ -40,112 +49,7 @@ class BufferedStream extends Stream
         $this->source = $stream;
     }
 
-    public function close()
-    {
-        $this->fill();
-
-        parent::close();
-    }
-
-    public function detach()
-    {
-        $this->fill();
-
-        return parent::detach();
-    }
-
-    public function getSize()
-    {
-        $this->fill();
-
-        return parent::getSize();
-    }
-
-    public function tell()
-    {
-        $this->fill();
-
-        return parent::tell();
-    }
-
-    public function eof()
-    {
-        $this->fill();
-
-        return parent::eof();
-    }
-
-    public function rewind()
-    {
-        $this->fill();
-
-        return parent::rewind();
-    }
-
-    public function isSeekable()
-    {
-        $this->fill();
-
-        return parent::isSeekable();
-    }
-
-    public function seek($offset, $whence = SEEK_SET)
-    {
-        $this->fill();
-
-        return parent::seek($offset, $whence);
-    }
-
-    public function isWritable()
-    {
-        $this->fill();
-
-        return parent::isWritable();
-    }
-
-    public function write($string)
-    {
-        $this->fill();
-
-        return parent::write($string);
-    }
-
-    public function isReadable()
-    {
-        $this->fill();
-
-        return parent::isReadable();
-    }
-
-    public function read($length)
-    {
-        $this->fill();
-
-        return parent::read($length);
-    }
-
-    public function getContents()
-    {
-        $this->fill();
-
-        return parent::getContents();
-    }
-
-    public function getMetadata($key = null)
-    {
-        $this->fill();
-
-        return parent::getMetadata($key);
-    }
-
-    public function __toString()
-    {
-        $this->fill();
-
-        return parent::__toString();
-    }
-
-    private function fill()
+    protected function call()
     {
         if ($this->filled) {
             return;
@@ -157,8 +61,7 @@ class BufferedStream extends Stream
         stream_copy_to_stream($source, $buffer, -1, 0);
         rewind($buffer);
 
-        $this->setResource($buffer);
-
+        $this->stream = new Stream($buffer);
         $this->filled = true;
     }
 }

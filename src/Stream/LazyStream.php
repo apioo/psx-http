@@ -20,6 +20,8 @@
 
 namespace PSX\Http\Stream;
 
+use PSX\Http\StreamInterface;
+
 /**
  * Stream which opens the stream only on actual usage
  *
@@ -27,10 +29,23 @@ namespace PSX\Http\Stream;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    http://phpsx.org
  */
-class LazyStream extends Stream
+class LazyStream implements StreamInterface
 {
+    use StreamWrapperTrait;
+
+    /**
+     * @var string
+     */
     protected $uri;
+
+    /**
+     * @var string
+     */
     protected $mode;
+
+    /**
+     * @var boolean
+     */
     protected $opened = false;
 
     public function __construct($uri, $mode = 'rb')
@@ -39,119 +54,13 @@ class LazyStream extends Stream
         $this->mode = $mode;
     }
 
-    public function close()
-    {
-        $this->open();
-
-        parent::close();
-    }
-
-    public function detach()
-    {
-        $this->open();
-
-        return parent::detach();
-    }
-
-    public function getSize()
-    {
-        $this->open();
-
-        return parent::getSize();
-    }
-
-    public function tell()
-    {
-        $this->open();
-
-        return parent::tell();
-    }
-
-    public function eof()
-    {
-        $this->open();
-
-        return parent::eof();
-    }
-
-    public function rewind()
-    {
-        $this->open();
-
-        return parent::rewind();
-    }
-
-    public function isSeekable()
-    {
-        $this->open();
-
-        return parent::isSeekable();
-    }
-
-    public function seek($offset, $whence = SEEK_SET)
-    {
-        $this->open();
-
-        return parent::seek($offset, $whence);
-    }
-
-    public function isWritable()
-    {
-        $this->open();
-
-        return parent::isWritable();
-    }
-
-    public function write($string)
-    {
-        $this->open();
-
-        return parent::write($string);
-    }
-
-    public function isReadable()
-    {
-        $this->open();
-
-        return parent::isReadable();
-    }
-
-    public function read($length)
-    {
-        $this->open();
-
-        return parent::read($length);
-    }
-
-    public function getContents()
-    {
-        $this->open();
-
-        return parent::getContents();
-    }
-
-    public function getMetadata($key = null)
-    {
-        $this->open();
-
-        return parent::getMetadata($key);
-    }
-
-    public function __toString()
-    {
-        $this->open();
-
-        return parent::__toString();
-    }
-
-    private function open()
+    protected function call()
     {
         if ($this->opened) {
             return;
         }
 
-        $this->setResource(fopen($this->uri, $this->mode));
-
+        $this->stream = new Stream(fopen($this->uri, $this->mode));
         $this->opened = true;
     }
 }
