@@ -23,8 +23,7 @@ namespace PSX\Http\Stream;
 use PSX\Http\StreamInterface;
 
 /**
- * Stream which works on an string therefore the size of the stream is limited 
- * to the available memory
+ * Stream which works on a string
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
@@ -127,6 +126,7 @@ class StringStream implements StreamInterface
             $this->data = $pre . $string . $post;
 
             $this->pointer+= $length;
+            $this->length = strlen($this->data);
 
             return $length;
         }
