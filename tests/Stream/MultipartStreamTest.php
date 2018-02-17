@@ -33,7 +33,7 @@ class MultipartStreamTest extends StreamTestCase
 {
     protected function getStream()
     {
-        $stream = new MultipartStream([]);
+        $stream = new MultipartStream([], []);
         $stream->write('foobar');
         $stream->seek(0);
 
