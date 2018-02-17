@@ -1,4 +1,9 @@
 
+### 2.0.3 (2018-02-17)
+
+* Improve file upload handling
+* Add multipart stream
+
 ### 2.0.2 (2018-02-16)
 
 * Add additional middlewares
