@@ -234,18 +234,18 @@ $chain->handle($request, $response);
 
 * Because PSR-7 is immutable PSR-15 must have the `fn(req): res` signature since
   it is not possible to change the response object.
-* The middleware needs to know how to create an HTTP response instance. Because
+* The middleware needs to know how to create a HTTP response instance. Because
   of this you can't inject a different response implementation into your 
   middleware stack. As workaround we see a HTTP factory PSR, but we think this 
   is a code-smell.
 * If your app uses a PHP server like Swoole you want to wrap the Swoole response 
-  object and pass it to the middleware to handle also streaming uses cases.
+  object and pass it to the middleware to handle also streaming use cases.
 * Immutability forces a design on your application you have i.e. not the
   option to use the double-pass middleware signature.
 * Since PHP has no immutability on the language level we must 
   always copy the object and change a specific value which is bad for memory /
   performance.
 * It is really difficult to migrate legacy applications to the
-  `fn(req): res` middleware style since most applications today work with an
+  `fn(req): res` middleware style since most applications today work with a
   mutable HTTP object.
 * PSR-7 is actually not fully immutable since the body is always mutable
