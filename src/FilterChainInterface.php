@@ -21,7 +21,7 @@
 namespace PSX\Http;
 
 /**
- * FilterChainInterface
+ * Represents a middleware chain which can be executed 
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
@@ -30,14 +30,14 @@ namespace PSX\Http;
 interface FilterChainInterface
 {
     /**
-     * Attaches a middleware
+     * Attaches a middleware to the chain
      *
      * @param \Closure|\PSX\Http\FilterInterface $filter
      */
     public function on($filter);
 
     /**
-     * Triggers the first middleware in the chain
+     * Triggers the first middleware on the chain
      *
      * @param \PSX\Http\RequestInterface $request
      * @param \PSX\Http\ResponseInterface $response

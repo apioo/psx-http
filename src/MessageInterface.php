@@ -39,54 +39,34 @@ use Psr\Http\Message\StreamInterface as PsrStreamInterface;
 interface MessageInterface
 {
     /**
-     * Retrieves the HTTP protocol version as a string.
+     * Retrieves the HTTP protocol version as a string. The string MUST contain 
+     * only the HTTP version number (e.g., "1.1", "1.0").
      *
-     * The string MUST contain only the HTTP version number (e.g., "1.1", "1.0").
-     *
-     * @return string HTTP protocol version.
+     * @return string
      */
     public function getProtocolVersion();
 
     /**
-     * Sets the specified HTTP protocol version.
+     * Sets the specified HTTP protocol version. The version string MUST contain 
+     * only the HTTP version number (e.g., "1.1", "1.0").
      *
-     * The version string MUST contain only the HTTP version number (e.g.,
-     * "1.1", "1.0").
-     *
-     * @param string $protocol HTTP protocol version
+     * @param string $protocol
      * @return void
      */
     public function setProtocolVersion($protocol);
 
     /**
-     * Retrieves all message header values.
+     * Returns an associative array of the message's headers. Each key MUST be a 
+     * header name, and each value MUST be an array of strings for that header
      *
-     * The keys represent the header name as it will be sent over the wire, and
-     * each value is an array of strings associated with the header.
-     *
-     *     // Represent the headers as a string
-     *     foreach ($message->getHeaders() as $name => $values) {
-     *         echo $name . ": " . implode(", ", $values);
-     *     }
-     *
-     *     // Emit headers iteratively:
-     *     foreach ($message->getHeaders() as $name => $values) {
-     *         foreach ($values as $value) {
-     *             header(sprintf('%s: %s', $name, $value), false);
-     *         }
-     *     }
-     *
-     * While header names are not case-sensitive, getHeaders() will preserve the
-     * exact case in which headers were originally specified.
-     *
-     * @return array Returns an associative array of the message's headers. Each
-     *     key MUST be a header name, and each value MUST be an array of strings
-     *     for that header.
+     * @return array.
      */
     public function getHeaders();
 
     /**
-     * Sets all message headers which overwrites all existing headers
+     * Sets all message headers which overwrites all existing headers. Each key 
+     * MUST be a header name, and each value MUST be an array of strings for 
+     * that header
      *
      * @param array $headers
      * @return void
@@ -94,23 +74,23 @@ interface MessageInterface
     public function setHeaders(array $headers);
 
     /**
-     * Checks if a header exists by the given case-insensitive name.
-     *
-     * @param string $name Case-insensitive header field name.
-     * @return bool Returns true if any header names match the given header
-     *     name using a case-insensitive string comparison. Returns false if
-     *     no matching header name is found in the message.
+     * Checks if a header exists by the given case-insensitive name. Returns 
+     * true if any header names match the given header name using a 
+     * case-insensitive string comparison. Returns false if no matching header 
+     * name is found in the message.
+     * 
+     * @param string $name
+     * @return boolean
      */
     public function hasHeader($name);
 
     /**
-     * Retrieves a message header value by the given case-insensitive name.
+     * Retrieves a message header value by the given case-insensitive name. This 
+     * method returns a string. If a header has multiple values they will be 
+     * concatenated with a comma. If the header does not appear in the message, 
+     * this method MUST return null
      *
-     * This method returns an string. If an header has multiple values they will
-     * be concatenated with an comma. If the header does not appear in the
-     * message, this method MUST return null
-     *
-     * @param string $name Case-insensitive header field name.
+     * @param string $name
      * @return string|null
      */
     public function getHeader($name);

@@ -32,6 +32,10 @@ namespace PSX\Http;
 interface FilterInterface
 {
     /**
+     * Executes a middleware which can read data from the request and modify the 
+     * response. A middleware can call the handle method of the filter chain in
+     * order to execute the next middleware 
+     * 
      * @param \PSX\Http\RequestInterface $request
      * @param \PSX\Http\ResponseInterface $response
      * @param \PSX\Http\FilterChainInterface $filterChain

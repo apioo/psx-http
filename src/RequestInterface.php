@@ -42,62 +42,41 @@ use PSX\Uri\UriInterface;
 interface RequestInterface extends MessageInterface
 {
     /**
-     * Retrieves the message's request target.
-     *
-     * Retrieves the message's request-target either as it will appear (for
-     * clients), as it appeared at request (for servers), or as it was
-     * specified for the instance (see withRequestTarget()).
-     *
-     * In most cases, this will be the origin-form of the composed URI,
-     * unless a value was provided to the concrete implementation (see
-     * withRequestTarget() below).
-     *
-     * If no URI is available, and no request-target has been specifically
-     * provided, this method MUST return the string "/".
+     * Returns the message's request-target
      *
      * @return string
      */
     public function getRequestTarget();
 
     /**
-     * Sets an specific request-target.
+     * Sets an specific request-target
      *
-     * If the request needs a non-origin-form request-target — e.g., for
-     * specifying an absolute-form, authority-form, or asterisk-form —
-     * this method may be used to create an instance with the specified
-     * request-target, verbatim.
-     *
-     * @link http://tools.ietf.org/html/rfc7230#section-2.7 (for the various
-     *     request-target forms allowed in request messages)
-     * @param mixed $requestTarget
+     * @link http://tools.ietf.org/html/rfc7230#section-2.7
+     * @param string $requestTarget
      * @return void
      */
     public function setRequestTarget($requestTarget);
 
     /**
-     * Retrieves the HTTP method of the request
+     * Retrieves the HTTP method of the request i.e. GET, POST
      *
      * @return string
      */
     public function getMethod();
 
     /**
-     * Sets the provided HTTP method.
+     * Sets the provided HTTP method. While HTTP method names are typically all 
+     * uppercase characters, HTTP method names are case-sensitive and thus 
+     * implementations SHOULD NOT modify the given string.
      *
-     * While HTTP method names are typically all uppercase characters, HTTP
-     * method names are case-sensitive and thus implementations SHOULD NOT
-     * modify the given string.
-     *
-     * @param string $method Case-insensitive method.
+     * @param string $method
      * @return void
-     * @throws \InvalidArgumentException for invalid HTTP methods.
+     * @throws \InvalidArgumentException
      */
     public function setMethod($method);
 
     /**
      * Retrieves the URI instance.
-     *
-     * This method MUST return a PSX\Uri\UriInterface instance.
      *
      * @link http://tools.ietf.org/html/rfc3986#section-4.3
      * @return \PSX\Uri\UriInterface
@@ -108,58 +87,42 @@ interface RequestInterface extends MessageInterface
      * Sets the provided URI.
      *
      * @link http://tools.ietf.org/html/rfc3986#section-4.3
-     * @param \PSX\Uri\UriInterface $uri New request URI to use.
+     * @param \PSX\Uri\UriInterface $uri
      * @return void
      */
     public function setUri(UriInterface $uri);
 
     /**
-     * Retrieve attributes derived from the request.
+     * Retrieve attributes derived from the request. The request attributes 
+     * should contain only additional information about the request i.e. 
+     * "REMOTE_ADDR" from the $_SERVER variable which contains the ip address of
+     * the client which has initiated the HTTP request
      *
-     * The request "attributes" may be used to allow injection of any
-     * parameters derived from the request: e.g., the results of path
-     * match operations; the results of decrypting cookies; the results of
-     * deserializing non-form-encoded message bodies; etc. Attributes
-     * will be application and request specific.
-     *
-     * @return array Attributes derived from the request.
+     * @return array
      */
     public function getAttributes();
 
     /**
-     * Retrieve a single derived request attribute.
+     * Retrieve a single derived request attribute
      *
-     * Retrieves a single derived request attribute as described in
-     * getAttributes(). If the attribute has not been previously set, returns
-     * NULL.
-     *
-     * @see getAttributes()
-     * @param string $name The attribute name.
+     * @param string $name
      * @return mixed
      */
     public function getAttribute($name);
 
     /**
-     * Sets the specified derived request attribute.
+     * This method allows setting a single derived request attribute
      *
-     * This method allows setting a single derived request attribute as
-     * described in getAttributes().
-     *
-     * @see getAttributes()
-     * @param string $name The attribute name.
-     * @param mixed $value The value of the attribute.
+     * @param string $name
+     * @param mixed $value
      * @return void
      */
     public function setAttribute($name, $value);
 
     /**
-     * Removes the specified derived request attribute.
+     * Removes the specified derived request attribute
      *
-     * This method allows removing a single derived request attribute as
-     * described in getAttributes().
-     *
-     * @see getAttributes()
-     * @param string $name The attribute name.
+     * @param string $name
      * @return void
      */
     public function removeAttribute($name);
