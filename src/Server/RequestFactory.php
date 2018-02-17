@@ -106,7 +106,7 @@ class RequestFactory implements RequestFactoryInterface
         if (in_array($method, ['POST', 'PUT', 'DELETE', 'PATCH'])) {
             if ($method == 'POST' && !empty($_FILES) && isset($headers['CONTENT-TYPE']) && strpos($headers['CONTENT-TYPE'], 'multipart/form-data') === 0) {
                 // in case of file uploads use multipart stream
-                $body = new MultipartStream($_FILES);
+                $body = new MultipartStream($_FILES, $_POST);
             } else {
                 // use lazy stream to open the stream only and usage and buffer the
                 // response to read multiple times from the same stream

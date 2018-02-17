@@ -32,20 +32,21 @@ class MultipartStream extends StringStream implements \Countable, \IteratorAggre
     /**
      * @var array
      */
-    protected $files;
+    protected $parts;
 
     /**
      * @param array $files
+     * @param array $post
      */
-    public function __construct(array $files)
+    public function __construct(array $files, array $post)
     {
         parent::__construct('');
 
-        $this->files = [];
+        $this->parts = [];
 
         foreach ($files as $name => $file) {
             if (isset($file['tmp_name']) && is_uploaded_file($file['tmp_name'])) {
-                $this->files[$name] = new FileStream(
+                $this->parts[$name] = new FileStream(
                     new LazyStream($file['tmp_name'], 'rb'),
                     $file['tmp_name'],
                     $file['name'],
@@ -55,15 +56,21 @@ class MultipartStream extends StringStream implements \Countable, \IteratorAggre
                 );
             }
         }
+
+        foreach ($post as $name => $value) {
+            if (!isset($this->parts[$name])) {
+                $this->parts[$name] = $value;
+            }
+        }
     }
 
     /**
      * @param string $name
-     * @return \PSX\Http\Stream\FileStream|null
+     * @return \PSX\Http\Stream\FileStream|string|null
      */
     public function getPart($name)
     {
-        return $this->files[$name] ?? null;
+        return $this->parts[$name] ?? null;
     }
 
     /**
@@ -71,7 +78,7 @@ class MultipartStream extends StringStream implements \Countable, \IteratorAggre
      */
     public function count()
     {
-        return count($this->files);
+        return count($this->parts);
     }
 
     /**
@@ -79,6 +86,6 @@ class MultipartStream extends StringStream implements \Countable, \IteratorAggre
      */
     public function getIterator()
     {
-        return new \ArrayIterator($this->files);
+        return new \ArrayIterator($this->parts);
     }
 }
