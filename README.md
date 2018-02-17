@@ -5,7 +5,8 @@ PSX Http
 
 This library contains well designed interfaces to describe HTTP message, 
 middleware and client classes. It contains also corresponding reference 
-implementations. They are used by the [PSX](http://phpsx.org/) framework and 
+implementations which can be used by every app which needs a solid HTTP stack.
+They are used by the [PSX](http://phpsx.org/) framework and 
 [Fusio](https://www.fusio-project.org/).
 
 We are aware that this overlaps with PSR-7 and PSR-15 but we think that those 
@@ -111,7 +112,9 @@ is the better solution. Also we should note the fitting [XKDC](https://xkcd.com/
 + getVersion(): float
 ```
 
-## Middleware
+## Examples
+
+### Middleware
 
 The following shows a simple middleware which always returns the response body
 `Hello World!`:
@@ -155,7 +158,7 @@ $chain->handle($request, $response);
 (new Server\Sender())->send($response);
 ```
 
-## Client
+### Client
 
 The following sends a HTTP GET request to google:
 
@@ -163,19 +166,32 @@ The following sends a HTTP GET request to google:
 <?php
 
 use PSX\Http\Client;
+use PSX\Http\Exception\StatusCodeException;
 
-$client   = new Client\Client();
-$request  = new Client\GetRequest('http://google.com', ['Accept' => 'text/html']);
+// create HTTP client
+$client = new Client\Client();
+
+// build request
+$request = new Client\GetRequest('http://google.com', ['Accept' => 'text/html']);
+
+// send request
 $response = $client->request($request);
 
+// check response
 if ($response->getStatusCode() == 200) {
+    // get header
+    $contentType = $response->getHeader('Content-Type');
+
+    // output response body
     echo (string) $response->getBody();
 } else {
-    // something goes wrong
+    // the client never throws an exception for unsuccessful response codes but
+    // you can do this explicit
+    StatusCodeException::throwOnError($response);
 }
 ```
 
-## Uploads
+### Uploads
 
 Example how to handle file uploads:
 
@@ -196,14 +212,25 @@ $chain->on(function(Http\RequestInterface $request, Http\ResponseInterface $resp
         // move uploaded file to a new location
         $body->getPart('userfile')->move('/home/new/file.txt');
 
-        // or access the file through the normal stream functions
-        $body->getPart('userfile')->read(32);
+        // or access the file directly through the normal stream functions
+        //$body->getPart('userfile')->read(32);
 
         // write data to the body
         $response->getBody()->write('Upload successful!');
     } else {
-        // no multipart upload
-        $response->getBody()->write('No upload!');
+        // no upload so show form
+        $html = <<<'HTML'
+<!-- The data encoding type, enctype, MUST be specified as below -->
+<form enctype="multipart/form-data" action="" method="POST">
+    <!-- MAX_FILE_SIZE must precede the file input field -->
+    <input type="hidden" name="MAX_FILE_SIZE" value="30000" />
+    <!-- Name of input element determines name in $_FILES array -->
+    Send this file: <input name="userfile" type="file" />
+    <input type="submit" value="Send File" />
+</form>
+HTML;
+
+        $response->getBody()->write($html);
     }
 
     $filterChain->handle($request, $response);
