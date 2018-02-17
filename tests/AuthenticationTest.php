@@ -43,6 +43,9 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
     {
         return [
             ['realm="http-auth@example.org", qop="auth", algorithm=SHA-256', ['realm' => 'http-auth@example.org', 'qop' => 'auth', 'algorithm' => 'SHA-256']],
+            ['Credential=AKIAIOSFODNN7EXAMPLE/20130524/us-east-1/s3/aws4_request, SignedHeaders=host;range;x-amz-date, Signature=fe5f80f77d5fa3beca038a248ff027d0445342fe2855ddc963176630326f1024', ['credential' => 'AKIAIOSFODNN7EXAMPLE/20130524/us-east-1/s3/aws4_request', 'signedheaders' => 'host;range;x-amz-date', 'signature' => 'fe5f80f77d5fa3beca038a248ff027d0445342fe2855ddc963176630326f1024']],
+            ['realm="Access to the staging site", charset="UTF-8"', ['realm' => 'Access to the staging site', 'charset' => 'UTF-8']],
+            ['foo=bar', ['foo' => 'bar']],
         ];
     }
 
