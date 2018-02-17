@@ -21,7 +21,9 @@
 namespace PSX\Http\Exception;
 
 use InvalidArgumentException;
+use PSX\Http\Authentication;
 use PSX\Http\Http;
+use PSX\Http\ResponseInterface;
 use RuntimeException;
 
 /**
@@ -74,5 +76,108 @@ class StatusCodeException extends RuntimeException
     public function isServerError()
     {
         return $this->statusCode >= 500 && $this->statusCode < 600;
+    }
+
+    public static function throwOnRedirection(ResponseInterface $response)
+    {
+        $statusCode = $response->getStatusCode();
+        $location   = $response->getHeader('Location');
+
+        switch ($statusCode) {
+            case 301:
+                throw new MovedPermanentlyException($location);
+
+            case 302:
+                throw new FoundException($location);
+
+            case 303:
+                throw new SeeOtherException($location);
+
+            case 304:
+                throw new NotModifiedException($location);
+
+            case 307:
+                throw new TemporaryRedirectException($location);
+        }
+        
+        if ($statusCode >= 300 && $statusCode < 400) {
+            throw new RedirectionException($statusCode);
+        }
+    }
+
+    public static function throwOnError(ResponseInterface $response)
+    {
+        $code = $response->getStatusCode();
+        if ($code >= 400 && $code < 500) {
+            self::throwOnClientError($response);
+        } elseif ($code >= 500 && $code < 600) {
+            self::throwOnServerError($response);
+        }
+    }
+
+    public static function throwOnClientError(ResponseInterface $response)
+    {
+        $statusCode = $response->getStatusCode();
+        $message    = $response->getReasonPhrase();
+
+        switch ($statusCode) {
+            case 400:
+                throw new BadRequestException($message);
+            case 401:
+                $parts = explode(' ', $response->getHeader('WWW-Authenticate'), 2);
+                $type  = isset($parts[0]) ? $parts[0] : null;
+                $data  = isset($parts[1]) ? $parts[1] : null;
+
+                $params = [];
+                if (!empty($data)) {
+                    $params = Authentication::decodeParameters($data);
+                }
+
+                throw new UnauthorizedException($message, $type, $params);
+            case 403:
+                throw new ForbiddenException($message);
+            case 404:
+                throw new NotFoundException($message);
+            case 405:
+                $allow = $response->getHeader('Allow');
+                $allow = explode(',', $allow);
+                $allow = array_map('trim', $allow);
+                $allow = array_filter($allow);
+
+                throw new MethodNotAllowedException($message, $allow);
+            case 406:
+                throw new NotAcceptableException($message);
+            case 409:
+                throw new ConflictException($message);
+            case 410:
+                throw new GoneException($message);
+            case 412:
+                throw new PreconditionFailedException($message);
+            case 415:
+                throw new UnsupportedMediaTypeException($message);
+        }
+
+        if ($statusCode >= 400 && $statusCode < 500) {
+            throw new ClientErrorException($message, $statusCode);
+        }
+    }
+
+    public static function throwOnServerError(ResponseInterface $response)
+    {
+        $statusCode = $response->getStatusCode();
+        $message    = $response->getReasonPhrase();
+
+        switch ($statusCode) {
+            case 500:
+                throw new InternalServerErrorException($message);
+            case 501:
+                throw new NotImplementedException($message);
+            case 503:
+                throw new ServiceUnavailableException($message);
+        }
+
+        if ($statusCode >= 500 && $statusCode < 600) {
+            throw new ServerErrorException($message, $statusCode);
+        }
     }
 }
