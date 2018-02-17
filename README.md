@@ -4,14 +4,14 @@ PSX Http
 ## About
 
 This library contains well designed interfaces to describe HTTP message, 
-middleware and client objects. It contains also corresponding reference 
+middleware and client classes. It contains also corresponding reference 
 implementations. They are used by the [PSX](http://phpsx.org/) framework and 
 [Fusio](https://www.fusio-project.org/).
 
 We are aware that this overlaps with PSR-7 and PSR-15 but we think that those 
 specs have made some bad design decisions and this project is here to provide an 
 alternative. It is always good to have diversity and evolution will show which 
-is the better design. Also we should note the fitting [XKDC](https://xkcd.com/927/).
+is the better solution. Also we should note the fitting [XKDC](https://xkcd.com/927/).
 
 ### HTTP
 
@@ -196,7 +196,7 @@ $chain->on(function(Http\RequestInterface $request, Http\ResponseInterface $resp
         // move uploaded file to a new location
         $body->getPart('userfile')->move('/home/new/file.txt');
 
-        // access the file through the normal stream functions
+        // or access the file through the normal stream functions
         $body->getPart('userfile')->read(32);
 
         // write data to the body
