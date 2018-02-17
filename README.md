@@ -23,8 +23,8 @@ is the better solution. Also we should note the fitting [XKDC](https://xkcd.com/
 + setRequestTarget(string $requestTarget)
 + getMethod(): string
 + setMethod(string $method)
-+ getUri(): Uri
-+ setUri(Uri $uri)
++ getUri(): UriInterface
++ setUri(UriInterface $uri)
 + getAttributes(): string|null
 + getAttribute(string $name)
 + setAttribute(string $name, mixed $value)
