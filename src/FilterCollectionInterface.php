@@ -22,18 +22,13 @@ namespace PSX\Http;
 
 /**
  * Represents a class which can return a middleware collection. This collection
- * can then be used to create a middleware chain
+ * can then be used in a a middleware chain. The class must contain 
+ * FilterInterface or callable classes
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    http://phpsx.org
  */
-interface FilterCollectionInterface
+interface FilterCollectionInterface extends \IteratorAggregate
 {
-    /**
-     * Returns an array containing FilterInterface or callable
-     *
-     * @return array|\Traversable
-     */
-    public function getFilters();
 }
