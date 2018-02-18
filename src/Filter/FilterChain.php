@@ -52,10 +52,10 @@ class FilterChain implements FilterChainInterface, LoggerAwareInterface
     protected $logger;
 
     /**
-     * @param array $filters
+     * @param array|\Traversable $filters
      * @param FilterChainInterface|null $filterChain
      */
-    public function __construct(array $filters = [], FilterChainInterface $filterChain = null)
+    public function __construct($filters = [], FilterChainInterface $filterChain = null)
     {
         $this->filters     = [];
         $this->filterChain = $filterChain;
@@ -78,9 +78,11 @@ class FilterChain implements FilterChainInterface, LoggerAwareInterface
      */
     public function on($filter)
     {
-        if ($filter instanceof \Closure) {
+        if ($filter instanceof FilterInterface) {
             $this->filters[] = $filter;
-        } elseif ($filter instanceof FilterInterface) {
+        } elseif ($filter instanceof \Closure) {
+            $this->filters[] = $filter;
+        } elseif (is_callable($filter)) {
             $this->filters[] = $filter;
         } else {
             throw new \InvalidArgumentException('Invalid filter must be either a \Closure or ' . FilterInterface::class);
