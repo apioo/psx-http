@@ -1,4 +1,9 @@
 
+### 2.0.4 (2018-02-18)
+
+* Add filter collection interface
+* Filter chain allow usage of callable
+
 ### 2.0.3 (2018-02-17)
 
 * Improve file upload handling
