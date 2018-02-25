@@ -1,4 +1,8 @@
 
+### 2.0.5 (2018-02-25)
+
+* Add http writer
+
 ### 2.0.4 (2018-02-18)
 
 * Add filter collection interface
