@@ -34,7 +34,7 @@ use PSX\Uri\Url;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    http://phpsx.org
  */
-class BasicAuthenticationTest extends \PHPUnit_Framework_TestCase
+class BasicAuthenticationTest extends FilterTestCase
 {
     public function testSuccessful()
     {
@@ -52,12 +52,7 @@ class BasicAuthenticationTest extends \PHPUnit_Framework_TestCase
         $request  = new Request(new Url('http://localhost'), 'GET', array('Authorization' => 'Basic ' . base64_encode($username . ':' . $password)));
         $response = new Response();
 
-        $filterChain = $this->getMockFilterChain();
-        $filterChain->expects($this->once())
-            ->method('handle')
-            ->with($this->equalTo($request), $this->equalTo($response));
-
-        $handle->handle($request, $response, $filterChain);
+        $handle->handle($request, $response, $this->getFilterChain(true, $request, $response));
     }
 
     /**
@@ -75,7 +70,7 @@ class BasicAuthenticationTest extends \PHPUnit_Framework_TestCase
         $request  = new Request(new Url('http://localhost'), 'GET', array('Authorization' => 'Basic ' . base64_encode($username . ':' . $password)));
         $response = new Response();
 
-        $handle->handle($request, $response, $this->getMockFilterChain());
+        $handle->handle($request, $response, $this->getFilterChain(false));
     }
 
     public function testMissing()
@@ -88,7 +83,7 @@ class BasicAuthenticationTest extends \PHPUnit_Framework_TestCase
         $response = new Response();
 
         try {
-            $handle->handle($request, $response, $this->getMockFilterChain());
+            $handle->handle($request, $response, $this->getFilterChain(false));
 
             $this->fail('Must throw an Exception');
         } catch (UnauthorizedException $e) {
@@ -108,7 +103,7 @@ class BasicAuthenticationTest extends \PHPUnit_Framework_TestCase
         $response = new Response();
 
         try {
-            $handle->handle($request, $response, $this->getMockFilterChain());
+            $handle->handle($request, $response, $this->getFilterChain(false));
 
             $this->fail('Must throw an Exception');
         } catch (UnauthorizedException $e) {
@@ -116,13 +111,5 @@ class BasicAuthenticationTest extends \PHPUnit_Framework_TestCase
             $this->assertEquals('Basic', $e->getType());
             $this->assertEquals(array('realm' => 'psx'), $e->getParameters());
         }
-    }
-
-    protected function getMockFilterChain()
-    {
-        return $this->getMockBuilder(FilterChain::class)
-            ->setConstructorArgs(array(array()))
-            ->setMethods(array('handle'))
-            ->getMock();
     }
 }
