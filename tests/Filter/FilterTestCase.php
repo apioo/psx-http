@@ -20,39 +20,45 @@
 
 namespace PSX\Http\Tests\Filter;
 
+use PSX\Http\Filter\CORS;
 use PSX\Http\Filter\FilterChain;
-use PSX\Http\Filter\UserAgentEnforcer;
 use PSX\Http\Request;
+use PSX\Http\RequestInterface;
 use PSX\Http\Response;
+use PSX\Http\ResponseInterface;
 use PSX\Uri\Url;
 
 /**
- * UserAgentEnforcerTest
+ * CORSTest
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    http://phpsx.org
  */
-class UserAgentEnforcerTest extends FilterTestCase
+abstract class FilterTestCase extends \PHPUnit_Framework_TestCase
 {
-    public function testUserAgent()
-    {
-        $request  = new Request(new Url('http://localhost'), 'GET', ['User-Agent' => 'foobar']);
-        $response = new Response();
-
-        $filter = new UserAgentEnforcer();
-        $filter->handle($request, $response, $this->getFilterChain(true, $request, $response));
-    }
-
     /**
-     * @expectedException \PSX\Http\Exception\BadRequestException
+     * @param boolean $expectNextCall
+     * @param \PSX\Http\RequestInterface|null $expectRequest
+     * @param \PSX\Http\ResponseInterface|null $expectResponse
+     * @return \PSX\Http\FilterChainInterface
      */
-    public function testNoUserAgent()
+    protected function getFilterChain($expectNextCall, RequestInterface $expectRequest = null, ResponseInterface $expectResponse = null)
     {
-        $request  = new Request(new Url('http://localhost'), 'GET');
-        $response = new Response();
+        $filterChain = $this->getMockBuilder(FilterChain::class)
+            ->setConstructorArgs([[]])
+            ->setMethods(['handle'])
+            ->getMock();
 
-        $filter = new UserAgentEnforcer();
-        $filter->handle($request, $response, $this->getFilterChain(false));
+        if ($expectNextCall) {
+            $filterChain->expects($this->once())
+                ->method('handle')
+                ->with($this->equalTo($expectRequest), $this->equalTo($expectResponse));
+        } else {
+            $filterChain->expects($this->never())
+                ->method('handle');
+        }
+
+        return $filterChain;
     }
 }

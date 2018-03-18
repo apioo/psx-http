@@ -26,6 +26,7 @@ use PSX\Http\FilterInterface;
 use PSX\Http\Request;
 use PSX\Http\Response;
 use PSX\Http\Stream\StringStream;
+use PSX\Http\Tests\Filter\FilterTestCase;
 use PSX\Uri\Url;
 
 /**
@@ -35,7 +36,7 @@ use PSX\Uri\Url;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    http://phpsx.org
  */
-class PathMatchTest extends \PHPUnit_Framework_TestCase
+class PathMatchTest extends FilterTestCase
 {
     public function testPath()
     {
@@ -51,16 +52,8 @@ class PathMatchTest extends \PHPUnit_Framework_TestCase
             ->method('handle')
             ->with($this->equalTo($request), $this->equalTo($response));
 
-        $filterChain = $this->getMockBuilder(FilterChain::class)
-            ->setConstructorArgs(array(array()))
-            ->setMethods(array('handle'))
-            ->getMock();
-
-        $filterChain->expects($this->never())
-            ->method('handle');
-
         $handle = new PathMatch('/foo+', $filter);
-        $handle->handle($request, $response, $filterChain);
+        $handle->handle($request, $response, $this->getFilterChain(false));
     }
 
     public function testWrongPath()
@@ -77,15 +70,7 @@ class PathMatchTest extends \PHPUnit_Framework_TestCase
             ->method('handle')
             ->with($this->equalTo($request), $this->equalTo($response));
 
-        $filterChain = $this->getMockBuilder(FilterChain::class)
-            ->setConstructorArgs(array(array()))
-            ->setMethods(array('handle'))
-            ->getMock();
-
-        $filterChain->expects($this->once())
-            ->method('handle');
-
         $handle = new PathMatch('/foo+', $filter);
-        $handle->handle($request, $response, $filterChain);
+        $handle->handle($request, $response, $this->getFilterChain(true, $request, $response));
     }
 }

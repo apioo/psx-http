@@ -34,7 +34,7 @@ use PSX\Uri\Url;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    http://phpsx.org
  */
-class BackstageTest extends \PHPUnit_Framework_TestCase
+class BackstageTest extends FilterTestCase
 {
     public function testFileExists()
     {
@@ -44,16 +44,8 @@ class BackstageTest extends \PHPUnit_Framework_TestCase
         $response = new Response();
         $response->setBody(new StringStream());
 
-        $filterChain = $this->getMockBuilder(FilterChain::class)
-            ->setConstructorArgs(array(array()))
-            ->setMethods(array('handle'))
-            ->getMock();
-
-        $filterChain->expects($this->never())
-            ->method('handle');
-
         $handle = new Backstage(__DIR__ . '/backstage.htm');
-        $handle->handle($request, $response, $filterChain);
+        $handle->handle($request, $response, $this->getFilterChain(false));
 
         $this->assertEquals('foobar', (string) $response->getBody());
     }
@@ -65,17 +57,8 @@ class BackstageTest extends \PHPUnit_Framework_TestCase
         ));
         $response = new Response();
 
-        $filterChain = $this->getMockBuilder(FilterChain::class)
-            ->setConstructorArgs(array(array()))
-            ->setMethods(array('handle'))
-            ->getMock();
-
-        $filterChain->expects($this->once())
-            ->method('handle')
-            ->with($this->equalTo($request), $this->equalTo($response));
-
         $handle = new Backstage(__DIR__ . '/backstage.htm');
-        $handle->handle($request, $response, $filterChain);
+        $handle->handle($request, $response, $this->getFilterChain(true, $request, $response));
     }
 
     public function testFileNotExists()
@@ -85,17 +68,8 @@ class BackstageTest extends \PHPUnit_Framework_TestCase
         ));
         $response = new Response();
 
-        $filterChain = $this->getMockBuilder(FilterChain::class)
-            ->setConstructorArgs(array(array()))
-            ->setMethods(array('handle'))
-            ->getMock();
-
-        $filterChain->expects($this->once())
-            ->method('handle')
-            ->with($this->equalTo($request), $this->equalTo($response));
-
         $handle = new Backstage(__DIR__ . '/foo.htm');
-        $handle->handle($request, $response, $filterChain);
+        $handle->handle($request, $response, $this->getFilterChain(true, $request, $response));
     }
 
     public function testNoFittingAcceptHeaderAndFileNotExists()
@@ -105,16 +79,7 @@ class BackstageTest extends \PHPUnit_Framework_TestCase
         ));
         $response = new Response();
 
-        $filterChain = $this->getMockBuilder(FilterChain::class)
-            ->setConstructorArgs(array(array()))
-            ->setMethods(array('handle'))
-            ->getMock();
-
-        $filterChain->expects($this->once())
-            ->method('handle')
-            ->with($this->equalTo($request), $this->equalTo($response));
-
         $handle = new Backstage(__DIR__ . '/foo.htm');
-        $handle->handle($request, $response, $filterChain);
+        $handle->handle($request, $response, $this->getFilterChain(true, $request, $response));
     }
 }

@@ -33,7 +33,7 @@ use PSX\Uri\Url;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    http://phpsx.org
  */
-class IpFirewallTest extends \PHPUnit_Framework_TestCase
+class IpFirewallTest extends FilterTestCase
 {
     public function testValidIp()
     {
@@ -42,17 +42,8 @@ class IpFirewallTest extends \PHPUnit_Framework_TestCase
 
         $request->setAttribute('REMOTE_ADDR', '127.0.0.1');
 
-        $filterChain = $this->getMockBuilder(FilterChain::class)
-            ->setConstructorArgs(array(array()))
-            ->setMethods(array('handle'))
-            ->getMock();
-
-        $filterChain->expects($this->once())
-            ->method('handle')
-            ->with($this->equalTo($request), $this->equalTo($response));
-
         $filter = new IpFirewall(['127.0.0.1']);
-        $filter->handle($request, $response, $filterChain);
+        $filter->handle($request, $response, $this->getFilterChain(true, $request, $response));
     }
 
     /**
@@ -65,17 +56,8 @@ class IpFirewallTest extends \PHPUnit_Framework_TestCase
 
         $request->setAttribute('REMOTE_ADDR', '127.0.0.1');
 
-        $filterChain = $this->getMockBuilder(FilterChain::class)
-            ->setConstructorArgs(array(array()))
-            ->setMethods(array('handle'))
-            ->getMock();
-
-        $filterChain->expects($this->never())
-            ->method('handle')
-            ->with($this->equalTo($request), $this->equalTo($response));
-
         $filter = new IpFirewall(['127.0.0.2']);
-        $filter->handle($request, $response, $filterChain);
+        $filter->handle($request, $response, $this->getFilterChain(false));
     }
 
     public function testNoIp()
@@ -83,16 +65,7 @@ class IpFirewallTest extends \PHPUnit_Framework_TestCase
         $request  = new Request(new Url('http://localhost'), 'GET');
         $response = new Response();
 
-        $filterChain = $this->getMockBuilder(FilterChain::class)
-            ->setConstructorArgs(array(array()))
-            ->setMethods(array('handle'))
-            ->getMock();
-
-        $filterChain->expects($this->once())
-            ->method('handle')
-            ->with($this->equalTo($request), $this->equalTo($response));
-
         $filter = new IpFirewall(['127.0.0.2']);
-        $filter->handle($request, $response, $filterChain);
+        $filter->handle($request, $response, $this->getFilterChain(true, $request, $response));
     }
 }

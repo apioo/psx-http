@@ -34,7 +34,7 @@ use PSX\Uri\Url;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    http://phpsx.org
  */
-class ContentMd5Test extends \PHPUnit_Framework_TestCase
+class ContentMd5Test extends FilterTestCase
 {
     public function testAddHeader()
     {
@@ -46,7 +46,7 @@ class ContentMd5Test extends \PHPUnit_Framework_TestCase
         $response->setBody($body);
 
         $filter = new ContentMd5();
-        $filter->handle($request, $response, $this->getMockFilterChain($request, $response));
+        $filter->handle($request, $response, $this->getFilterChain(true, $request, $response));
 
         $this->assertEquals(md5('foobar'), $response->getHeader('Content-MD5'));
         $this->assertEquals('foobar', (string) $response->getBody());
@@ -63,22 +63,8 @@ class ContentMd5Test extends \PHPUnit_Framework_TestCase
         $response->setBody($body);
 
         $filter = new ContentMd5();
-        $filter->handle($request, $response, $this->getMockFilterChain($request, $response));
+        $filter->handle($request, $response, $this->getFilterChain(true, $request, $response));
 
         $this->assertEquals('foobar', $response->getHeader('Content-MD5'));
-    }
-
-    protected function getMockFilterChain($request, $response)
-    {
-        $filterChain = $this->getMockBuilder(FilterChain::class)
-            ->setConstructorArgs(array(array()))
-            ->setMethods(array('handle'))
-            ->getMock();
-
-        $filterChain->expects($this->once())
-            ->method('handle')
-            ->with($this->equalTo($request), $this->equalTo($response));
-
-        return $filterChain;
     }
 }
