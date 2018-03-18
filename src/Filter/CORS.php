@@ -35,19 +35,71 @@ use PSX\Http\ResponseInterface;
 class CORS implements FilterInterface
 {
     /**
-     * @var string
+     * @var string|\Closure
      */
     protected $allowOrigin;
 
-    public function __construct($allowOrigin)
+    /**
+     * @var array
+     */
+    protected $allowMethods;
+
+    /**
+     * @var array
+     */
+    protected $allowHeaders;
+
+    /**
+     * @var boolean
+     */
+    protected $allowCredentials;
+
+    /**
+     * @param string|\Closure $allowOrigin
+     * @param array|null $allowMethods
+     * @param array|null $allowHeaders
+     * @param boolean|null $allowCredentials
+     */
+    public function __construct($allowOrigin, array $allowMethods = null, array $allowHeaders = null, $allowCredentials = null)
     {
-        $this->allowOrigin = $allowOrigin;
+        $this->allowOrigin      = $allowOrigin;
+        $this->allowMethods     = $allowMethods;
+        $this->allowHeaders     = $allowHeaders;
+        $this->allowCredentials = $allowCredentials;
     }
 
     public function handle(RequestInterface $request, ResponseInterface $response, FilterChainInterface $filterChain)
     {
-        if (!empty($this->allowOrigin)) {
-            $response->setHeader('Access-Control-Allow-Origin', $this->allowOrigin);
+        $allow  = false;
+        $origin = $request->getHeader('Origin');
+        if (!empty($origin)) {
+            if (is_string($this->allowOrigin)) {
+                $response->setHeader('Access-Control-Allow-Origin', $this->allowOrigin);
+                $allow = true;
+            } elseif ($this->allowOrigin instanceof \Closure) {
+                $func = $this->allowOrigin;
+                if ($func($origin)) {
+                    $response->setHeader('Access-Control-Allow-Origin', $origin);
+                    $response->addHeader('Vary', 'Origin');
+                    $allow = true;
+                }
+            }
+
+            if ($allow && $this->allowCredentials) {
+                $response->setHeader('Access-Control-Allow-Credentials', 'true');
+            }
+        }
+
+        if ($allow && $request->getMethod() == 'OPTIONS') {
+            $method = $request->getHeader('Access-Control-Request-Method');
+            if (!empty($method)) {
+                $response->setHeader('Access-Control-Allow-Methods', implode(', ', $this->allowMethods));
+            }
+
+            $headers = $request->getHeader('Access-Control-Request-Headers');
+            if (!empty($headers)) {
+                $response->setHeader('Access-Control-Allow-Headers', implode(', ', $this->allowHeaders));
+            }
         }
 
         $filterChain->handle($request, $response);

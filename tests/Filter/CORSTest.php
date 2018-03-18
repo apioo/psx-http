@@ -33,46 +33,187 @@ use PSX\Uri\Url;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    http://phpsx.org
  */
-class CORSTest extends \PHPUnit_Framework_TestCase
+class CORSTest extends FilterTestCase
 {
-    public function testAllowOrigin()
+    /**
+     * @dataProvider corsProvider
+     */
+    public function testHandle($allowOrigin, array $allowMethods, array $allowHeaders, $allowCredentials, $method, array $headers, array $expectHeaders)
     {
-        $request  = new Request(new Url('http://localhost'), 'GET', array());
+        $request  = new Request(new Url('http://localhost'), $method, $headers);
         $response = new Response();
 
-        $filterChain = $this->getMockBuilder(FilterChain::class)
-            ->setConstructorArgs(array(array()))
-            ->setMethods(array('handle'))
-            ->getMock();
+        $handle = new CORS($allowOrigin, $allowMethods, $allowHeaders, $allowCredentials);
+        $handle->handle($request, $response, $this->getFilterChain(true, $request, $response));
 
-        $filterChain->expects($this->once())
-            ->method('handle')
-            ->with($this->equalTo($request), $this->equalTo($response));
+        $this->assertEquals($expectHeaders, $response->getHeaders());
+    }
+
+    public function corsProvider()
+    {
+        $originTrue = function($origin) {
+            return true;
+        };
+
+        $originFalse = function($origin) {
+            return false;
+        };
+
+        return [
+            // no origin
+            // no credentials
+            [null, ['GET', 'POST'], ['Content-Type'], false, 'GET', [
+            ], [
+            ]],
+            ['*', ['GET', 'POST'], ['Content-Type'], false, 'GET', [
+            ], [
+            ]],
+            [$originTrue, ['GET', 'POST'], ['Content-Type'], false, 'GET', [
+            ], [
+            ]],
+            [$originFalse, ['GET', 'POST'], ['Content-Type'], false, 'GET', [
+            ], [
+            ]],
+
+            // with credentials
+            [null, ['GET', 'POST'], ['Content-Type'], true, 'GET', [
+            ], [
+            ]],
+            ['*', ['GET', 'POST'], ['Content-Type'], true, 'GET', [
+            ], [
+            ]],
+            [$originTrue, ['GET', 'POST'], ['Content-Type'], true, 'GET', [
+            ], [
+            ]],
+            [$originFalse, ['GET', 'POST'], ['Content-Type'], true, 'GET', [
+            ], [
+            ]],
+
+            // simple requests
+            // no credentials
+            [null, ['GET', 'POST'], ['Content-Type'], false, 'GET', [
+                'Origin' => 'http://foo.example'
+            ], [
+            ]],
+            ['*', ['GET', 'POST'], ['Content-Type'], false, 'GET', [
+                'Origin' => 'http://foo.example'
+            ], [
+                'access-control-allow-origin' => ['*']
+            ]],
+            [$originTrue, ['GET', 'POST'], ['Content-Type'], false, 'GET', [
+                'Origin' => 'http://foo.example'
+            ], [
+                'access-control-allow-origin' => ['http://foo.example'],
+                'vary' => ['Origin']
+            ]],
+            [$originFalse, ['GET', 'POST'], ['Content-Type'], false, 'GET', [
+                'Origin' => 'http://foo.example'
+            ], [
+            ]],
+
+            // with crendetials
+            [null, ['GET', 'POST'], ['Content-Type'], true, 'GET', [
+                'Origin' => 'http://foo.example'
+            ], [
+            ]],
+            ['*', ['GET', 'POST'], ['Content-Type'], true, 'GET', [
+                'Origin' => 'http://foo.example'
+            ], [
+                'access-control-allow-origin' => ['*'],
+                'access-control-allow-credentials' => ['true'],
+            ]],
+            [$originTrue, ['GET', 'POST'], ['Content-Type'], true, 'GET', [
+                'Origin' => 'http://foo.example'
+            ], [
+                'access-control-allow-origin' => ['http://foo.example'],
+                'vary' => ['Origin'],
+                'access-control-allow-credentials' => ['true'],
+            ]],
+            [$originFalse, ['GET', 'POST'], ['Content-Type'], true, 'GET', [
+                'Origin' => 'http://foo.example'
+            ], [
+            ]],
+
+            // prefligh requests
+            // no credentials
+            [null, ['GET', 'POST'], ['Content-Type'], false, 'OPTIONS', [
+                'Origin' => 'http://foo.example',
+                'Access-Control-Request-Method' => 'POST',
+                'Access-Control-Request-Headers' => 'X-PINGOTHER, Content-Type'
+            ],[
+            ]],
+            ['*', ['GET', 'POST'], ['Content-Type'], false, 'OPTIONS', [
+                'Origin' => 'http://foo.example',
+                'Access-Control-Request-Method' => 'POST',
+                'Access-Control-Request-Headers' => 'X-PINGOTHER, Content-Type'
+            ],[
+                'access-control-allow-origin' => ['*'],
+                'access-control-allow-methods' => ['GET, POST'],
+                'access-control-allow-headers' => ['Content-Type']
+            ]],
+            [$originTrue, ['GET', 'POST'], ['Content-Type'], false, 'OPTIONS', [
+                'Origin' => 'http://foo.example',
+                'Access-Control-Request-Method' => 'POST',
+                'Access-Control-Request-Headers' => 'X-PINGOTHER, Content-Type'
+            ],[
+                'access-control-allow-origin' => ['http://foo.example'],
+                'access-control-allow-methods' => ['GET, POST'],
+                'access-control-allow-headers' => ['Content-Type'],
+                'vary' => ['Origin']
+            ]],
+            [$originFalse, ['GET', 'POST'], ['Content-Type'], false, 'OPTIONS', [
+                'Origin' => 'http://foo.example',
+                'Access-Control-Request-Method' => 'POST',
+                'Access-Control-Request-Headers' => 'X-PINGOTHER, Content-Type'
+            ],[
+            ]],
+
+            // with credentials
+            [null, ['GET', 'POST'], ['Content-Type'], true, 'OPTIONS', [
+                'Origin' => 'http://foo.example',
+                'Access-Control-Request-Method' => 'POST',
+                'Access-Control-Request-Headers' => 'X-PINGOTHER, Content-Type'
+            ],[
+            ]],
+            ['*', ['GET', 'POST'], ['Content-Type'], true, 'OPTIONS', [
+                'Origin' => 'http://foo.example',
+                'Access-Control-Request-Method' => 'POST',
+                'Access-Control-Request-Headers' => 'X-PINGOTHER, Content-Type'
+            ],[
+                'access-control-allow-origin' => ['*'],
+                'access-control-allow-methods' => ['GET, POST'],
+                'access-control-allow-headers' => ['Content-Type'],
+                'access-control-allow-credentials' => ['true'],
+            ]],
+            [$originTrue, ['GET', 'POST'], ['Content-Type'], true, 'OPTIONS', [
+                'Origin' => 'http://foo.example',
+                'Access-Control-Request-Method' => 'POST',
+                'Access-Control-Request-Headers' => 'X-PINGOTHER, Content-Type'
+            ],[
+                'access-control-allow-origin' => ['http://foo.example'],
+                'access-control-allow-methods' => ['GET, POST'],
+                'access-control-allow-headers' => ['Content-Type'],
+                'vary' => ['Origin'],
+                'access-control-allow-credentials' => ['true'],
+            ]],
+            [$originFalse, ['GET', 'POST'], ['Content-Type'], true, 'OPTIONS', [
+                'Origin' => 'http://foo.example',
+                'Access-Control-Request-Method' => 'POST',
+                'Access-Control-Request-Headers' => 'X-PINGOTHER, Content-Type'
+            ],[
+            ]],
+        ];
+    }
+
+    public function testAllowOrigin()
+    {
+        $request  = new Request(new Url('http://localhost'), 'GET', ['Origin' => 'http://foo.example']);
+        $response = new Response();
 
         $handle = CORS::allowOrigin('*');
-        $handle->handle($request, $response, $filterChain);
+        $handle->handle($request, $response, $this->getFilterChain(true, $request, $response));
 
         $this->assertTrue($response->hasHeader('Access-Control-Allow-Origin'));
         $this->assertEquals('*', $response->getHeader('Access-Control-Allow-Origin'));
-    }
-
-    public function testAllowOriginEmpty()
-    {
-        $request  = new Request(new Url('http://localhost'), 'GET', array());
-        $response = new Response();
-
-        $filterChain = $this->getMockBuilder(FilterChain::class)
-            ->setConstructorArgs(array(array()))
-            ->setMethods(array('handle'))
-            ->getMock();
-
-        $filterChain->expects($this->once())
-            ->method('handle')
-            ->with($this->equalTo($request), $this->equalTo($response));
-
-        $handle = CORS::allowOrigin('');
-        $handle->handle($request, $response, $filterChain);
-
-        $this->assertFalse($response->hasHeader('Access-Control-Allow-Origin'));
     }
 }
