@@ -1,4 +1,10 @@
 
+### 2.0.6 (2018-03-18)
+
+* Add HSTS filter
+* Improve CORS filter
+* Improve filter test cases
+
 ### 2.0.5 (2018-02-25)
 
 * Add http writer
