@@ -20,6 +20,7 @@
 
 namespace PSX\Http\Tests\Filter;
 
+use PHPUnit\Framework\TestCase;
 use PSX\Http\Filter\FilterChain;
 use PSX\Http\Filter\Group;
 use PSX\Http\FilterChainInterface;
@@ -37,7 +38,7 @@ use PSX\Uri\Url;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    http://phpsx.org
  */
-class GroupTest extends \PHPUnit_Framework_TestCase
+class GroupTest extends TestCase
 {
     public function testGroup()
     {

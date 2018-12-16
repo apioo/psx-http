@@ -20,6 +20,7 @@
 
 namespace PSX\Http\Tests\Parser;
 
+use PHPUnit\Framework\TestCase;
 use PSX\Http\Http;
 use PSX\Http\Parser\RequestParser;
 use PSX\Http\Request;
@@ -33,7 +34,7 @@ use PSX\Uri\Url;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    http://phpsx.org
  */
-class RequestParserTest extends \PHPUnit_Framework_TestCase
+class RequestParserTest extends TestCase
 {
     public function testParseStrictMode()
     {

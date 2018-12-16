@@ -20,6 +20,7 @@
 
 namespace PSX\Http\Tests\Filter;
 
+use PHPUnit\Framework\TestCase;
 use PSX\Http\Filter\FilterChain;
 use PSX\Http\FilterChainInterface;
 use PSX\Http\Request;
@@ -35,7 +36,7 @@ use PSX\Uri\Uri;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    http://phpsx.org
  */
-class FilterChainTest extends \PHPUnit_Framework_TestCase
+class FilterChainTest extends TestCase
 {
     public function testFilterChain()
     {

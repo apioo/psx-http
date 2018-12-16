@@ -20,6 +20,7 @@
 
 namespace PSX\Http\Tests;
 
+use PHPUnit\Framework\TestCase;
 use PSX\Http\Message;
 use PSX\Http\Stream\StringStream;
 
@@ -30,7 +31,7 @@ use PSX\Http\Stream\StringStream;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    http://phpsx.org
  */
-class MessageTest extends \PHPUnit_Framework_TestCase
+class MessageTest extends TestCase
 {
     public function testConstructor()
     {

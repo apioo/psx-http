@@ -20,6 +20,7 @@
 
 namespace PSX\Http\Tests\Stream;
 
+use PHPUnit\Framework\TestCase;
 use PSX\Http\Stream\Stream;
 use PSX\Http\Stream\Util;
 
@@ -30,7 +31,7 @@ use PSX\Http\Stream\Util;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    http://phpsx.org
  */
-class UtilTest extends \PHPUnit_Framework_TestCase
+class UtilTest extends TestCase
 {
     public function testToString()
     {

@@ -20,6 +20,8 @@
 
 namespace PSX\Http\Tests\Stream;
 
+use PHPUnit\Framework\TestCase;
+
 /**
  * StreamTestCase
  *
@@ -27,7 +29,7 @@ namespace PSX\Http\Tests\Stream;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    http://phpsx.org
  */
-abstract class StreamTestCase extends \PHPUnit_Framework_TestCase
+abstract class StreamTestCase extends TestCase
 {
     /**
      * @var \PSX\Http\StreamInterface

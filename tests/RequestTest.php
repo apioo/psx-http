@@ -20,6 +20,7 @@
 
 namespace PSX\Http\Tests;
 
+use PHPUnit\Framework\TestCase;
 use PSX\Http\Http;
 use PSX\Http\Request;
 use PSX\Http\Stream\StringStream;
@@ -32,7 +33,7 @@ use PSX\Uri\Url;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    http://phpsx.org
  */
-class RequestTest extends \PHPUnit_Framework_TestCase
+class RequestTest extends TestCase
 {
     public function testGetRequestTarget()
     {

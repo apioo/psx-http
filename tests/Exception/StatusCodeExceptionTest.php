@@ -20,6 +20,7 @@
 
 namespace PSX\Http\Tests\Exception;
 
+use PHPUnit\Framework\TestCase;
 use PSX\Http\Exception\FoundException;
 use PSX\Http\Exception\MethodNotAllowedException;
 use PSX\Http\Exception\StatusCodeException;
@@ -34,7 +35,7 @@ use PSX\Http\Response;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    http://phpsx.org
  */
-class StatusCodeExceptionTest extends \PHPUnit_Framework_TestCase
+class StatusCodeExceptionTest extends TestCase
 {
     /**
      * @expectedException \InvalidArgumentException

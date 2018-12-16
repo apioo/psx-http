@@ -20,6 +20,7 @@
 
 namespace PSX\Http\Tests;
 
+use PHPUnit\Framework\TestCase;
 use PSX\Http\Authentication;
 
 /**
@@ -29,7 +30,7 @@ use PSX\Http\Authentication;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    http://phpsx.org
  */
-class AuthenticationTest extends \PHPUnit_Framework_TestCase
+class AuthenticationTest extends TestCase
 {
     /**
      * @dataProvider decodeParametersProvider

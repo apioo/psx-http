@@ -20,6 +20,7 @@
 
 namespace PSX\Http\Tests;
 
+use PHPUnit\Framework\TestCase;
 use PSX\Http\MediaType;
 
 /**
@@ -29,7 +30,7 @@ use PSX\Http\MediaType;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    http://phpsx.org
  */
-class MediaTypeTest extends \PHPUnit_Framework_TestCase
+class MediaTypeTest extends TestCase
 {
     /**
      * @dataProvider mediaTypeProvider

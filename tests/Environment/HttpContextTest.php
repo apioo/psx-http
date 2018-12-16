@@ -20,6 +20,7 @@
 
 namespace PSX\Http\Tests\Environment;
 
+use PHPUnit\Framework\TestCase;
 use PSX\Http\Environment\HttpContext;
 use PSX\Http\Environment\HttpContextInterface;
 use PSX\Http\Request;
@@ -32,7 +33,7 @@ use PSX\Uri\Uri;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    http://phpsx.org
  */
-class HttpContextTest extends \PHPUnit_Framework_TestCase
+class HttpContextTest extends TestCase
 {
     public function testContext()
     {

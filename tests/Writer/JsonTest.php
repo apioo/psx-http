@@ -20,6 +20,7 @@
 
 namespace PSX\Http\Tests\Writer;
 
+use PHPUnit\Framework\TestCase;
 use PSX\Http\Response;
 use PSX\Http\Writer\Json;
 
@@ -30,7 +31,7 @@ use PSX\Http\Writer\Json;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    http://phpsx.org
  */
-class JsonTest extends \PHPUnit_Framework_TestCase
+class JsonTest extends TestCase
 {
     public function testWriteTo()
     {

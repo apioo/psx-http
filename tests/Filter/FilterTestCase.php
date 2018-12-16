@@ -20,13 +20,10 @@
 
 namespace PSX\Http\Tests\Filter;
 
-use PSX\Http\Filter\CORS;
+use PHPUnit\Framework\TestCase;
 use PSX\Http\Filter\FilterChain;
-use PSX\Http\Request;
 use PSX\Http\RequestInterface;
-use PSX\Http\Response;
 use PSX\Http\ResponseInterface;
-use PSX\Uri\Url;
 
 /**
  * CORSTest
@@ -35,7 +32,7 @@ use PSX\Uri\Url;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    http://phpsx.org
  */
-abstract class FilterTestCase extends \PHPUnit_Framework_TestCase
+abstract class FilterTestCase extends TestCase
 {
     /**
      * @param boolean $expectNextCall

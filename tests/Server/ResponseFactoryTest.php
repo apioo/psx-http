@@ -20,6 +20,7 @@
 
 namespace PSX\Http\Tests\Server;
 
+use PHPUnit\Framework\TestCase;
 use PSX\Http\Server\ResponseFactory;
 
 /**
@@ -30,7 +31,7 @@ use PSX\Http\Server\ResponseFactory;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    http://phpsx.org
  */
-class ResponseFactoryTest extends \PHPUnit_Framework_TestCase
+class ResponseFactoryTest extends TestCase
 {
     /**
      * @var array

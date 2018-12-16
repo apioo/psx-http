@@ -20,6 +20,7 @@
 
 namespace PSX\Http\Tests\Client;
 
+use PHPUnit\Framework\TestCase;
 use PSX\Http\Client\DeleteRequest;
 use PSX\Uri\Url;
 
@@ -30,7 +31,7 @@ use PSX\Uri\Url;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    http://phpsx.org
  */
-class DeleteRequestTest extends \PHPUnit_Framework_TestCase
+class DeleteRequestTest extends TestCase
 {
     public function testConstruct()
     {

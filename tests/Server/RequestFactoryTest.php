@@ -20,6 +20,7 @@
 
 namespace PSX\Http\Tests\Server;
 
+use PHPUnit\Framework\TestCase;
 use PSX\Http\Server\RequestFactory;
 
 /**
@@ -31,7 +32,7 @@ use PSX\Http\Server\RequestFactory;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    http://phpsx.org
  */
-class RequestFactoryTest extends \PHPUnit_Framework_TestCase
+class RequestFactoryTest extends TestCase
 {
     /**
      * @dataProvider createRequestNoPathProvider

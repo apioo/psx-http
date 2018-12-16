@@ -20,6 +20,7 @@
 
 namespace PSX\Http\Tests\Server;
 
+use PHPUnit\Framework\TestCase;
 use PSX\Http\Response;
 use PSX\Http\Server\SenderInterface;
 
@@ -30,7 +31,7 @@ use PSX\Http\Server\SenderInterface;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    http://phpsx.org
  */
-class SenderTestCase extends \PHPUnit_Framework_TestCase
+class SenderTestCase extends TestCase
 {
     protected function captureOutput(SenderInterface $sender, Response $response)
     {

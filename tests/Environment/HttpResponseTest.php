@@ -20,6 +20,7 @@
 
 namespace PSX\Http\Tests\Environment;
 
+use PHPUnit\Framework\TestCase;
 use PSX\Http\Environment\HttpResponse;
 use PSX\Http\Environment\HttpResponseInterface;
 
@@ -30,7 +31,7 @@ use PSX\Http\Environment\HttpResponseInterface;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    http://phpsx.org
  */
-class HttpResponseTest extends \PHPUnit_Framework_TestCase
+class HttpResponseTest extends TestCase
 {
     public function testResponse()
     {

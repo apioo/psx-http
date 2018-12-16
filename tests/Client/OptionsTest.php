@@ -20,6 +20,7 @@
 
 namespace PSX\Http\Tests\Client;
 
+use PHPUnit\Framework\TestCase;
 use PSX\Http\Client\Options;
 
 /**
@@ -29,7 +30,7 @@ use PSX\Http\Client\Options;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    http://phpsx.org
  */
-class OptionsTest extends \PHPUnit_Framework_TestCase
+class OptionsTest extends TestCase
 {
     public function testOptions()
     {

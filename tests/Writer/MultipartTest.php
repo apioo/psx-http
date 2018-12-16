@@ -20,6 +20,7 @@
 
 namespace PSX\Http\Tests\Writer;
 
+use PHPUnit\Framework\TestCase;
 use PSX\Http\Response;
 use PSX\Http\Writer\Multipart;
 
@@ -30,7 +31,7 @@ use PSX\Http\Writer\Multipart;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    http://phpsx.org
  */
-class MultipartTest extends \PHPUnit_Framework_TestCase
+class MultipartTest extends TestCase
 {
     public function testWriteTo()
     {

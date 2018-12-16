@@ -20,6 +20,8 @@
 
 namespace PSX\Http\Tests;
 
+use PHPUnit\Framework\TestCase;
+
 /**
  * ExceptionTest
  *
@@ -27,7 +29,7 @@ namespace PSX\Http\Tests;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    http://phpsx.org
  */
-class ExceptionTest extends \PHPUnit_Framework_TestCase
+class ExceptionTest extends TestCase
 {
     public function testBadRequestException()
     {

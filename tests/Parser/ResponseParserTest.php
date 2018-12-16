@@ -20,6 +20,7 @@
 
 namespace PSX\Http\Tests\Parser;
 
+use PHPUnit\Framework\TestCase;
 use PSX\Http\Http;
 use PSX\Http\Parser\ResponseParser;
 use PSX\Http\Response;
@@ -31,7 +32,7 @@ use PSX\Http\Response;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    http://phpsx.org
  */
-class ResponseParserTest extends \PHPUnit_Framework_TestCase
+class ResponseParserTest extends TestCase
 {
     public function testParseStrictMode()
     {
