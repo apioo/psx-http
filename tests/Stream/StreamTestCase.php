@@ -64,6 +64,8 @@ abstract class StreamTestCase extends TestCase
             $this->assertEquals(0, $this->stream->tell());
             $this->stream->seek(2);
             $this->assertEquals(2, $this->stream->tell());
+        } else {
+            $this->assertFalse($this->stream->isSeekable());
         }
     }
 
@@ -105,6 +107,8 @@ abstract class StreamTestCase extends TestCase
             }
 
             $this->assertEquals('foobar', $content);
+        } else {
+            $this->assertFalse($this->stream->isReadable());
         }
     }
 
@@ -116,6 +120,8 @@ abstract class StreamTestCase extends TestCase
             $this->assertEquals(2, $this->stream->tell());
             $this->stream->rewind();
             $this->assertEquals(0, $this->stream->tell());
+        } else {
+            $this->assertFalse($this->stream->isSeekable());
         }
     }
 
@@ -138,6 +144,8 @@ abstract class StreamTestCase extends TestCase
             $this->assertEquals(6, $this->stream->tell());
             $this->stream->seek(0);
             $this->assertEquals(0, $this->stream->tell());
+        } else {
+            $this->assertFalse($this->stream->isSeekable());
         }
     }
 
@@ -166,6 +174,8 @@ abstract class StreamTestCase extends TestCase
             if ($this->stream->isReadable()) {
                 $this->assertEquals('foobarbarfoobaroo', (string) $this->stream);
             }
+        } else {
+            $this->assertFalse($this->stream->isWritable());
         }
     }
 
@@ -191,6 +201,8 @@ abstract class StreamTestCase extends TestCase
                 $this->assertEquals('foob', $this->stream->read(4));
                 $this->assertEquals(4, $this->stream->tell());
             }
+        } else {
+            $this->assertFalse($this->stream->isReadable());
         }
     }
 
@@ -208,6 +220,8 @@ abstract class StreamTestCase extends TestCase
                 $this->assertEquals('obar', $this->stream->getContents());
                 $this->assertEquals(6, $this->stream->tell());
             }
+        } else {
+            $this->assertFalse($this->stream->isReadable());
         }
     }
 
@@ -221,6 +235,8 @@ abstract class StreamTestCase extends TestCase
             $this->assertEquals(2, $this->stream->tell());
             $this->assertEquals('ob', $this->stream->read(2));
             $this->assertEquals(4, $this->stream->tell());
+        } else {
+            $this->assertFalse($this->stream->isReadable());
         }
     }
 
