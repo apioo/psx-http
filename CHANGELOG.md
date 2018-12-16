@@ -1,4 +1,8 @@
 
+### 2.0.7 (2018-12-16)
+
+* Upgrade PHPUnit to 6.0
+
 ### 2.0.6 (2018-03-18)
 
 * Add HSTS filter
