@@ -21,7 +21,7 @@
 namespace PSX\Http\Server;
 
 use PSX\Http\Response;
-use PSX\Http\Stream\TempStream;
+use PSX\Http\Stream\Stream;
 
 /**
  * ResponseFactory
@@ -54,7 +54,7 @@ class ResponseFactory implements ResponseFactoryInterface
         $response = new Response();
         $response->setProtocolVersion($protocol);
         $response->setHeader('X-Powered-By', 'psx');
-        $response->setBody(new TempStream(fopen('php://temp', 'r+')));
+        $response->setBody(new Stream(fopen('php://temp', 'r+')));
 
         return $response;
     }
