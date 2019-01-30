@@ -20,9 +20,11 @@
 
 namespace PSX\Http\Server;
 
+use Psr\Http\Message\StreamInterface;
 use PSX\Http\Http;
 use PSX\Http\Parser\ResponseParser;
 use PSX\Http\ResponseInterface;
+use PSX\Http\Stream\CopyableInterface;
 use PSX\Http\Stream\StringStream;
 
 /**
@@ -35,18 +37,19 @@ use PSX\Http\Stream\StringStream;
  */
 class Sender implements SenderInterface
 {
-    protected $chunkSize = 8192;
-
     /**
      * The chunk size which is used if the transfer encoding is "chunked"
      *
      * @param integer $chunkSize
+     * @deprecated
      */
     public function setChunkSize($chunkSize)
     {
-        $this->chunkSize = $chunkSize;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function send(ResponseInterface $response)
     {
         // remove body on specific status codes
@@ -106,58 +109,17 @@ class Sender implements SenderInterface
 
     protected function sendBody(ResponseInterface $response)
     {
-        if ($response->getBody() !== null) {
-            $transferEncoding = $response->getHeader('Transfer-Encoding');
-            $contentEncoding  = $response->getHeader('Content-Encoding');
-
-            if ($transferEncoding == 'chunked') {
-                $this->sendContentChunked($response);
-            } else {
-                $this->sendContentEncoded($contentEncoding, $response);
-            }
-        }
-    }
-
-    protected function sendContentEncoded($contentEncoding, ResponseInterface $response)
-    {
-        switch ($contentEncoding) {
-            case 'deflate':
-                $body = (string) $response->getBody();
-
-                echo gzcompress($body);
-                break;
-
-            case 'gzip':
-            case 'x-gzip':
-                $body = (string) $response->getBody();
-
-                echo gzencode($body);
-                break;
-
-            default:
-                echo (string) $response->getBody();
-                break;
-        }
-    }
-
-    protected function sendContentChunked(ResponseInterface $response)
-    {
         $body = $response->getBody();
-        $body->seek(0);
-
-        while (!$body->eof()) {
-            $chunk = $body->read($this->chunkSize);
-            $len   = mb_strlen($chunk);
-
-            if ($len > 0) {
-                echo dechex($len) . "\r\n" . $chunk . "\r\n";
-                flush();
-            }
+        if ($body instanceof CopyableInterface) {
+            $fp = fopen('php://output', 'wb');
+            $body->copyTo($fp, -1, 0);
+            fclose($fp);
+        } elseif ($body instanceof StreamInterface) {
+            echo $body->__toString();
         }
 
-        echo '0' . "\r\n" . "\r\n";
-        flush();
-
-        $body->close();
+        if ($body instanceof StreamInterface) {
+            $body->close();
+        }
     }
 }

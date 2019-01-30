@@ -22,6 +22,7 @@ namespace PSX\Http\Tests\Server;
 
 use PSX\Http\Response;
 use PSX\Http\Server\Sender;
+use PSX\Http\Stream\Stream;
 use PSX\Http\Stream\StringStream;
 
 /**
@@ -112,10 +113,9 @@ class SenderTest extends SenderTestCase
         $this->assertEquals('', $actual);
     }
 
-    public function testSendTransferEncodingChunked()
+    public function testSendBody()
     {
         $response = new Response();
-        $response->setHeader('Transfer-Encoding', 'chunked');
         $response->setBody(new StringStream('foobarfoobarfoobarfoobar'));
 
         $sender = $this->getMockBuilder(Sender::class)
@@ -126,18 +126,19 @@ class SenderTest extends SenderTestCase
             ->method('shouldSendHeader')
             ->will($this->returnValue(true));
 
-        $sender->setChunkSize(16);
-
         $actual = $this->captureOutput($sender, $response);
 
-        $this->assertEquals('10' . "\r\n" . 'foobarfoobarfoob' . "\r\n" . '8' . "\r\n" . 'arfoobar' . "\r\n" . '0' . "\r\n" . "\r\n", $actual);
+        $this->assertEquals('foobarfoobarfoobarfoobar', $actual);
     }
 
-    public function testSendContentEncodingDeflate()
+    public function testSendBodyCopy()
     {
+        $fp = fopen('php://temp', 'r+');
+        fwrite($fp, 'foobarfoobarfoobarfoobar');
+        rewind($fp);
+
         $response = new Response();
-        $response->setHeader('Content-Encoding', 'deflate');
-        $response->setBody(new StringStream('foobar'));
+        $response->setBody(new Stream($fp));
 
         $sender = $this->getMockBuilder(Sender::class)
             ->setMethods(array('shouldSendHeader', 'sendHeader'))
@@ -149,26 +150,7 @@ class SenderTest extends SenderTestCase
 
         $actual = $this->captureOutput($sender, $response);
 
-        $this->assertEquals(gzcompress('foobar'), $actual);
-    }
-
-    public function testSendContentEncodingGzip()
-    {
-        $response = new Response();
-        $response->setHeader('Content-Encoding', 'gzip');
-        $response->setBody(new StringStream('foobar'));
-
-        $sender = $this->getMockBuilder(Sender::class)
-            ->setMethods(array('shouldSendHeader', 'sendHeader'))
-            ->getMock();
-
-        $sender->expects($this->once())
-            ->method('shouldSendHeader')
-            ->will($this->returnValue(true));
-
-        $actual = $this->captureOutput($sender, $response);
-
-        $this->assertEquals(gzencode('foobar'), $actual);
+        $this->assertEquals('foobarfoobarfoobarfoobar', $actual);
     }
 
     public function testEmpyBodyStatusCode()
