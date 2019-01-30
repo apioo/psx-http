@@ -30,7 +30,7 @@ use PSX\Http\StreamInterface;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    http://phpsx.org
  */
-class Stream implements StreamInterface
+class Stream implements StreamInterface, CopyableInterface
 {
     protected $resource;
     protected $seekable;
@@ -176,6 +176,11 @@ class Stream implements StreamInterface
         }
 
         return '';
+    }
+
+    public function copyTo($resource, $maxLength = null, $offset = null)
+    {
+        return stream_copy_to_stream($this->resource, $resource, $maxLength, $offset);
     }
 
     protected function setResource($resource)
