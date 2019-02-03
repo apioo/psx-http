@@ -41,6 +41,7 @@ class HttpContextTest extends TestCase
         $context = new HttpContext($request, ['bar' => 'foo']);
 
         $this->assertInstanceOf(HttpContextInterface::class, $context);
+        $this->assertEquals('GET', $context->getMethod());
         $this->assertEquals('bar', $context->getHeader('X-Foo'));
         $this->assertEquals(['x-foo' => ['bar']], $context->getHeaders());
         $this->assertEquals('foo', $context->getParameter('baz'));
