@@ -1,4 +1,12 @@
 
+### 2.0.8
+
+* Add stream CopyableInterface to allow a stream to copy all content to another
+  stream
+* Sender handle body streams which implement CopyableInterface
+* Sender do not handle Transfer-Encoding and Content-Encoding
+* StringStream proper multibyte handling
+
 ### 2.0.7 (2018-12-16)
 
 * Upgrade PHPUnit to 6.0
