@@ -39,7 +39,7 @@ class StringStream implements StreamInterface
     public function __construct($data = '')
     {
         $this->data   = $data;
-        $this->length = strlen($data);
+        $this->length = mb_strlen($data);
     }
 
     public function close()
@@ -119,14 +119,14 @@ class StringStream implements StreamInterface
     public function write($string)
     {
         if ($this->isWritable()) {
-            $length = strlen($string);
-            $pre    = substr($this->data, 0, $this->pointer);
-            $post   = substr($this->data, $this->pointer + $length);
+            $length = mb_strlen($string);
+            $pre    = mb_substr($this->data, 0, $this->pointer);
+            $post   = mb_substr($this->data, $this->pointer + $length);
 
             $this->data = $pre . $string . $post;
 
             $this->pointer+= $length;
-            $this->length = strlen($this->data);
+            $this->length = mb_strlen($this->data);
 
             return $length;
         }
@@ -142,7 +142,7 @@ class StringStream implements StreamInterface
     public function read($maxLength)
     {
         if ($this->isReadable()) {
-            $data = substr($this->data, $this->pointer, $maxLength);
+            $data = mb_substr($this->data, $this->pointer, $maxLength);
 
             $this->pointer+= $maxLength;
 
@@ -158,7 +158,7 @@ class StringStream implements StreamInterface
             return null;
         }
 
-        $data = substr($this->data, $this->pointer);
+        $data = mb_substr($this->data, $this->pointer);
 
         $this->pointer = $this->length;
 

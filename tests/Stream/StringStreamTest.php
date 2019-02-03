@@ -35,4 +35,19 @@ class StringStreamTest extends StreamTestCase
     {
         return new StringStream('foobar');
     }
+
+    public function testStreamMultiByte()
+    {
+        $stream = new StringStream('foobär');
+
+        $this->assertEquals(6, $stream->getSize());
+
+        $stream->rewind();
+        $chars = '';
+        while (!$stream->eof()) {
+            $chars.= $stream->read(1);
+        }
+
+        $this->assertEquals('foobär', $chars);
+    }
 }
