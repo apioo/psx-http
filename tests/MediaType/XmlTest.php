@@ -52,4 +52,17 @@ class XmlTest extends TestCase
             ['text/plain', false],
         ];
     }
+    
+    public function testMediaTypes()
+    {
+        $mediaTypes = [
+            'text/xml',
+            'application/xml',
+            'text/xml-external-parsed-entity',
+            'application/xml-external-parsed-entity',
+            'application/xml-dtd'
+        ];
+
+        $this->assertEquals($mediaTypes, MediaType\Xml::getMediaTypes());
+    }
 }
