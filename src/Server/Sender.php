@@ -20,6 +20,7 @@
 
 namespace PSX\Http\Server;
 
+use Psr\Http\Message\StreamInterface;
 use PSX\Http\Http;
 use PSX\Http\Parser\ResponseParser;
 use PSX\Http\ResponseInterface;
@@ -107,6 +108,9 @@ class Sender implements SenderInterface
 
     protected function sendBody(ResponseInterface $response)
     {
-        echo $response->getBody()->__toString();
+        $body = $response->getBody();
+        if ($body instanceof StreamInterface) {
+            echo $body->__toString();
+        }
     }
 }
