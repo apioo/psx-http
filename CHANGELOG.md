@@ -1,9 +1,6 @@
 
 ### 2.0.8
 
-* Add stream CopyableInterface to allow a stream to copy all content to another
-  stream
-* Sender handle body streams which implement CopyableInterface
 * Sender do not handle Transfer-Encoding and Content-Encoding
 * StringStream proper multibyte handling
 
