@@ -135,7 +135,6 @@ class SenderTest extends SenderTestCase
     {
         $fp = fopen('php://temp', 'r+');
         fwrite($fp, 'foobarfoobarfoobarfoobar');
-        rewind($fp);
 
         $response = new Response();
         $response->setBody(new Stream($fp));
