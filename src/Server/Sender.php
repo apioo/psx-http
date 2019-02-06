@@ -20,11 +20,9 @@
 
 namespace PSX\Http\Server;
 
-use Psr\Http\Message\StreamInterface;
 use PSX\Http\Http;
 use PSX\Http\Parser\ResponseParser;
 use PSX\Http\ResponseInterface;
-use PSX\Http\Stream\CopyableInterface;
 use PSX\Http\Stream\StringStream;
 
 /**
@@ -109,17 +107,6 @@ class Sender implements SenderInterface
 
     protected function sendBody(ResponseInterface $response)
     {
-        $body = $response->getBody();
-        if ($body instanceof CopyableInterface) {
-            $fp = fopen('php://output', 'wb');
-            $body->copyTo($fp, -1, 0);
-            fclose($fp);
-        } elseif ($body instanceof StreamInterface) {
-            echo $body->__toString();
-        }
-
-        if ($body instanceof StreamInterface) {
-            $body->close();
-        }
+        echo $response->getBody()->__toString();
     }
 }
