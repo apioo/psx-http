@@ -35,8 +35,8 @@ namespace PSX\Http\Exception;
  */
 class ConflictException extends ClientErrorException
 {
-    public function __construct($message)
+    public function __construct($message, \Throwable $previous = null)
     {
-        parent::__construct($message, 409);
+        parent::__construct($message, 409, $previous);
     }
 }

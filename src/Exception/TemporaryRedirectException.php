@@ -32,8 +32,8 @@ namespace PSX\Http\Exception;
  */
 class TemporaryRedirectException extends RedirectionException
 {
-    public function __construct($location)
+    public function __construct($location, \Throwable $previous = null)
     {
-        parent::__construct(307, $location);
+        parent::__construct(307, $location, $previous);
     }
 }

@@ -33,8 +33,8 @@ namespace PSX\Http\Exception;
  */
 class MovedPermanentlyException extends RedirectionException
 {
-    public function __construct($location)
+    public function __construct($location, \Throwable $previous = null)
     {
-        parent::__construct(301, $location);
+        parent::__construct(301, $location, $previous);
     }
 }

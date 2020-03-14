@@ -30,8 +30,8 @@ namespace PSX\Http\Exception;
  */
 class BadRequestException extends ClientErrorException
 {
-    public function __construct($message)
+    public function __construct($message, \Throwable $previous = null)
     {
-        parent::__construct($message, 400);
+        parent::__construct($message, 400, $previous);
     }
 }

@@ -30,8 +30,8 @@ namespace PSX\Http\Exception;
  */
 class InternalServerErrorException extends ServerErrorException
 {
-    public function __construct($message)
+    public function __construct($message, \Throwable $previous = null)
     {
-        parent::__construct($message, 500);
+        parent::__construct($message, 500, $previous);
     }
 }

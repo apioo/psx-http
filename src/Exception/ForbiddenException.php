@@ -34,8 +34,8 @@ namespace PSX\Http\Exception;
  */
 class ForbiddenException extends ClientErrorException
 {
-    public function __construct($message)
+    public function __construct($message, \Throwable $previous = null)
     {
-        parent::__construct($message, 403);
+        parent::__construct($message, 403, $previous);
     }
 }

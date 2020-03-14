@@ -35,8 +35,8 @@ namespace PSX\Http\Exception;
  */
 class GoneException extends ClientErrorException
 {
-    public function __construct($message)
+    public function __construct($message, \Throwable $previous = null)
     {
-        parent::__construct($message, 410);
+        parent::__construct($message, 410, $previous);
     }
 }

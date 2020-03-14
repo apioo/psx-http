@@ -31,8 +31,8 @@ namespace PSX\Http\Exception;
  */
 class NotAcceptableException extends ClientErrorException
 {
-    public function __construct($message)
+    public function __construct($message, \Throwable $previous = null)
     {
-        parent::__construct($message, 406);
+        parent::__construct($message, 406, $previous);
     }
 }

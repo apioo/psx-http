@@ -41,9 +41,9 @@ class UnauthorizedException extends ClientErrorException
     protected $type;
     protected $parameters;
 
-    public function __construct($message, $type, array $parameters = array())
+    public function __construct($message, $type, array $parameters = array(), \Throwable $previous = null)
     {
-        parent::__construct($message, 401);
+        parent::__construct($message, 401, $previous);
 
         $this->type       = $type;
         $this->parameters = $parameters;

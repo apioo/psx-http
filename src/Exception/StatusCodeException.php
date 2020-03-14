@@ -37,9 +37,9 @@ class StatusCodeException extends RuntimeException
 {
     protected $statusCode;
 
-    public function __construct($message, $statusCode)
+    public function __construct($message, $statusCode, \Throwable $previous = null)
     {
-        parent::__construct($message);
+        parent::__construct($message, 0, $previous);
 
         if (isset(Http::$codes[$statusCode])) {
             $this->statusCode = $statusCode;

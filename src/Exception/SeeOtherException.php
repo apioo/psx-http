@@ -34,8 +34,8 @@ namespace PSX\Http\Exception;
  */
 class SeeOtherException extends RedirectionException
 {
-    public function __construct($location)
+    public function __construct($location, \Throwable $previous = null)
     {
-        parent::__construct(303, $location);
+        parent::__construct(303, $location, $previous);
     }
 }
