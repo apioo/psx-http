@@ -36,12 +36,12 @@ abstract class StreamTestCase extends TestCase
      */
     protected $stream;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->stream = $this->getStream();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->stream->close();
     }

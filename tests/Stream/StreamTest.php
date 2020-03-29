@@ -40,11 +40,10 @@ class StreamTest extends StreamTestCase
         return new Stream($resource);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testConstructor()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         new Stream('foo');
     }
 }

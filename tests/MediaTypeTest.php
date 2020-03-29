@@ -101,27 +101,24 @@ class MediaTypeTest extends TestCase
         $this->assertEquals($expect, $actual);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testParseEmpty()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         new MediaType('');
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testParseInvalid()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         new MediaType('foo');
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testParseInvalidMediaType()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         new MediaType('foo/bar');
     }
 

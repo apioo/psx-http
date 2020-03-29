@@ -38,7 +38,7 @@ class ResponseFactoryTest extends TestCase
      */
     protected $server;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -47,7 +47,7 @@ class ResponseFactoryTest extends TestCase
         $this->server = $_SERVER;
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
 

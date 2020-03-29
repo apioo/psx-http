@@ -22,6 +22,7 @@ namespace PSX\Http\Tests\Parser;
 
 use PHPUnit\Framework\TestCase;
 use PSX\Http\Http;
+use PSX\Http\Parser\ParseException;
 use PSX\Http\Parser\RequestParser;
 use PSX\Http\Request;
 use PSX\Http\RequestInterface;
@@ -106,11 +107,10 @@ class RequestParserTest extends TestCase
         $this->assertEquals('Google is built by a large team of engineers, designers, researchers, robots, and others in many different sites across the globe. It is updated continuously, and built with more tools and technologies than we can shake a stick at. If you\'d like to help us out, see google.com/jobs.', $request->getBody());
     }
 
-    /**
-     * @expectedException \PSX\Http\Parser\ParseException
-     */
     public function testParseInvalidStatusLine()
     {
+        $this->expectException(ParseException::class);
+
         $request = 'foobar' . Http::NEW_LINE;
         $request.= 'Vary: Accept-Encoding' . Http::NEW_LINE;
 
@@ -118,22 +118,20 @@ class RequestParserTest extends TestCase
         $parser->parse($request);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testParseEmpty()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $request = '';
 
         $parser = new RequestParser(new Url('http://localhost.com'), RequestParser::MODE_STRICT);
         $parser->parse($request);
     }
 
-    /**
-     * @expectedException \PSX\Http\Parser\ParseException
-     */
     public function testParseNoLineEnding()
     {
+        $this->expectException(ParseException::class);
+
         $request = 'GET /foobar?foo=bar#fragment HTTP/1.1';
         $request.= 'Vary: Accept-Encoding';
 
@@ -141,11 +139,10 @@ class RequestParserTest extends TestCase
         $parser->parse($request);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testParseInvalidMode()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $request = 'GET /foobar?foo=bar#fragment HTTP/1.1' . Http::NEW_LINE;
         $request.= 'Content-Type: text/plain' . Http::NEW_LINE;
 
@@ -160,11 +157,10 @@ class RequestParserTest extends TestCase
         $this->assertEquals('GET / HTTP/1.1', RequestParser::buildStatusLine($request));
     }
 
-    /**
-     * @expectedException \RuntimeException
-     */
     public function testBuildStatusLineNoTarget()
     {
+        $this->expectException(\RuntimeException::class);
+
         $request = new Request(new Url('http://127.0.0.1'), 'GET');
         $request->setRequestTarget('');
 

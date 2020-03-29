@@ -21,8 +21,11 @@
 namespace PSX\Http\Tests\Exception;
 
 use PHPUnit\Framework\TestCase;
+use PSX\Http\Exception\ClientErrorException;
 use PSX\Http\Exception\FoundException;
 use PSX\Http\Exception\MethodNotAllowedException;
+use PSX\Http\Exception\RedirectionException;
+use PSX\Http\Exception\ServerErrorException;
 use PSX\Http\Exception\StatusCodeException;
 use PSX\Http\Exception\UnauthorizedException;
 use PSX\Http\Http;
@@ -37,11 +40,10 @@ use PSX\Http\Response;
  */
 class StatusCodeExceptionTest extends TestCase
 {
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testInvalidStatusCode()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         new StatusCodeException('foo', 108);
     }
 
@@ -109,10 +111,11 @@ class StatusCodeExceptionTest extends TestCase
 
     /**
      * @dataProvider redirectionCodeProvider
-     * @expectedException \PSX\Http\Exception\RedirectionException
      */
     public function testThrowOnRedirection($statusCode)
     {
+        $this->expectException(RedirectionException::class);
+
         StatusCodeException::throwOnRedirection(new Response($statusCode));
     }
 
@@ -153,10 +156,11 @@ class StatusCodeExceptionTest extends TestCase
 
     /**
      * @dataProvider clientErrorCodeProvider
-     * @expectedException \PSX\Http\Exception\ClientErrorException
      */
     public function testThrowOnClientError($statusCode)
     {
+        $this->expectException(ClientErrorException::class);
+
         StatusCodeException::throwOnClientError(new Response($statusCode));
     }
 
@@ -209,10 +213,11 @@ class StatusCodeExceptionTest extends TestCase
 
     /**
      * @dataProvider serverErrorCodeProvider
-     * @expectedException \PSX\Http\Exception\ServerErrorException
      */
     public function testThrowOnServerError($statusCode)
     {
+        $this->expectException(ServerErrorException::class);
+
         StatusCodeException::throwOnServerError(new Response($statusCode));
     }
 
@@ -242,10 +247,11 @@ class StatusCodeExceptionTest extends TestCase
 
     /**
      * @dataProvider errorCodeProvider
-     * @expectedException \PSX\Http\Exception\StatusCodeException
      */
     public function testThrowOnError($statusCode)
     {
+        $this->expectException(StatusCodeException::class);
+
         StatusCodeException::throwOnError(new Response($statusCode));
     }
 

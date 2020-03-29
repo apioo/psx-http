@@ -248,11 +248,10 @@ class MessageTest extends TestCase
         $this->assertEquals('foobar', (string) $message->getBody());
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testInvalidBody()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         new Message(array('foo' => 'bar'), new \stdClass());
     }
 }

@@ -20,6 +20,7 @@
 
 namespace PSX\Http\Tests\Filter;
 
+use PSX\Http\Exception\BadRequestException;
 use PSX\Http\Filter\FilterChain;
 use PSX\Http\Filter\UserAgentEnforcer;
 use PSX\Http\Request;
@@ -44,11 +45,10 @@ class UserAgentEnforcerTest extends FilterTestCase
         $filter->handle($request, $response, $this->getFilterChain(true, $request, $response));
     }
 
-    /**
-     * @expectedException \PSX\Http\Exception\BadRequestException
-     */
     public function testNoUserAgent()
     {
+        $this->expectException(BadRequestException::class);
+
         $request  = new Request(new Url('http://localhost'), 'GET');
         $response = new Response();
 

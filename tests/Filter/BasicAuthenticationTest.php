@@ -20,6 +20,7 @@
 
 namespace PSX\Http\Tests\Filter;
 
+use PSX\Http\Exception\BadRequestException;
 use PSX\Http\Exception\UnauthorizedException;
 use PSX\Http\Filter\BasicAuthentication;
 use PSX\Http\Filter\FilterChain;
@@ -55,11 +56,10 @@ class BasicAuthenticationTest extends FilterTestCase
         $handle->handle($request, $response, $this->getFilterChain(true, $request, $response));
     }
 
-    /**
-     * @expectedException \PSX\Http\Exception\BadRequestException
-     */
     public function testFailure()
     {
+        $this->expectException(BadRequestException::class);
+
         $handle = new BasicAuthentication(function ($username, $password) {
             return $username == 'test' && $password == 'test';
         });

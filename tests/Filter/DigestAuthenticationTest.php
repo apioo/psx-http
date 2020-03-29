@@ -21,6 +21,7 @@
 namespace PSX\Framework\Tests\Filter;
 
 use PSX\Http\Authentication;
+use PSX\Http\Exception\BadRequestException;
 use PSX\Http\Exception\UnauthorizedException;
 use PSX\Http\Filter\DigestAuthentication;
 use PSX\Http\Filter\DigestAuthentication\Digest;
@@ -83,11 +84,10 @@ class DigestAuthenticationTest extends FilterTestCase
         $handle->handle($request, $response, $this->getFilterChain(true, $request, $response));
     }
 
-    /**
-     * @expectedException \PSX\Http\Exception\BadRequestException
-     */
     public function testFailure()
     {
+        $this->expectException(BadRequestException::class);
+
         $store  = new MemoryStore();
         $handle = $this->makeHandshake($store);
 

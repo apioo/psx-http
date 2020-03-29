@@ -22,6 +22,7 @@ namespace PSX\Http\Tests\Parser;
 
 use PHPUnit\Framework\TestCase;
 use PSX\Http\Http;
+use PSX\Http\Parser\ParseException;
 use PSX\Http\Parser\ResponseParser;
 use PSX\Http\Response;
 
@@ -119,11 +120,10 @@ class ResponseParserTest extends TestCase
         }
     }
 
-    /**
-     * @expectedException \PSX\Http\Parser\ParseException
-     */
     public function testParseInvalidStatusLine()
     {
+        $this->expectException(ParseException::class);
+
         $response = 'foobar' . Http::NEW_LINE;
         $response.= 'Vary: Accept-Encoding' . Http::NEW_LINE;
 
@@ -131,22 +131,20 @@ class ResponseParserTest extends TestCase
         $parser->parse($response);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testParseEmpty()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $response = '';
 
         $parser = new ResponseParser(ResponseParser::MODE_STRICT);
         $parser->parse($response);
     }
 
-    /**
-     * @expectedException \PSX\Http\Parser\ParseException
-     */
     public function testParseNoLineEnding()
     {
+        $this->expectException(ParseException::class);
+
         $response = 'HTTP/1.1 200 OK';
         $response.= 'Vary: Accept-Encoding';
 
@@ -154,11 +152,10 @@ class ResponseParserTest extends TestCase
         $parser->parse($response);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testParseInvalidMode()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $response = 'HTTP/1.1 200 OK' . Http::NEW_LINE;
         $response.= 'Vary: Accept-Encoding' . Http::NEW_LINE;
 
@@ -202,30 +199,27 @@ class ResponseParserTest extends TestCase
         ), $response->getHeaders());
     }
 
-    /**
-     * @expectedException \PSX\Http\Parser\ParseException
-     */
     public function testBuildResponseFromHeaderInvalidStatusLine()
     {
+        $this->expectException(ParseException::class);
+
         ResponseParser::buildResponseFromHeader(array(
             'foobar',
             'Vary: Accept-Encoding',
         ));
     }
 
-    /**
-     * @expectedException \PSX\Http\Parser\ParseException
-     */
     public function testBuildResponseFromHeaderEmpty()
     {
+        $this->expectException(ParseException::class);
+
         ResponseParser::buildResponseFromHeader(array());
     }
 
-    /**
-     * @expectedException \PSX\Http\Parser\ParseException
-     */
     public function testBuildResponseFromHeaderEmptyStatusLine()
     {
+        $this->expectException(ParseException::class);
+
         ResponseParser::buildResponseFromHeader(array(
             '',
             'Vary: Accept-Encoding',
@@ -239,21 +233,19 @@ class ResponseParserTest extends TestCase
         $this->assertEquals('HTTP/1.1 200 OK', ResponseParser::buildStatusLine($response));
     }
 
-    /**
-     * @expectedException \RuntimeException
-     */
     public function testBuildStatusLineUnknownStausCode()
     {
+        $this->expectException(\RuntimeException::class);
+
         $response = new Response(0);
 
         ResponseParser::buildStatusLine($response);
     }
 
-    /**
-     * @expectedException \RuntimeException
-     */
     public function testBuildStatusLineUnknownStausCodeWithNoReason()
     {
+        $this->expectException(\RuntimeException::class);
+
         $response = new Response(800);
 
         ResponseParser::buildStatusLine($response);

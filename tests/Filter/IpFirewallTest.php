@@ -20,6 +20,7 @@
 
 namespace PSX\Http\Tests\Filter;
 
+use PSX\Http\Exception\ForbiddenException;
 use PSX\Http\Filter\FilterChain;
 use PSX\Http\Filter\IpFirewall;
 use PSX\Http\Request;
@@ -46,11 +47,10 @@ class IpFirewallTest extends FilterTestCase
         $filter->handle($request, $response, $this->getFilterChain(true, $request, $response));
     }
 
-    /**
-     * @expectedException \PSX\Http\Exception\ForbiddenException
-     */
     public function testInvalidIp()
     {
+        $this->expectException(ForbiddenException::class);
+
         $request  = new Request(new Url('http://localhost'), 'GET');
         $response = new Response();
 
