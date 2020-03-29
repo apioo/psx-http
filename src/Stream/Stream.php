@@ -147,8 +147,8 @@ class Stream implements StreamInterface
 
     public function getContents()
     {
-        if ($this->resource) {
-            return stream_get_contents($this->resource);
+        if ($this->resource && $this->readable) {
+            return (string) stream_get_contents($this->resource);
         }
 
         return null;
@@ -171,8 +171,8 @@ class Stream implements StreamInterface
 
     public function __toString()
     {
-        if ($this->resource) {
-            return stream_get_contents($this->resource, -1, 0);
+        if ($this->resource && $this->readable) {
+            return (string) stream_get_contents($this->resource, -1, 0);
         }
 
         return '';
