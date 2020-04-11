@@ -110,6 +110,7 @@ is the better solution. Also we should note the fitting [XKDC](https://xkcd.com/
 + getVerify(): boolean
 + getTimeout(): float
 + getVersion(): float
++ getSink(): string|resource
 ```
 
 ## Examples
