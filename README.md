@@ -9,11 +9,6 @@ implementations which can be used by every app which needs a solid HTTP stack.
 They are used by the [PSX](http://phpsx.org/) framework and 
 [Fusio](https://www.fusio-project.org/).
 
-We are aware that this overlaps with PSR-7 and PSR-15 but we think that those 
-specs have made some bad design decisions and this project is here to provide an 
-alternative. It is always good to have diversity and evolution will show which 
-is the better solution. Also we should note the fitting [XKDC](https://xkcd.com/927/).
-
 ### HTTP
 
 #### `RequestInterface`
@@ -250,12 +245,17 @@ $chain->handle($request, $response);
 
 ## Distinction
 
+We are aware that this overlaps with PSR-7, PSR-15 and PSR-17 but we think that
+those specs have made some bad design decisions and this project provides an
+alternative.
+
 ### PSR-7
 
 * The classes are mutable (`set*` instead of `with*`), you can change the state
   of the object.
 * There is no `ServerRequestInterface` and `UploadedFileInterface`
-* There is only a single way to access query parameters
+* There is only a single way to access query parameters. You can access a
+  query parameter from the URI instead of `getQueryParams`
 * `getHeader` returns a string instead of an array which is the 80% case
 
 ### Thoughts
@@ -264,8 +264,8 @@ $chain->handle($request, $response);
   it is not possible to change the response object.
 * The middleware needs to know how to create a HTTP response instance. Because
   of this you can't inject a different response implementation into your 
-  middleware stack. As workaround we see a HTTP factory PSR, but we think this 
-  is a code-smell.
+  middleware stack. To solve this there is PSR-17 but we think this is a bad
+  solution.
 * If your app uses a PHP server like Swoole you want to wrap the Swoole response 
   object and pass it to the middleware to handle also streaming use cases.
 * Immutability forces a design on your application you have i.e. not the
