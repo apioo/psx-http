@@ -81,6 +81,11 @@ class Client implements ClientInterface
             $opt['body'] = $request->getBody();
         }
 
+        $sink = $options->getSink();
+        if (!empty($sink)) {
+            $opt['sink'] = $sink;
+        }
+
         $response = $this->client->request($request->getMethod(), $request->getUri(), $opt);
 
         return new Response($response->getStatusCode(), $response->getHeaders(), $response->getBody());

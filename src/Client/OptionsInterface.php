@@ -80,4 +80,12 @@ interface OptionsInterface
      * @return float
      */
     public function getVersion();
+
+    /**
+     * Specify where the body of a response will be saved. Must be either a
+     * path to a file or a resource
+     *
+     * @return string|resource
+     */
+    public function getSink();
 }

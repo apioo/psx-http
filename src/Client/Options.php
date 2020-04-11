@@ -65,6 +65,11 @@ class Options implements OptionsInterface
     protected $version;
 
     /**
+     * @var string|resource
+     */
+    protected $sink;
+
+    /**
      * @inheritdoc
      */
     public function getAllowRedirects()
@@ -174,5 +179,21 @@ class Options implements OptionsInterface
     public function setVersion(float $version)
     {
         $this->version = $version;
+    }
+
+    /**
+     * @return resource|string
+     */
+    public function getSink()
+    {
+        return $this->sink;
+    }
+
+    /**
+     * @param resource|string $sink
+     */
+    public function setSink($sink): void
+    {
+        $this->sink = $sink;
     }
 }
