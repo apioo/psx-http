@@ -33,6 +33,9 @@ class LazyStreamTest extends StreamTestCase
 {
     protected function getStream()
     {
-        return new LazyStream('data://text/plain;base64,' . base64_encode('foobar'), 'r+');
+        $file = __DIR__ . '/StreamTestLazy.txt';
+        file_put_contents($file, 'foobar');
+
+        return new LazyStream($file, 'r+');
     }
 }
