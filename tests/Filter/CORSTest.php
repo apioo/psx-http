@@ -126,8 +126,8 @@ class CORSTest extends FilterTestCase
                 'Origin' => 'http://foo.example'
             ], [
                 'access-control-allow-origin' => ['http://foo.example'],
-                'vary' => ['Origin'],
                 'access-control-allow-credentials' => ['true'],
+                'vary' => ['Origin'],
             ]],
             [$originFalse, ['GET', 'POST'], ['Content-Type'], true, 'GET', [
                 'Origin' => 'http://foo.example'
@@ -149,7 +149,8 @@ class CORSTest extends FilterTestCase
             ],[
                 'access-control-allow-origin' => ['*'],
                 'access-control-allow-methods' => ['GET, POST'],
-                'access-control-allow-headers' => ['Content-Type']
+                'access-control-allow-headers' => ['Content-Type'],
+                'access-control-expose-headers' => ['*'],
             ]],
             [$originTrue, ['GET', 'POST'], ['Content-Type'], false, 'OPTIONS', [
                 'Origin' => 'http://foo.example',
@@ -159,6 +160,7 @@ class CORSTest extends FilterTestCase
                 'access-control-allow-origin' => ['http://foo.example'],
                 'access-control-allow-methods' => ['GET, POST'],
                 'access-control-allow-headers' => ['Content-Type'],
+                'access-control-expose-headers' => ['*'],
                 'vary' => ['Origin']
             ]],
             [$originFalse, ['GET', 'POST'], ['Content-Type'], false, 'OPTIONS', [
@@ -184,6 +186,7 @@ class CORSTest extends FilterTestCase
                 'access-control-allow-methods' => ['GET, POST'],
                 'access-control-allow-headers' => ['Content-Type'],
                 'access-control-allow-credentials' => ['true'],
+                'access-control-expose-headers' => ['*'],
             ]],
             [$originTrue, ['GET', 'POST'], ['Content-Type'], true, 'OPTIONS', [
                 'Origin' => 'http://foo.example',
@@ -193,8 +196,9 @@ class CORSTest extends FilterTestCase
                 'access-control-allow-origin' => ['http://foo.example'],
                 'access-control-allow-methods' => ['GET, POST'],
                 'access-control-allow-headers' => ['Content-Type'],
-                'vary' => ['Origin'],
                 'access-control-allow-credentials' => ['true'],
+                'access-control-expose-headers' => ['*'],
+                'vary' => ['Origin'],
             ]],
             [$originFalse, ['GET', 'POST'], ['Content-Type'], true, 'OPTIONS', [
                 'Origin' => 'http://foo.example',
