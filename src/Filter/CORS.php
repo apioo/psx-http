@@ -100,6 +100,8 @@ class CORS implements FilterInterface
             if (!empty($headers)) {
                 $response->setHeader('Access-Control-Allow-Headers', implode(', ', $this->allowHeaders));
             }
+
+            $response->setHeader('Access-Control-Expose-Headers', '*');
         }
 
         $filterChain->handle($request, $response);
