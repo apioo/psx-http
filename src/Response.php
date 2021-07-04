@@ -42,7 +42,7 @@ class Response extends Message implements ResponseInterface
     /**
      * @param integer $code
      * @param array $headers
-     * @param string $body
+     * @param \Psr\Http\Message\StreamInterface|string|resource $body
      */
     public function __construct($code = null, array $headers = array(), $body = null)
     {
@@ -77,7 +77,7 @@ class Response extends Message implements ResponseInterface
      * the standard message according to the status code is used
      *
      * @param integer $code
-     * @param integer $reasonPhrase
+     * @param string|null $reasonPhrase
      */
     public function setStatus($code, $reasonPhrase = null)
     {

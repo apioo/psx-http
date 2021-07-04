@@ -82,7 +82,7 @@ class Stream implements StreamInterface
             return ftell($this->resource);
         }
 
-        return false;
+        return 0;
     }
 
     public function eof()
@@ -128,7 +128,7 @@ class Stream implements StreamInterface
             return fwrite($this->resource, $string);
         }
 
-        return false;
+        return 0;
     }
 
     public function isReadable()
@@ -142,7 +142,7 @@ class Stream implements StreamInterface
             return fread($this->resource, $length);
         }
 
-        return false;
+        return '';
     }
 
     public function getContents()
@@ -151,7 +151,7 @@ class Stream implements StreamInterface
             return (string) stream_get_contents($this->resource);
         }
 
-        return null;
+        return '';
     }
 
     public function getMetadata($key = null)

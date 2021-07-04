@@ -149,7 +149,7 @@ class DigestAuthentication implements FilterInterface
 
                 // build ha2
                 if ($qop == 'auth-int') {
-                    $ha2 = md5($request->getMethod() . ':' . $request->getUri()->getPath() . ':' . md5($request->getBody()));
+                    $ha2 = md5($request->getMethod() . ':' . $request->getUri()->getPath() . ':' . md5('' . $request->getBody()));
                 } else {
                     $ha2 = md5($request->getMethod() . ':' . $request->getUri()->getPath());
                 }

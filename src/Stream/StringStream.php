@@ -131,7 +131,7 @@ class StringStream implements StreamInterface
             return $length;
         }
 
-        return false;
+        return 0;
     }
 
     public function isReadable()
@@ -139,23 +139,23 @@ class StringStream implements StreamInterface
         return $this->data !== null;
     }
 
-    public function read($maxLength)
+    public function read($length)
     {
         if ($this->isReadable()) {
-            $data = mb_substr($this->data, $this->pointer, $maxLength);
+            $data = mb_substr($this->data, $this->pointer, $length);
 
-            $this->pointer+= $maxLength;
+            $this->pointer+= $length;
 
             return $data;
         }
 
-        return false;
+        return '';
     }
 
     public function getContents()
     {
         if ($this->data === null) {
-            return null;
+            return '';
         }
 
         $data = mb_substr($this->data, $this->pointer);

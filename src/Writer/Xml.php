@@ -70,9 +70,9 @@ class Xml extends Writer
     private function toString()
     {
         if ($this->data instanceof DOMDocument) {
-            return $this->data->saveXML();
+            return (string) $this->data->saveXML();
         } elseif ($this->data instanceof SimpleXMLElement) {
-            return $this->data->asXML();
+            return (string) $this->data->asXML();
         } else {
             return $this->data;
         }

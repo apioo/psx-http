@@ -59,7 +59,7 @@ interface MessageInterface
      * Returns an associative array of the message's headers. Each key MUST be a 
      * header name, and each value MUST be an array of strings for that header
      *
-     * @return array.
+     * @return array
      */
     public function getHeaders();
 

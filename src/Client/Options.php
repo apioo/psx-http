@@ -192,7 +192,7 @@ class Options implements OptionsInterface
     /**
      * @param resource|string $sink
      */
-    public function setSink($sink): void
+    public function setSink($sink)
     {
         $this->sink = $sink;
     }

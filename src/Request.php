@@ -55,7 +55,7 @@ class Request extends Message implements RequestInterface
      * @param \PSX\Uri\UriInterface $uri
      * @param string $method
      * @param array $headers
-     * @param string $body
+     * @param \Psr\Http\Message\StreamInterface|string|resource $body
      */
     public function __construct(UriInterface $uri, $method, array $headers = [], $body = null)
     {

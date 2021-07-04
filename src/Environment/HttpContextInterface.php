@@ -57,7 +57,7 @@ interface HttpContextInterface
      * Returns a specific fragment from the uri
      *
      * @param string $name
-     * @return string
+     * @return string|null
      */
     public function getUriFragment($name);
 

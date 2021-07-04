@@ -36,7 +36,7 @@ class DeleteRequest extends Request
     /**
      * @param \PSX\Uri\UriInterface|string $uri
      * @param array $headers
-     * @param \PSX\Http\StreamInterface|string $body
+     * @param \Psr\Http\Message\StreamInterface|string|resource $body
      */
     public function __construct($uri, array $headers = array(), $body = null)
     {

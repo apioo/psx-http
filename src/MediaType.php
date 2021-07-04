@@ -146,16 +146,13 @@ class MediaType
 
         if (!empty($rest)) {
             $parts = explode(';', $rest);
+            foreach ($parts as $part) {
+                $kv    = explode('=', $part, 2);
+                $key   = trim($kv[0]);
+                $value = isset($kv[1]) ? trim($kv[1]) : null;
 
-            if (!empty($parts)) {
-                foreach ($parts as $part) {
-                    $kv    = explode('=', $part, 2);
-                    $key   = trim($kv[0]);
-                    $value = isset($kv[1]) ? trim($kv[1]) : null;
-
-                    if (!empty($key)) {
-                        $parameters[$key] = trim($value, '"');
-                    }
+                if (!empty($key)) {
+                    $parameters[$key] = trim($value, '"');
                 }
             }
         }

@@ -142,7 +142,7 @@ abstract class ParserAbstract
 
     /**
      * @param string $message
-     * @return boolean|string
+     * @return string|false
      */
     protected function getStatusLine($message)
     {

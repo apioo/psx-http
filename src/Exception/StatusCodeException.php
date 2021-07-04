@@ -94,7 +94,7 @@ class StatusCodeException extends RuntimeException
                 throw new SeeOtherException($location);
 
             case 304:
-                throw new NotModifiedException($location);
+                throw new NotModifiedException();
 
             case 307:
                 throw new TemporaryRedirectException($location);
