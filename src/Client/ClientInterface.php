@@ -21,6 +21,7 @@
 namespace PSX\Http\Client;
 
 use PSX\Http\RequestInterface;
+use PSX\Http\ResponseInterface;
 
 /**
  * ClientInterface
@@ -33,10 +34,6 @@ interface ClientInterface
 {
     /**
      * Sends the request through the given handler and returns the response
-     *
-     * @param \PSX\Http\RequestInterface $request
-     * @param \PSX\Http\Client\OptionsInterface $options
-     * @return \PSX\Http\ResponseInterface
      */
-    public function request(RequestInterface $request, OptionsInterface $options = null);
+    public function request(RequestInterface $request, ?OptionsInterface $options = null): ResponseInterface;
 }

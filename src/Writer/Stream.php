@@ -32,23 +32,11 @@ use PSX\Http\StreamInterface;
  */
 class Stream extends Writer
 {
-    /**
-     * @var \PSX\Http\StreamInterface
-     */
-    protected $data;
-
-    /**
-     * @param \PSX\Http\StreamInterface $stream
-     * @param string $contentType
-     */
     public function __construct(StreamInterface $stream, $contentType = 'application/octet-stream')
     {
         parent::__construct($stream, $contentType);
     }
 
-    /**
-     * @inheritdoc
-     */
     public function writeTo(ResponseInterface $response)
     {
         $response->setHeader('Content-Type', $this->contentType);

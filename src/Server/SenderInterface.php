@@ -33,8 +33,6 @@ interface SenderInterface
 {
     /**
      * Method to send the response which was created to the browser
-     *
-     * @param \PSX\Http\ResponseInterface $response
      */
-    public function send(ResponseInterface $response);
+    public function send(ResponseInterface $response): void;
 }

@@ -31,12 +31,11 @@ use PSX\Http\StreamInterface;
  */
 class StringStream implements StreamInterface
 {
-    protected $data;
-    protected $length;
+    private ?string $data;
+    private int $length;
+    private int $pointer = 0;
 
-    protected $pointer = 0;
-
-    public function __construct($data = '')
+    public function __construct(string $data = '')
     {
         $this->data   = $data;
         $this->length = mb_strlen($data);

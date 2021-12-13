@@ -22,6 +22,7 @@ namespace PSX\Http\Client;
 
 use PSX\Http\RequestInterface;
 use PSX\Http\Response;
+use PSX\Http\ResponseInterface;
 
 /**
  * This class is a simple wrapper around guzzle to offer a simple way to send
@@ -43,14 +44,8 @@ use PSX\Http\Response;
  */
 class Client implements ClientInterface
 {
-    /**
-     * @var \GuzzleHttp\Client
-     */
-    protected $client;
+    private \GuzzleHttp\Client $client;
 
-    /**
-     * @param array $options
-     */
     public function __construct(array $options = [])
     {
         $this->client = new \GuzzleHttp\Client($options);
@@ -59,7 +54,7 @@ class Client implements ClientInterface
     /**
      * @inheritdoc
      */
-    public function request(RequestInterface $request, OptionsInterface $options = null)
+    public function request(RequestInterface $request, ?OptionsInterface $options = null): ResponseInterface
     {
         if ($options === null) {
             $options = new Options();

@@ -36,27 +36,13 @@ use PSX\Http\Stream\StringStream;
  */
 class Sender implements SenderInterface
 {
-    /**
-     * The chunk size which is used if the transfer encoding is "chunked"
-     *
-     * @param integer $chunkSize
-     * @deprecated
-     */
-    public function setChunkSize($chunkSize)
+    public function send(ResponseInterface $response): void
     {
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function send(ResponseInterface $response)
-    {
-        // remove body on specific status codes
         if (in_array($response->getStatusCode(), array(100, 101, 204, 304))) {
+            // remove body on specific status codes
             $response->setBody(new StringStream(''));
-        }
-        // if we have a location header we dont send any content
-        elseif ($response->hasHeader('Location')) {
+        } elseif ($response->hasHeader('Location')) {
+            // if we have a location header we dont send any content
             $response->setBody(new StringStream(''));
         }
 
@@ -72,12 +58,12 @@ class Sender implements SenderInterface
         $this->sendBody($response);
     }
 
-    protected function shouldSendHeader()
+    private function shouldSendHeader(): bool
     {
         return PHP_SAPI != 'cli' && !headers_sent();
     }
 
-    protected function sendStatusLine(ResponseInterface $response)
+    private function sendStatusLine(ResponseInterface $response)
     {
         $scheme = $response->getProtocolVersion();
         if (empty($scheme)) {
@@ -92,7 +78,7 @@ class Sender implements SenderInterface
         $this->sendHeader($scheme . ' ' . $code . ' ' . Http::$codes[$code]);
     }
 
-    protected function sendHeaders(ResponseInterface $response)
+    private function sendHeaders(ResponseInterface $response)
     {
         $headers = ResponseParser::buildHeaderFromMessage($response);
 
@@ -101,12 +87,12 @@ class Sender implements SenderInterface
         }
     }
 
-    protected function sendHeader($header)
+    private function sendHeader($header)
     {
         header($header);
     }
 
-    protected function sendBody(ResponseInterface $response)
+    private function sendBody(ResponseInterface $response)
     {
         $body = $response->getBody();
         if ($body instanceof StreamInterface) {

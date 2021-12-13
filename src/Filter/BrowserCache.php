@@ -34,20 +34,20 @@ use PSX\Http\ResponseInterface;
  */
 class BrowserCache implements FilterInterface
 {
-    const TYPE_PUBLIC      = 0x1;
-    const TYPE_PRIVATE     = 0x2;
-    const NO_CACHE         = 0x4;
-    const NO_STORE         = 0x8;
-    const NO_TRANSFORM     = 0x10;
-    const MUST_REVALIDATE  = 0x20;
-    const PROXY_REVALIDATE = 0x40;
+    public const TYPE_PUBLIC      = 0x1;
+    public const TYPE_PRIVATE     = 0x2;
+    public const NO_CACHE         = 0x4;
+    public const NO_STORE         = 0x8;
+    public const NO_TRANSFORM     = 0x10;
+    public const MUST_REVALIDATE  = 0x20;
+    public const PROXY_REVALIDATE = 0x40;
 
-    protected $flags;
-    protected $maxAge;
-    protected $sMaxAge;
-    protected $expires;
+    private int $flags;
+    private ?int $maxAge;
+    private ?int $sMaxAge;
+    private ?\DateTime $expires;
 
-    public function __construct($flags = 0, $maxAge = null, $sMaxAge = null, \DateTime $expires = null)
+    public function __construct(int $flags = 0, ?int $maxAge = null, ?int $sMaxAge = null, ?\DateTime $expires = null)
     {
         $this->flags   = $flags;
         $this->maxAge  = $maxAge;
@@ -55,12 +55,12 @@ class BrowserCache implements FilterInterface
         $this->expires = $expires;
     }
 
-    public function setMaxAge($maxAge)
+    public function setMaxAge(int $maxAge)
     {
         $this->maxAge = $maxAge;
     }
 
-    public function setSMaxAge($sMaxAge)
+    public function setSMaxAge(int $sMaxAge)
     {
         $this->sMaxAge = $sMaxAge;
     }
@@ -103,11 +103,11 @@ class BrowserCache implements FilterInterface
         }
 
         if ($this->maxAge !== null) {
-            $cacheControl[] = 'max-age=' . intval($this->maxAge);
+            $cacheControl[] = 'max-age=' . $this->maxAge;
         }
 
         if ($this->sMaxAge !== null) {
-            $cacheControl[] = 's-maxage=' . intval($this->sMaxAge);
+            $cacheControl[] = 's-maxage=' . $this->sMaxAge;
         }
 
         if (!empty($cacheControl)) {
@@ -121,17 +121,17 @@ class BrowserCache implements FilterInterface
         $filterChain->handle($request, $response);
     }
 
-    public static function expires(\DateTime $expires)
+    public static function expires(\DateTime $expires): self
     {
         return new self(0, null, null, $expires);
     }
 
-    public static function cacheControl($flags = 0, $maxAge = null, $sMaxAge = null)
+    public static function cacheControl($flags = 0, $maxAge = null, $sMaxAge = null): self
     {
         return new self($flags, $maxAge, $sMaxAge);
     }
 
-    public static function preventCache()
+    public static function preventCache(): self
     {
         return new self(
             self::NO_STORE | self::NO_CACHE | self::MUST_REVALIDATE,

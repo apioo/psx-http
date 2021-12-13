@@ -35,8 +35,8 @@ use PSX\Http\ResponseInterface;
  */
 class RequestMethodChoice implements FilterInterface
 {
-    protected $requestMethods;
-    protected $filter;
+    private array $requestMethods;
+    private FilterInterface $filter;
 
     public function __construct(array $requestMethods, FilterInterface $filter)
     {

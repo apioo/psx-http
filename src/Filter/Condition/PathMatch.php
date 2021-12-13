@@ -34,10 +34,10 @@ use PSX\Http\ResponseInterface;
  */
 class PathMatch implements FilterInterface
 {
-    protected $pattern;
-    protected $filter;
+    private string $pattern;
+    private FilterInterface $filter;
 
-    public function __construct($pattern, FilterInterface $filter)
+    public function __construct(string $pattern, FilterInterface $filter)
     {
         $this->pattern = $pattern;
         $this->filter  = $filter;

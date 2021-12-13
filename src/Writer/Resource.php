@@ -32,15 +32,6 @@ use PSX\Http\ResponseInterface;
  */
 class Resource extends Writer
 {
-    /**
-     * @var resource
-     */
-    protected $data;
-
-    /**
-     * @param resource $data
-     * @param string $contentType
-     */
     public function __construct($data, $contentType = 'application/octet-stream')
     {
         if (!is_resource($data)) {

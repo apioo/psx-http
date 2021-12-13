@@ -36,9 +36,9 @@ use PSX\Uri\Url;
  */
 class RequestParser extends ParserAbstract
 {
-    protected $baseUrl;
+    private ?Url $baseUrl;
 
-    public function __construct(Url $baseUrl = null, $mode = self::MODE_STRICT)
+    public function __construct(?Url $baseUrl = null, int $mode = self::MODE_STRICT)
     {
         parent::__construct($mode);
 
@@ -48,11 +48,9 @@ class RequestParser extends ParserAbstract
     /**
      * Converts an raw http request into an PSX\Http\Request object
      *
-     * @param string $content
-     * @return \PSX\Http\Request
-     * @throws \PSX\Http\Parser\ParseException
+     * @throws ParseException
      */
-    public function parse($content)
+    public function parse(string $content): Request
     {
         $content = $this->normalize($content);
 
@@ -78,11 +76,9 @@ class RequestParser extends ParserAbstract
     }
 
     /**
-     * @param string $request
-     * @return array
-     * @throws \PSX\Http\Parser\ParseException
+     * @throws ParseException
      */
-    protected function getStatus($request)
+    protected function getStatus(string $request): array
     {
         $line = $this->getStatusLine($request);
 
@@ -103,11 +99,7 @@ class RequestParser extends ParserAbstract
         }
     }
 
-    /**
-     * @param \PSX\Http\RequestInterface $request
-     * @return string
-     */
-    public static function buildStatusLine(RequestInterface $request)
+    public static function buildStatusLine(RequestInterface $request): string
     {
         $method   = $request->getMethod();
         $target   = $request->getRequestTarget();
@@ -127,13 +119,9 @@ class RequestParser extends ParserAbstract
      * Parses an raw http request into an PSX\Http\Request object. Throws an
      * exception if the request has not an valid format
      *
-     * @param string $content
-     * @param \PSX\Uri\Url $baseUrl
-     * @param integer $mode
-     * @return \PSX\Http\RequestInterface
-     * @throws \PSX\Http\Parser\ParseException
+     * @throws ParseException
      */
-    public static function convert($content, Url $baseUrl = null, $mode = ParserAbstract::MODE_STRICT)
+    public static function convert(string $content, Url $baseUrl = null, int $mode = ParserAbstract::MODE_STRICT): RequestInterface
     {
         $parser = new self($baseUrl, $mode);
 

@@ -20,6 +20,8 @@
 
 namespace PSX\Http\Server;
 
+use PSX\Http\RequestInterface;
+
 /**
  * RequestFactoryInterface
  *
@@ -31,8 +33,6 @@ interface RequestFactoryInterface
 {
     /**
      * Returns the http request containing all values from the environment
-     *
-     * @return \PSX\Http\RequestInterface
      */
-    public function createRequest();
+    public function createRequest(): RequestInterface;
 }

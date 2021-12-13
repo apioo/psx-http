@@ -29,22 +29,10 @@ namespace PSX\Http;
  */
 class Response extends Message implements ResponseInterface
 {
-    /**
-     * @var integer
-     */
-    protected $code;
+    protected int $code;
+    protected ?string $reasonPhrase;
 
-    /**
-     * @var string
-     */
-    protected $reasonPhrase;
-
-    /**
-     * @param integer $code
-     * @param array $headers
-     * @param \Psr\Http\Message\StreamInterface|string|resource $body
-     */
-    public function __construct($code = null, array $headers = array(), $body = null)
+    public function __construct(int $code = null, array $headers = [], mixed $body = null)
     {
         parent::__construct($headers, $body);
 
@@ -53,10 +41,8 @@ class Response extends Message implements ResponseInterface
 
     /**
      * Returns the http response code
-     *
-     * @return integer
      */
-    public function getStatusCode()
+    public function getStatusCode(): int
     {
         return $this->code;
     }
@@ -64,10 +50,8 @@ class Response extends Message implements ResponseInterface
     /**
      * Returns the http response message. That means the last part of the status
      * line i.e. "OK" from an 200 response
-     *
-     * @return string
      */
-    public function getReasonPhrase()
+    public function getReasonPhrase(): ?string
     {
         return $this->reasonPhrase;
     }
@@ -75,27 +59,22 @@ class Response extends Message implements ResponseInterface
     /**
      * Sets the status code and reason phrase. If no reason phrase is provided
      * the standard message according to the status code is used
-     *
-     * @param integer $code
-     * @param string|null $reasonPhrase
      */
-    public function setStatus($code, $reasonPhrase = null)
+    public function setStatus(int $code, ?string $reasonPhrase = null): void
     {
-        $this->code = (int) $code;
+        $this->code = $code;
 
         if ($reasonPhrase !== null) {
             $this->reasonPhrase = $reasonPhrase;
-        } elseif (isset(Http::$codes[$this->code])) {
-            $this->reasonPhrase = Http::$codes[$this->code];
+        } elseif (isset(Http::CODES[$this->code])) {
+            $this->reasonPhrase = Http::CODES[$this->code];
         }
     }
 
     /**
      * Converts the response object to an http response string
-     *
-     * @return string
      */
-    public function toString()
+    public function toString(): string
     {
         $response = Parser\ResponseParser::buildStatusLine($this) . Http::NEW_LINE;
         $headers  = Parser\ResponseParser::buildHeaderFromMessage($this);
@@ -105,7 +84,7 @@ class Response extends Message implements ResponseInterface
         }
 
         $response.= Http::NEW_LINE;
-        $response.= (string) $this->getBody();
+        $response.= $this->getBody();
 
         return $response;
     }

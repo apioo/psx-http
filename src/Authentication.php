@@ -29,17 +29,17 @@ namespace PSX\Http;
  */
 class Authentication
 {
-    public static function decodeParameters($data)
+    public static function decodeParameters(string $data): array
     {
-        $params = array();
+        $params = [];
         $parts  = explode(',', $data);
 
         foreach ($parts as $value) {
             $value = trim($value);
             $pair  = explode('=', $value);
 
-            $key   = isset($pair[0]) ? $pair[0] : null;
-            $value = isset($pair[1]) ? $pair[1] : null;
+            $key   = $pair[0] ?? null;
+            $value = $pair[1] ?? null;
 
             if (!empty($key)) {
                 $key   = strtolower($key);
@@ -52,7 +52,7 @@ class Authentication
         return $params;
     }
 
-    public static function encodeParameters(array $params)
+    public static function encodeParameters(array $params): string
     {
         $parts = array();
 

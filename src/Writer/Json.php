@@ -31,18 +31,11 @@ use PSX\Http\ResponseInterface;
  */
 class Json extends Writer
 {
-    /**
-     * @param mixed $data
-     * @param string $contentType
-     */
-    public function __construct($data, $contentType = 'application/json')
+    public function __construct(mixed $data, $contentType = 'application/json')
     {
         parent::__construct($data, $contentType);
     }
 
-    /**
-     * @inheritdoc
-     */
     public function writeTo(ResponseInterface $response)
     {
         $response->setHeader('Content-Type', $this->contentType);

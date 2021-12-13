@@ -36,26 +36,11 @@ use PSX\Http\ResponseInterface;
  */
 class FilterChain implements FilterChainInterface, LoggerAwareInterface
 {
-    /**
-     * @var array
-     */
-    protected $filters;
+    private iterable $filters;
+    private FilterChainInterface $filterChain;
+    private LoggerInterface $logger;
 
-    /**
-     * @var \PSX\Http\FilterChainInterface
-     */
-    protected $filterChain;
-
-    /**
-     * @var \Psr\Log\LoggerInterface
-     */
-    protected $logger;
-
-    /**
-     * @param array|\Traversable $filters
-     * @param FilterChainInterface|null $filterChain
-     */
-    public function __construct($filters = [], FilterChainInterface $filterChain = null)
+    public function __construct(iterable $filters = [], ?FilterChainInterface $filterChain = null)
     {
         $this->filters     = [];
         $this->filterChain = $filterChain;
@@ -65,17 +50,11 @@ class FilterChain implements FilterChainInterface, LoggerAwareInterface
         }
     }
 
-    /**
-     * @inheritdoc
-     */
     public function setLogger(LoggerInterface $logger)
     {
         $this->logger = $logger;
     }
 
-    /**
-     * @inheritdoc
-     */
     public function on($filter)
     {
         if ($filter instanceof FilterInterface) {
@@ -89,9 +68,6 @@ class FilterChain implements FilterChainInterface, LoggerAwareInterface
         }
     }
 
-    /**
-     * @inheritdoc
-     */
     public function handle(RequestInterface $request, ResponseInterface $response)
     {
         $filter = array_shift($this->filters);

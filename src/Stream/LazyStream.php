@@ -33,22 +33,11 @@ class LazyStream implements StreamInterface
 {
     use StreamWrapperTrait;
 
-    /**
-     * @var string
-     */
-    protected $uri;
+    private string $uri;
+    private string $mode;
+    private bool $opened = false;
 
-    /**
-     * @var string
-     */
-    protected $mode;
-
-    /**
-     * @var boolean
-     */
-    protected $opened = false;
-
-    public function __construct($uri, $mode = 'rb')
+    public function __construct(string $uri, string $mode = 'rb')
     {
         $this->uri  = $uri;
         $this->mode = $mode;

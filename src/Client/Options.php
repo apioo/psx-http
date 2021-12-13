@@ -29,170 +29,91 @@ namespace PSX\Http\Client;
  */
 class Options implements OptionsInterface
 {
-    /**
-     * @var boolean
-     */
-    protected $allowRedirects;
+    private ?bool $allowRedirects = null;
+    private ?string $cert = null;
+    private ?string $proxy = null;
+    private ?string $sslKey = null;
+    private ?bool $verify = null;
+    private ?float $timeout = null;
+    private ?float $version = null;
+    private mixed $sink = null;
 
-    /**
-     * @var string
-     */
-    protected $cert;
-
-    /**
-     * @var string
-     */
-    protected $proxy;
-
-    /**
-     * @var string
-     */
-    protected $sslKey;
-
-    /**
-     * @var boolean
-     */
-    protected $verify;
-
-    /**
-     * @var float
-     */
-    protected $timeout;
-
-    /**
-     * @var float
-     */
-    protected $version;
-
-    /**
-     * @var string|resource
-     */
-    protected $sink;
-
-    /**
-     * @inheritdoc
-     */
-    public function getAllowRedirects()
+    public function getAllowRedirects(): ?bool
     {
         return $this->allowRedirects;
     }
 
-    /**
-     * @param boolean $allowRedirects
-     */
-    public function setAllowRedirects($allowRedirects)
+    public function setAllowRedirects(?bool $allowRedirects)
     {
         $this->allowRedirects = $allowRedirects;
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function getCert()
+    public function getCert(): ?string
     {
         return $this->cert;
     }
 
-    /**
-     * @param string $cert
-     */
-    public function setCert($cert)
+    public function setCert(?string $cert)
     {
         $this->cert = $cert;
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function getProxy()
+    public function getProxy(): ?string
     {
         return $this->proxy;
     }
 
-    /**
-     * @param string $proxy
-     */
-    public function setProxy($proxy)
+    public function setProxy(?string $proxy)
     {
         $this->proxy = $proxy;
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function getSslKey()
+    public function getSslKey(): ?string
     {
         return $this->sslKey;
     }
 
-    /**
-     * @param string $sslKey
-     */
-    public function setSslKey($sslKey)
+    public function setSslKey(?string $sslKey)
     {
         $this->sslKey = $sslKey;
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function getVerify()
+    public function getVerify(): ?bool
     {
         return $this->verify;
     }
 
-    /**
-     * @param boolean $verify
-     */
-    public function setVerify($verify)
+    public function setVerify(?bool $verify)
     {
         $this->verify = $verify;
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function getTimeout()
+    public function getTimeout(): ?float
     {
         return $this->timeout;
     }
 
-    /**
-     * @param float $timeout
-     */
-    public function setTimeout($timeout)
+    public function setTimeout(?float $timeout)
     {
         $this->timeout = $timeout;
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function getVersion()
+    public function getVersion(): ?float
     {
         return $this->version;
     }
 
-    /**
-     * @param float $version
-     */
-    public function setVersion(float $version)
+    public function setVersion(?float $version)
     {
         $this->version = $version;
     }
 
-    /**
-     * @return resource|string
-     */
-    public function getSink()
+    public function getSink(): mixed
     {
         return $this->sink;
     }
 
-    /**
-     * @param resource|string $sink
-     */
-    public function setSink($sink)
+    public function setSink(mixed $sink): void
     {
         $this->sink = $sink;
     }

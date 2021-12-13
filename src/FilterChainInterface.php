@@ -31,16 +31,11 @@ interface FilterChainInterface
 {
     /**
      * Attaches a middleware to the chain
-     *
-     * @param \Closure|\PSX\Http\FilterInterface $filter
      */
-    public function on($filter);
+    public function on(FilterInterface|\Closure $filter);
 
     /**
      * Triggers the first middleware on the chain
-     *
-     * @param \PSX\Http\RequestInterface $request
-     * @param \PSX\Http\ResponseInterface $response
      */
     public function handle(RequestInterface $request, ResponseInterface $response);
 }

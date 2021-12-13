@@ -37,29 +37,15 @@ class HSTS implements FilterInterface
     const INCLUDE_SUB_DOMAINS = 1;
     const PRELOAD = 2;
 
-    /**
-     * @var integer
-     */
-    protected $maxAge;
+    private int $maxAge;
+    private ?int $mode;
 
-    /**
-     * @var integer
-     */
-    protected $mode;
-
-    /**
-     * @param integer $maxAge
-     * @param integer|null $mode
-     */
-    public function __construct($maxAge, $mode = null)
+    public function __construct(int $maxAge, ?int $mode = null)
     {
         $this->maxAge = $maxAge;
         $this->mode   = $mode;
     }
 
-    /**
-     * @inheritdoc
-     */
     public function handle(RequestInterface $request, ResponseInterface $response, FilterChainInterface $filterChain)
     {
         if ($this->maxAge > 0) {

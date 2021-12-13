@@ -33,12 +33,7 @@ use PSX\Uri\UriInterface;
  */
 class DeleteRequest extends Request
 {
-    /**
-     * @param \PSX\Uri\UriInterface|string $uri
-     * @param array $headers
-     * @param \Psr\Http\Message\StreamInterface|string|resource $body
-     */
-    public function __construct($uri, array $headers = array(), $body = null)
+    public function __construct(UriInterface|string $uri, array $headers = array(), mixed $body = null)
     {
         if (!$uri instanceof UriInterface) {
             $uri = new Uri((string) $uri);

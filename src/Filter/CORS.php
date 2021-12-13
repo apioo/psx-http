@@ -34,33 +34,12 @@ use PSX\Http\ResponseInterface;
  */
 class CORS implements FilterInterface
 {
-    /**
-     * @var string|\Closure
-     */
-    protected $allowOrigin;
+    private string|\Closure $allowOrigin;
+    private ?array $allowMethods;
+    private ?array $allowHeaders;
+    private ?bool $allowCredentials;
 
-    /**
-     * @var array
-     */
-    protected $allowMethods;
-
-    /**
-     * @var array
-     */
-    protected $allowHeaders;
-
-    /**
-     * @var boolean
-     */
-    protected $allowCredentials;
-
-    /**
-     * @param string|\Closure $allowOrigin
-     * @param array|null $allowMethods
-     * @param array|null $allowHeaders
-     * @param boolean|null $allowCredentials
-     */
-    public function __construct($allowOrigin, array $allowMethods = null, array $allowHeaders = null, $allowCredentials = null)
+    public function __construct(string|\Closure $allowOrigin, ?array $allowMethods = null, ?array $allowHeaders = null, ?bool $allowCredentials = null)
     {
         $this->allowOrigin      = $allowOrigin;
         $this->allowMethods     = $allowMethods;
@@ -107,7 +86,7 @@ class CORS implements FilterInterface
         $filterChain->handle($request, $response);
     }
 
-    public static function allowOrigin($allowOrigin)
+    public static function allowOrigin($allowOrigin): self
     {
         return new self($allowOrigin);
     }

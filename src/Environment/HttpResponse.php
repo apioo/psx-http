@@ -30,64 +30,33 @@ namespace PSX\Http\Environment;
  */
 class HttpResponse implements HttpResponseInterface
 {
-    /**
-     * @var integer
-     */
-    protected $statusCode;
+    private int $statusCode;
+    private array $headers;
+    private mixed $body;
 
-    /**
-     * @var array
-     */
-    protected $headers;
-
-    /**
-     * @var mixed
-     */
-    protected $body;
-
-    /**
-     * @param integer $statusCode
-     * @param array $headers
-     * @param mixed $body
-     */
-    public function __construct($statusCode, array $headers, $body)
+    public function __construct(int $statusCode, array $headers, mixed $body)
     {
         $this->statusCode = $statusCode;
-        $this->headers    = array_change_key_case($headers, CASE_LOWER);
-        $this->body       = $body;
+        $this->headers = array_change_key_case($headers, CASE_LOWER);
+        $this->body = $body;
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function getStatusCode()
+    public function getStatusCode(): int
     {
         return $this->statusCode;
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function getHeaders()
+    public function getHeaders(): array
     {
         return $this->headers;
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function getHeader($name)
+    public function getHeader(string $name): ?string
     {
-        $name  = strtolower($name);
-        $value = isset($this->headers[$name]) ? $this->headers[$name] : null;
-
-        return $value;
+        return $this->headers[strtolower($name)] ?? null;
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function getBody()
+    public function getBody(): mixed
     {
         return $this->body;
     }

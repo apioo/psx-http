@@ -37,11 +37,9 @@ class ResponseParser extends ParserAbstract
     /**
      * Converts an raw http response into an PSX\Http\Response object
      *
-     * @param string $content
-     * @return \PSX\Http\ResponseInterface
-     * @throws \PSX\Http\Parser\ParseException
+     * @throws ParseException
      */
-    public function parse($content)
+    public function parse(string $content): ResponseInterface
     {
         $content = $this->normalize($content);
 
@@ -61,11 +59,9 @@ class ResponseParser extends ParserAbstract
     }
 
     /**
-     * @param string $response
-     * @return array
-     * @throws \PSX\Http\Parser\ParseException
+     * @throws ParseException
      */
-    protected function getStatus($response)
+    protected function getStatus(string $response): array
     {
         $line = $this->getStatusLine($response);
 
@@ -87,11 +83,9 @@ class ResponseParser extends ParserAbstract
     }
 
     /**
-     * @param array $headers
-     * @return \PSX\Http\ResponseInterface
-     * @throws \PSX\Http\Parser\ParseException
+     * @throws ParseException
      */
-    public static function buildResponseFromHeader(array $headers)
+    public static function buildResponseFromHeader(array $headers): ResponseInterface
     {
         $line = array_shift($headers);
 
@@ -128,11 +122,7 @@ class ResponseParser extends ParserAbstract
         }
     }
 
-    /**
-     * @param \PSX\Http\ResponseInterface $response
-     * @return string
-     */
-    public static function buildStatusLine(ResponseInterface $response)
+    public static function buildStatusLine(ResponseInterface $response): string
     {
         $protocol = $response->getProtocolVersion();
         $code     = $response->getStatusCode();
@@ -159,12 +149,9 @@ class ResponseParser extends ParserAbstract
      * Parses an raw http response into an PSX\Http\Response object. Throws an
      * exception if the response has not an valid format
      *
-     * @param string $content
-     * @param integer $mode
-     * @return \PSX\Http\ResponseInterface
-     * @throws \PSX\Http\Parser\ParseException
+     * @throws ParseException
      */
-    public static function convert($content, $mode = ParserAbstract::MODE_STRICT)
+    public static function convert(string $content, int $mode = ParserAbstract::MODE_STRICT): ResponseInterface
     {
         $parser = new self($mode);
 

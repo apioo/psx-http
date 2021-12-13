@@ -31,7 +31,7 @@ use PSX\Http\MediaType;
  */
 class Xml
 {
-    protected static $mediaTypes = array(
+    private const MEDIA_TYPES = array(
         'text/xml',
         'application/xml',
         'text/xml-external-parsed-entity',
@@ -39,15 +39,15 @@ class Xml
         'application/xml-dtd'
     );
 
-    public static function isMediaType(MediaType $mediaType)
+    public static function isMediaType(MediaType $mediaType): bool
     {
-        return in_array($mediaType->getName(), self::$mediaTypes) ||
-            substr($mediaType->getSubType(), -4) == '+xml' ||
-            substr($mediaType->getSubType(), -4) == '/xml';
+        return in_array($mediaType->getName(), self::MEDIA_TYPES) ||
+            str_ends_with($mediaType->getSubType(), '+xml') ||
+            str_ends_with($mediaType->getSubType(), '/xml');
     }
 
-    public static function getMediaTypes()
+    public static function getMediaTypes(): array
     {
-        return self::$mediaTypes;
+        return self::MEDIA_TYPES;
     }
 }

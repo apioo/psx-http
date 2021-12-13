@@ -31,34 +31,20 @@ use PSX\Http\ResponseInterface;
  */
 class File extends Writer
 {
-    /**
-     * @var string
-     */
-    protected $fileName;
+    protected ?string $fileName;
 
-    /**
-     * @param string $file
-     * @param string|null $fileName
-     * @param string|null $contentType
-     */
-    public function __construct($file, $fileName = null, $contentType = null)
+    public function __construct(string $file, ?string $fileName = null, ?string $contentType = null)
     {
         parent::__construct($file, $contentType);
 
         $this->fileName = $fileName;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getFileName()
+    public function getFileName(): ?string
     {
         return $this->fileName;
     }
 
-    /**
-     * @inheritdoc
-     */
     public function writeTo(ResponseInterface $response)
     {
         $file = $this->data;

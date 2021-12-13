@@ -31,10 +31,10 @@ use PSX\Http\MediaType;
  */
 class Json
 {
-    public static function isMediaType(MediaType $mediaType)
+    public static function isMediaType(MediaType $mediaType): bool
     {
         return $mediaType->getSubType() == 'json' ||
-            substr($mediaType->getSubType(), -5) == '+json' ||
-            substr($mediaType->getSubType(), -5) == '/json';
+            str_ends_with($mediaType->getSubType(), '+json') ||
+            str_ends_with($mediaType->getSubType(), '/json');
     }
 }

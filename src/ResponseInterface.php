@@ -41,10 +41,8 @@ interface ResponseInterface extends MessageInterface
     /**
      * Gets the response status code. The status code is a 3-digit integer 
      * result code of the server's attempt to understand and satisfy the request
-     *
-     * @return integer
      */
-    public function getStatusCode();
+    public function getStatusCode(): int;
 
     /**
      * Gets the response reason phrase, a short textual description of the
@@ -52,9 +50,8 @@ interface ResponseInterface extends MessageInterface
      *
      * @link http://tools.ietf.org/html/rfc7231#section-6
      * @link http://www.iana.org/assignments/http-status-codes/http-status-codes.xhtml
-     * @return string|null
      */
-    public function getReasonPhrase();
+    public function getReasonPhrase(): ?string;
 
     /**
      * Sets the specified status code, and optionally reason phrase, for the
@@ -62,10 +59,6 @@ interface ResponseInterface extends MessageInterface
      *
      * @link http://tools.ietf.org/html/rfc7231#section-6
      * @link http://www.iana.org/assignments/http-status-codes/http-status-codes.xhtml
-     * @param int $code
-     * @param null|string $reasonPhrase
-     * @return void
-     * @throws \InvalidArgumentException
      */
-    public function setStatus($code, $reasonPhrase = null);
+    public function setStatus(int $code, ?string $reasonPhrase = null): void;
 }

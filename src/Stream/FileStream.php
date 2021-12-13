@@ -33,40 +33,13 @@ class FileStream implements StreamInterface
 {
     use StreamWrapperTrait;
 
-    /**
-     * @var string
-     */
-    protected $tmpName;
+    private string $tmpName;
+    private string $name;
+    private string $type;
+    private int $size;
+    private int $error;
 
-    /**
-     * @var string
-     */
-    protected $name;
-
-    /**
-     * @var string
-     */
-    protected $type;
-
-    /**
-     * @var integer
-     */
-    protected $size;
-
-    /**
-     * @var integer
-     */
-    protected $error;
-
-    /**
-     * @param \PSX\Http\StreamInterface $stream
-     * @param string $tmpName
-     * @param string $name
-     * @param string $type
-     * @param integer $size
-     * @param integer $error
-     */
-    public function __construct(StreamInterface $stream, $tmpName, $name, $type, $size, $error)
+    public function __construct(StreamInterface $stream, string $tmpName, string $name, string $type, int $size, int $error)
     {
         $this->stream  = $stream;
         $this->tmpName = $tmpName;
@@ -76,42 +49,27 @@ class FileStream implements StreamInterface
         $this->error   = $error;
     }
 
-    /**
-     * @return string
-     */
-    public function getTmpName()
+    public function getTmpName(): string
     {
         return $this->tmpName;
     }
 
-    /**
-     * @return string
-     */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @return string
-     */
-    public function getType()
+    public function getType(): string
     {
         return $this->type;
     }
 
-    /**
-     * @return int
-     */
-    public function getSize()
+    public function getSize(): int
     {
         return $this->size;
     }
 
-    /**
-     * @return int
-     */
-    public function getError()
+    public function getError(): int
     {
         return $this->error;
     }
@@ -119,10 +77,8 @@ class FileStream implements StreamInterface
     /**
      * Moves the uploaded file to a new location
      * 
-     * @param string $toFile
-     * @return boolean
      */
-    public function move($toFile)
+    public function move(string $toFile): bool
     {
         if ($this->error == UPLOAD_ERR_OK) {
             return move_uploaded_file($this->tmpName, $toFile);
@@ -135,11 +91,11 @@ class FileStream implements StreamInterface
     {
         $this->call();
 
-        $this->tmpName = null;
-        $this->name    = null;
-        $this->type    = null;
-        $this->size    = null;
-        $this->error   = null;
+        $this->tmpName = '';
+        $this->name    = '';
+        $this->type    = '';
+        $this->size    = 0;
+        $this->error   = 0;
 
         return $this->stream->detach();
     }

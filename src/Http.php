@@ -29,13 +29,13 @@ namespace PSX\Http;
  */
 class Http
 {
-    const NEW_LINE = "\r\n";
+    public const NEW_LINE = "\r\n";
 
     /**
      * @see http://www.iana.org/assignments/http-status-codes/http-status-codes.xhtml
      * @var array
      */
-    public static $codes = array(
+    public const CODES = [
         100 => 'Continue',
         101 => 'Switching Protocols',
         102 => 'Processing', // RFC2518
@@ -96,5 +96,5 @@ class Http
         508 => 'Loop Detected', // RFC5842
         510 => 'Not Extended', // RFC2774
         511 => 'Network Authentication Required', // RFC6585
-    );
+    ];
 }

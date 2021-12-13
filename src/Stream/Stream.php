@@ -32,10 +32,10 @@ use PSX\Http\StreamInterface;
  */
 class Stream implements StreamInterface
 {
-    protected $resource;
-    protected $seekable;
-    protected $readable;
-    protected $writable;
+    private mixed $resource;
+    private bool $seekable = false;
+    private bool $readable = false;
+    private bool $writable = false;
 
     public function __construct($resource)
     {
@@ -70,7 +70,7 @@ class Stream implements StreamInterface
         if ($this->resource) {
             $stat = fstat($this->resource);
 
-            return isset($stat['size']) ? $stat['size'] : null;
+            return $stat['size'] ?? null;
         }
 
         return null;

@@ -31,7 +31,7 @@ use InvalidArgumentException;
  */
 class MediaType
 {
-    protected static $topLevelMediaTypes = array(
+    protected const TOP_LEVEL_MEDIA_TYPES = [
         'application',
         'audio',
         'example',
@@ -40,58 +40,62 @@ class MediaType
         'model',
         'multipart',
         'text',
-        'video'
-    );
+        'video',
+    ];
 
-    protected $type;
-    protected $subType;
-    protected $parameters;
-    protected $quality;
+    private string $type;
+    private string $subType;
+    private array $parameters;
+    private ?float $quality = null;
 
-    public function __construct($mediaType, $subType = null, array $parameters = array())
+    public function __construct(string $type, ?string $subType = null, ?array $parameters = null)
     {
-        if (func_num_args() == 1) {
-            $this->parse($mediaType);
-        } else {
-            $this->type       = $mediaType;
-            $this->subType    = $subType;
+        if ($subType !== null && $parameters !== null) {
+            $this->type = $type;
+            $this->subType = $subType;
             $this->parameters = $parameters;
 
-            $this->parseQuality(isset($parameters['q']) ? $parameters['q'] : null);
+            $this->parseQuality($parameters['q'] ?? null);
+        } else {
+            $this->type = '';
+            $this->subType = '';
+            $this->parameters = [];
+
+            $this->parse($type);
         }
     }
 
-    public function getType()
+    public function getType(): string
     {
         return $this->type;
     }
 
-    public function getSubType()
+    public function getSubType(): string
     {
         return $this->subType;
     }
 
-    public function getName()
+    public function getName(): string
     {
         return $this->type . '/' . $this->subType;
     }
 
-    public function getQuality()
+    public function getQuality(): ?float
     {
         return $this->quality;
     }
 
-    public function getParameter($name)
+    public function getParameter($name): ?string
     {
-        return isset($this->parameters[$name]) ? $this->parameters[$name] : null;
+        return $this->parameters[$name] ?? null;
     }
 
-    public function getParameters()
+    public function getParameters(): array
     {
         return $this->parameters;
     }
 
-    public function toString()
+    public function toString(): string
     {
         $mediaType = $this->getName();
 
@@ -114,35 +118,30 @@ class MediaType
 
     /**
      * Checks whether the given media type would match
-     *
-     * @param \PSX\Http\MediaType $mediaType
-     * @return boolean
      */
-    public function match(MediaType $mediaType)
+    public function match(MediaType $mediaType): bool
     {
         return ($this->type == '*' && $this->subType == '*') ||
             ($this->type == $mediaType->getType() && $this->subType == $mediaType->getSubType()) ||
             ($this->type == $mediaType->getType() && $this->subType == '*');
     }
 
-    protected function parse($mime)
+    protected function parse(string $mime)
     {
-        $mime   = (string) $mime;
         $result = preg_match('/^' . self::getPattern() . '$/i', $mime, $matches);
-
         if (!$result) {
             throw new InvalidArgumentException('Invalid media type given');
         }
 
-        $type    = isset($matches[1]) ? strtolower($matches[1]) : null;
+        $type = isset($matches[1]) ? strtolower($matches[1]) : null;
         $subType = isset($matches[2]) ? strtolower($matches[2]) : null;
 
-        if ($type != '*' && !in_array($type, self::$topLevelMediaTypes)) {
+        if ($type != '*' && !in_array($type, self::TOP_LEVEL_MEDIA_TYPES)) {
             throw new InvalidArgumentException('Invalid media type given');
         }
 
-        $rest       = isset($matches[3]) ? $matches[3] : null;
-        $parameters = array();
+        $rest = $matches[3] ?? null;
+        $parameters = [];
 
         if (!empty($rest)) {
             $parts = explode(';', $rest);
@@ -157,11 +156,11 @@ class MediaType
             }
         }
 
-        $this->type       = $type;
-        $this->subType    = $subType;
+        $this->type = $type;
+        $this->subType = $subType;
         $this->parameters = $parameters;
 
-        $this->parseQuality(isset($parameters['q']) ? $parameters['q'] : null);
+        $this->parseQuality($parameters['q'] ?? null);
     }
 
     protected function parseQuality($quality)
@@ -178,7 +177,7 @@ class MediaType
         $this->quality = 1;
     }
 
-    public static function parseList($mimeList)
+    public static function parseList($mimeList): array
     {
         $types  = explode(',', $mimeList);
         $result = array();
@@ -203,7 +202,7 @@ class MediaType
         return $result;
     }
 
-    public static function getPattern()
+    public static function getPattern(): string
     {
         return '([A-z]+|x-[A-z\-\_]+|\*)\/([A-z0-9\-\_\.\+]+|\*);?\s?(.*)';
     }

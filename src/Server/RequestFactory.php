@@ -21,6 +21,7 @@
 namespace PSX\Http\Server;
 
 use PSX\Http\Request;
+use PSX\Http\RequestInterface;
 use PSX\Http\Stream\BufferedStream;
 use PSX\Http\Stream\LazyStream;
 use PSX\Http\Stream\MultipartStream;
@@ -35,34 +36,20 @@ use PSX\Uri\Uri;
  */
 class RequestFactory implements RequestFactoryInterface
 {
-    /**
-     * @var string
-     */
-    protected $baseUri;
+    private ?string $baseUri;
+    private array $server;
 
-    /**
-     * @var array
-     */
-    protected $server;
-
-    /**
-     * @param string|null $baseUri
-     * @param array|null $server
-     */
-    public function __construct($baseUri = null, array $server = null)
+    public function __construct(?string $baseUri = null, ?array $server = null)
     {
         $this->baseUri = $baseUri;
         $this->server  = $server === null ? $_SERVER : $server;
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function createRequest()
+    public function createRequest(): RequestInterface
     {
         $https  = isset($this->server['HTTPS']) ? strtolower($this->server['HTTPS']) : null;
         $scheme = !empty($https) && $https != 'off' ? 'https' : 'http';
-        $host   = isset($this->server['SERVER_NAME']) ? $this->server['SERVER_NAME'] : null;
+        $host   = $this->server['SERVER_NAME'] ?? null;
         $query  = null;
 
         if (isset($this->server['REQUEST_URI'])) {
@@ -130,10 +117,8 @@ class RequestFactory implements RequestFactoryInterface
     /**
      * Tries to detect the current request method. It considers the
      * X-HTTP-METHOD-OVERRIDE header.
-     *
-     * @return string
      */
-    protected function getRequestMethod()
+    protected function getRequestMethod(): string
     {
         if (isset($this->server['REQUEST_METHOD'])) {
             // check for X-HTTP-Method-Override
@@ -149,10 +134,8 @@ class RequestFactory implements RequestFactoryInterface
 
     /**
      * Returns all request headers
-     *
-     * @return array
      */
-    protected function getRequestHeaders()
+    protected function getRequestHeaders(): array
     {
         $contentKeys = array('CONTENT_LENGTH' => true, 'CONTENT_MD5' => true, 'CONTENT_TYPE' => true);
         $headers     = array();
@@ -181,12 +164,8 @@ class RequestFactory implements RequestFactoryInterface
     /**
      * Removes the given $skipPath from the $srcPath as long as they have the
      * same value
-     *
-     * @param string $srcPath
-     * @param string $skipPath
-     * @return string
      */
-    protected function skip($srcPath, $skipPath)
+    protected function skip(string $srcPath, string $skipPath): string
     {
         $len = strlen($srcPath);
 

@@ -37,9 +37,9 @@ use PSX\Http\ResponseInterface;
  */
 class Backstage implements FilterInterface
 {
-    protected $file;
+    private string $file;
 
-    public function __construct($file)
+    public function __construct(string $file)
     {
         $this->file = $file;
     }

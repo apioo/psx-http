@@ -41,105 +41,74 @@ interface MessageInterface
     /**
      * Retrieves the HTTP protocol version as a string. The string MUST contain 
      * only the HTTP version number (e.g., "1.1", "1.0").
-     *
-     * @return string
      */
-    public function getProtocolVersion();
+    public function getProtocolVersion(): ?string;
 
     /**
      * Sets the specified HTTP protocol version. The version string MUST contain 
      * only the HTTP version number (e.g., "1.1", "1.0").
-     *
-     * @param string $protocol
-     * @return void
      */
-    public function setProtocolVersion($protocol);
+    public function setProtocolVersion(string $protocol): void;
 
     /**
      * Returns an associative array of the message's headers. Each key MUST be a 
      * header name, and each value MUST be an array of strings for that header
-     *
-     * @return array
      */
-    public function getHeaders();
+    public function getHeaders(): array;
 
     /**
      * Sets all message headers which overwrites all existing headers. Each key 
      * MUST be a header name, and each value MUST be an array of strings for 
      * that header
-     *
-     * @param array $headers
-     * @return void
      */
-    public function setHeaders(array $headers);
+    public function setHeaders(array $headers): void;
 
     /**
      * Checks if a header exists by the given case-insensitive name. Returns 
      * true if any header names match the given header name using a 
      * case-insensitive string comparison. Returns false if no matching header 
      * name is found in the message.
-     * 
-     * @param string $name
-     * @return boolean
      */
-    public function hasHeader($name);
+    public function hasHeader(string $name): bool;
 
     /**
      * Retrieves a message header value by the given case-insensitive name. This 
      * method returns a string. If a header has multiple values they will be 
      * concatenated with a comma. If the header does not appear in the message, 
      * this method MUST return null
-     *
-     * @param string $name
-     * @return string|null
      */
-    public function getHeader($name);
+    public function getHeader(string $name): string;
 
     /**
      * Retrieves a header by the given case-insensitive name as an array of
      * strings
-     *
-     * @param string $name
-     * @return array
      */
-    public function getHeaderLines($name);
+    public function getHeaderLines(string $name): array;
 
     /**
      * Sets a new header, replacing any existing values of any headers with the
      * same case-insensitive name
-     *
-     * @param string $name
-     * @param string|array $value
      */
-    public function setHeader($name, $value);
+    public function setHeader(string $name, string|array $value): void;
 
     /**
      * Adds a new header, the value gets appended if such a header already
      * exists
-     *
-     * @param string $name
-     * @param string|array $value
      */
-    public function addHeader($name, $value);
+    public function addHeader(string $name, string|array $value): void;
 
     /**
      * Removes the given header name
-     *
-     * @param string $name
      */
-    public function removeHeader($name);
+    public function removeHeader(string $name): void;
 
     /**
      * Gets the body of the message
-     *
-     * @return \Psr\Http\Message\StreamInterface
      */
-    public function getBody();
+    public function getBody(): PsrStreamInterface;
 
     /**
      * Sets the specified message body
-     *
-     * @param \Psr\Http\Message\StreamInterface $body
      */
-    public function setBody(PsrStreamInterface $body);
+    public function setBody(PsrStreamInterface $body): void;
 }

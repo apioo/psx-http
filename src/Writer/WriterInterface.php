@@ -31,9 +31,5 @@ use PSX\Http\ResponseInterface;
  */
 interface WriterInterface
 {
-    /**
-     * @param \PSX\Http\ResponseInterface $response
-     * @return void
-     */
-    public function writeTo(ResponseInterface $response);
+    public function writeTo(ResponseInterface $response): void;
 }

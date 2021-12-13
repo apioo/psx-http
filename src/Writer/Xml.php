@@ -21,7 +21,6 @@
 namespace PSX\Http\Writer;
 
 use DOMDocument;
-use InvalidArgumentException;
 use PSX\Http\ResponseInterface;
 use SimpleXMLElement;
 
@@ -34,40 +33,18 @@ use SimpleXMLElement;
  */
 class Xml extends Writer
 {
-    /**
-     * @var \DOMDocument|\SimpleXMLElement|string
-     */
-    protected $data;
-
-    /**
-     * @param \DOMDocument|\SimpleXMLElement|string $data
-     * @param string $contentType
-     */
-    public function __construct($data, $contentType = 'application/xml')
+    public function __construct(DOMDocument|SimpleXMLElement|string $data, $contentType = 'application/xml')
     {
-        if ($data instanceof DOMDocument) {
-        } elseif ($data instanceof SimpleXMLElement) {
-        } elseif (is_string($data)) {
-        } else {
-            throw new InvalidArgumentException('Document must be either a string, DOMDocument or SimpleXMLElement');
-        }
-
         parent::__construct($data, $contentType);
     }
 
-    /**
-     * @inheritdoc
-     */
     public function writeTo(ResponseInterface $response)
     {
         $response->setHeader('Content-Type', $this->contentType);
         $response->getBody()->write($this->toString());
     }
 
-    /**
-     * @return string
-     */
-    private function toString()
+    private function toString(): string
     {
         if ($this->data instanceof DOMDocument) {
             return (string) $this->data->saveXML();

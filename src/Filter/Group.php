@@ -34,7 +34,7 @@ use PSX\Http\ResponseInterface;
  */
 class Group implements FilterInterface
 {
-    protected $filters;
+    private array $filters;
 
     public function __construct(array $filters)
     {

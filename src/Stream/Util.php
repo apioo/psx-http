@@ -35,11 +35,8 @@ class Util
      * Converts an stream into an string and returns the result. The position of
      * the pointer will not change if the stream is seekable. Note this copies
      * the complete content of the stream into the memory
-     *
-     * @param \Psr\Http\Message\StreamInterface $stream
-     * @return string
      */
-    public static function toString(StreamInterface $stream)
+    public static function toString(StreamInterface $stream): string
     {
         if (!$stream->isReadable()) {
             return '';

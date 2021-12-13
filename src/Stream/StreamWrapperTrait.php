@@ -20,6 +20,8 @@
 
 namespace PSX\Http\Stream;
 
+use PSX\Http\StreamInterface;
+
 /**
  * StreamWrapperTrait
  *
@@ -29,10 +31,7 @@ namespace PSX\Http\Stream;
  */
 trait StreamWrapperTrait
 {
-    /**
-     * @var \PSX\Http\StreamInterface
-     */
-    protected $stream;
+    private StreamInterface $stream;
     
     public function close()
     {

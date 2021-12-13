@@ -31,61 +31,45 @@ interface OptionsInterface
 {
     /**
      * Describes the redirect behavior of a request
-     *
-     * @return boolean
      */
-    public function getAllowRedirects();
+    public function getAllowRedirects(): ?bool;
 
     /**
      * Set to a string to specify the path to a file containing a PEM formatted 
      * client side certificate
-     *
-     * @return string
      */
-    public function getCert();
+    public function getCert(): ?string;
 
     /**
      * Pass a string to specify an HTTP proxy, or an array to specify different 
      * proxies for different protocols
-     *
-     * @return string
      */
-    public function getProxy();
+    public function getProxy(): ?string;
 
     /**
      * Specify the path to a file containing a private SSL key in PEM format
-     *
-     * @return string
      */
-    public function getSslKey();
+    public function getSslKey(): ?string;
 
     /**
      * Describes the SSL certificate verification behavior of a request
-     *
-     * @return boolean
      */
-    public function getVerify();
+    public function getVerify(): ?bool;
 
     /**
      * Float describing the timeout of the request in seconds. Use 0 to wait 
      * indefinitely (the default behavior)
-     *
-     * @return float
      */
-    public function getTimeout();
+    public function getTimeout(): ?float;
 
     /**
      * Protocol version to use with the request
-     *
-     * @return float
      */
-    public function getVersion();
+    public function getVersion(): ?float;
 
     /**
      * Specify where the body of a response will be saved. Must be either a
      * path to a file or a resource
-     *
-     * @return string|resource
      */
-    public function getSink();
+    public function getSink(): mixed;
 }

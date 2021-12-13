@@ -33,12 +33,7 @@ use PSX\Uri\UriInterface;
  */
 class PostRequest extends Request
 {
-    /**
-     * @param \PSX\Uri\UriInterface|string $uri
-     * @param array $headers
-     * @param \Psr\Http\Message\StreamInterface|string|resource|array $body
-     */
-    public function __construct($uri, array $headers = array(), $body = null)
+    public function __construct(UriInterface|string $uri, array $headers = [], mixed $body = null)
     {
         if (!$uri instanceof UriInterface) {
             $uri = new Uri((string) $uri);

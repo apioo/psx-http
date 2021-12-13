@@ -31,46 +31,26 @@ use PSX\Http\ResponseInterface;
  */
 class Writer implements WriterInterface
 {
-    /**
-     * @var mixed
-     */
-    protected $data;
+    protected mixed $data;
+    protected ?string $contentType;
 
-    /**
-     * @var string
-     */
-    protected $contentType;
-
-    /**
-     * @param mixed $data
-     * @param string|null $contentType
-     */
-    public function __construct($data, $contentType = null)
+    public function __construct(mixed $data, ?string $contentType = null)
     {
-        $this->data        = $data;
+        $this->data = $data;
         $this->contentType = $contentType;
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function getData()
+    public function getData(): mixed
     {
         return $this->data;
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function getContentType()
+    public function getContentType(): ?string
     {
         return $this->contentType;
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function writeTo(ResponseInterface $response)
+    public function writeTo(ResponseInterface $response): void
     {
         if ($this->contentType !== null) {
             $response->setHeader('Content-Type', $this->contentType);

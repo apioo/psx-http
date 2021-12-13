@@ -33,42 +33,27 @@ use PSX\Http\Stream;
  */
 class Message implements MessageInterface
 {
-    /**
-     * @var array
-     */
-    protected $headers;
+    protected array $headers;
+    protected mixed $body;
+    protected ?string $protocol = null;
 
-    /**
-     * @var \Psr\Http\Message\StreamInterface
-     */
-    protected $body;
-
-    /**
-     * @var string
-     */
-    protected $protocol;
-
-    /**
-     * @param array $headers
-     * @param \Psr\Http\Message\StreamInterface|string|resource $body
-     */
-    public function __construct(array $headers = array(), $body = null)
+    public function __construct(array $headers = [], mixed $body = null)
     {
         $this->headers = $this->prepareHeaders($headers);
-        $this->body    = $this->prepareBody($body);
+        $this->body = $this->prepareBody($body);
     }
 
-    public function getProtocolVersion()
+    public function getProtocolVersion(): ?string
     {
         return $this->protocol;
     }
 
-    public function setProtocolVersion($protocol)
+    public function setProtocolVersion(string $protocol)
     {
         $this->protocol = $protocol;
     }
 
-    public function getHeaders()
+    public function getHeaders(): array
     {
         return $this->headers;
     }
@@ -78,35 +63,35 @@ class Message implements MessageInterface
         $this->headers = $this->prepareHeaders($headers);
     }
 
-    public function hasHeader($name)
+    public function hasHeader(string $name): bool
     {
         return array_key_exists(strtolower($name), $this->headers);
     }
 
-    public function getHeader($name)
+    public function getHeader(string $name): ?string
     {
         $lines = $this->getHeaderLines($name);
 
         return $lines ? implode(', ', $lines) : null;
     }
 
-    public function getHeaderLines($name)
+    public function getHeaderLines(string $name): array
     {
         $name = strtolower($name);
 
         if (!$this->hasHeader($name)) {
-            return array();
+            return [];
         }
 
         return $this->headers[$name];
     }
 
-    public function setHeader($name, $value)
+    public function setHeader(string $name, string|array $value): void
     {
         $this->headers[strtolower($name)] = $this->normalizeHeaderValue($value);
     }
 
-    public function addHeader($name, $value)
+    public function addHeader(string $name, string|array $value): void
     {
         $name = strtolower($name);
 
@@ -117,7 +102,7 @@ class Message implements MessageInterface
         }
     }
 
-    public function removeHeader($name)
+    public function removeHeader(string $name): void
     {
         $name = strtolower($name);
 
@@ -126,7 +111,7 @@ class Message implements MessageInterface
         }
     }
 
-    public function getBody()
+    public function getBody(): PsrStreamInterface
     {
         return $this->body;
     }
@@ -136,17 +121,17 @@ class Message implements MessageInterface
         $this->body = $body;
     }
 
-    protected function prepareHeaders(array $headers)
+    protected function prepareHeaders(array $headers): array
     {
         return array_map(array($this, 'normalizeHeaderValue'), array_change_key_case($headers));
     }
 
-    protected function normalizeHeaderValue($value)
+    protected function normalizeHeaderValue($value): array
     {
         return is_array($value) ? array_map('strval', $value) : [(string) $value];
     }
 
-    protected function prepareBody($body)
+    protected function prepareBody($body): PsrStreamInterface
     {
         if ($body instanceof PsrStreamInterface) {
             return $body;

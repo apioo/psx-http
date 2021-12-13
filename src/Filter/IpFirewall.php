@@ -38,7 +38,7 @@ use PSX\Http\ResponseInterface;
  */
 class IpFirewall implements FilterInterface
 {
-    protected $allowedIps;
+    private array $allowedIps;
 
     public function __construct(array $allowedIps)
     {

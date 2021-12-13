@@ -31,46 +31,23 @@ use PSX\Uri\UriInterface;
  */
 class Request extends Message implements RequestInterface
 {
-    /**
-     * @var string
-     */
-    protected $requestTarget;
+    protected ?string $requestTarget = null;
+    protected string $method;
+    protected UriInterface $uri;
+    protected array $attributes = [];
 
-    /**
-     * @var string
-     */
-    protected $method;
-
-    /**
-     * @var \PSX\Uri\UriInterface
-     */
-    protected $uri;
-
-    /**
-     * @var array
-     */
-    protected $attributes = [];
-
-    /**
-     * @param \PSX\Uri\UriInterface $uri
-     * @param string $method
-     * @param array $headers
-     * @param \Psr\Http\Message\StreamInterface|string|resource $body
-     */
-    public function __construct(UriInterface $uri, $method, array $headers = [], $body = null)
+    public function __construct(UriInterface $uri, string $method, array $headers = [], mixed $body = null)
     {
         parent::__construct($headers, $body);
 
-        $this->uri    = $uri;
+        $this->uri = $uri;
         $this->method = $method;
     }
 
     /**
      * Returns the request target
-     *
-     * @return string
      */
-    public function getRequestTarget()
+    public function getRequestTarget(): string
     {
         if ($this->requestTarget !== null) {
             return $this->requestTarget;
@@ -91,60 +68,48 @@ class Request extends Message implements RequestInterface
 
     /**
      * Sets the request target
-     *
-     * @param string $requestTarget
      */
-    public function setRequestTarget($requestTarget)
+    public function setRequestTarget(string $requestTarget): void
     {
         $this->requestTarget = $requestTarget;
     }
 
     /**
      * Returns the request method
-     *
-     * @return string
      */
-    public function getMethod()
+    public function getMethod(): string
     {
         return $this->method;
     }
 
     /**
      * Sets the request method
-     *
-     * @param string $method
      */
-    public function setMethod($method)
+    public function setMethod(string $method): void
     {
         $this->method = $method;
     }
 
     /**
      * Returns the request uri
-     *
-     * @return \PSX\Uri\UriInterface
      */
-    public function getUri()
+    public function getUri(): UriInterface
     {
         return $this->uri;
     }
 
     /**
      * Sets the request uri
-     *
-     * @param \PSX\Uri\UriInterface $uri
      */
-    public function setUri(UriInterface $uri)
+    public function setUri(UriInterface $uri): void
     {
         $this->uri = $uri;
     }
 
     /**
      * Converts the request object to an http request string
-     *
-     * @return string
      */
-    public function toString()
+    public function toString(): string
     {
         $request = Parser\RequestParser::buildStatusLine($this) . Http::NEW_LINE;
         $headers = Parser\RequestParser::buildHeaderFromMessage($this);
@@ -154,27 +119,27 @@ class Request extends Message implements RequestInterface
         }
 
         $request.= Http::NEW_LINE;
-        $request.= (string) $this->getBody();
+        $request.= $this->getBody();
 
         return $request;
     }
 
-    public function getAttributes()
+    public function getAttributes(): array
     {
         return $this->attributes;
     }
 
-    public function getAttribute($name)
+    public function getAttribute($name): mixed
     {
-        return isset($this->attributes[$name]) ? $this->attributes[$name] : null;
+        return $this->attributes[$name] ?? null;
     }
 
-    public function setAttribute($name, $value)
+    public function setAttribute($name, $value): void
     {
         $this->attributes[$name] = $value;
     }
 
-    public function removeAttribute($name)
+    public function removeAttribute($name): void
     {
         if (isset($this->attributes[$name])) {
             unset($this->attributes[$name]);

@@ -36,17 +36,15 @@ abstract class ParserAbstract
     const MODE_STRICT = 0x1;
     const MODE_LOOSE  = 0x2;
 
-    protected $mode;
+    protected int $mode;
 
     /**
      * The mode indicates how the header is detected in strict mode we search
      * exactly for CRLF CRLF in loose mode we look for the first empty line. In
      * loose mode we can parse an header wich was defined in the code means is
      * not strictly seperated by CRLF
-     *
-     * @param integer $mode
      */
-    public function __construct($mode = self::MODE_STRICT)
+    public function __construct(int $mode = self::MODE_STRICT)
     {
         if ($mode == self::MODE_STRICT || $mode == self::MODE_LOOSE) {
             $this->mode = $mode;
@@ -57,19 +55,13 @@ abstract class ParserAbstract
 
     /**
      * Converts an raw http message into an PSX\Http\Message object
-     *
-     * @param string $content
-     * @return \PSX\Http\MessageInterface
      */
-    abstract public function parse($content);
+    abstract public function parse(string $content): MessageInterface;
 
     /**
      * Splits an given http message into the header and body part
-     *
-     * @param string $message
-     * @return array
      */
-    protected function splitMessage($message)
+    protected function splitMessage(string $message): array
     {
         if ($this->mode == self::MODE_STRICT) {
             $pos    = strpos($message, Http::NEW_LINE . Http::NEW_LINE);
@@ -101,11 +93,7 @@ abstract class ParserAbstract
         return array($header, $body);
     }
 
-    /**
-     * @param string $content
-     * @return string
-     */
-    protected function normalize($content)
+    protected function normalize(string $content): string
     {
         if (empty($content)) {
             throw new InvalidArgumentException('Empty message');
@@ -120,11 +108,8 @@ abstract class ParserAbstract
 
     /**
      * Parses an raw http header string into an Message object
-     *
-     * @param \PSX\Http\MessageInterface $message
-     * @param string $header
      */
-    protected function headerToArray(MessageInterface $message, $header)
+    protected function headerToArray(MessageInterface $message, string $header)
     {
         $lines = explode(Http::NEW_LINE, $header);
 
@@ -140,26 +125,20 @@ abstract class ParserAbstract
         }
     }
 
-    /**
-     * @param string $message
-     * @return string|false
-     */
-    protected function getStatusLine($message)
+    protected function getStatusLine(string $message): string|false
     {
         if ($this->mode == self::MODE_STRICT) {
             $pos = strpos($message, Http::NEW_LINE);
         } elseif ($this->mode == self::MODE_LOOSE) {
             $pos = strpos($message, "\n");
+        } else {
+            throw new InvalidArgumentException('Provided an invalid mode');
         }
 
         return $pos !== false ? substr($message, 0, $pos) : false;
     }
 
-    /**
-     * @param \PSX\Http\MessageInterface $message
-     * @return array
-     */
-    public static function buildHeaderFromMessage(MessageInterface $message)
+    public static function buildHeaderFromMessage(MessageInterface $message): array
     {
         $headers = $message->getHeaders();
         $result  = array();

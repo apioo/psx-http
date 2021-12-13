@@ -34,15 +34,8 @@ class BufferedStream implements StreamInterface
 {
     use StreamWrapperTrait;
 
-    /**
-     * @var \PSX\Http\StreamInterface
-     */
-    protected $source;
-
-    /**
-     * @var boolean
-     */
-    protected $filled = false;
+    private StreamInterface $source;
+    private bool $filled = false;
 
     public function __construct(StreamInterface $stream)
     {

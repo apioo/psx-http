@@ -21,7 +21,7 @@
 namespace PSX\Http\Stream;
 
 /**
- * Stream which contains multiple streams from an multipart upload
+ * Stream which contains multiple streams from a multipart upload
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
@@ -29,15 +29,8 @@ namespace PSX\Http\Stream;
  */
 class MultipartStream extends StringStream implements \Countable, \IteratorAggregate
 {
-    /**
-     * @var array
-     */
-    protected $parts;
+    private array $parts;
 
-    /**
-     * @param array $files
-     * @param array $post
-     */
     public function __construct(array $files, array $post)
     {
         parent::__construct('');
@@ -64,26 +57,16 @@ class MultipartStream extends StringStream implements \Countable, \IteratorAggre
         }
     }
 
-    /**
-     * @param string $name
-     * @return \PSX\Http\Stream\FileStream|string|null
-     */
-    public function getPart($name)
+    public function getPart(string $name): FileStream|string|null
     {
         return $this->parts[$name] ?? null;
     }
 
-    /**
-     * @return integer
-     */
     public function count()
     {
         return count($this->parts);
     }
 
-    /**
-     * @return \Traversable
-     */
     public function getIterator()
     {
         return new \ArrayIterator($this->parts);

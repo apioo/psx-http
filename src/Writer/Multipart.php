@@ -33,26 +33,15 @@ use PSX\Http\ResponseInterface;
  */
 class Multipart extends Writer
 {
-    /**
-     * @var string
-     */
-    protected $subType;
+    protected string $subType;
+    protected ?string $boundary;
 
     /**
-     * @var string
+     * @var ResponseInterface[]
      */
-    protected $boundary;
+    protected array $parts;
 
-    /**
-     * @var \PSX\Http\ResponseInterface[]
-     */
-    protected $parts;
-
-    /**
-     * @param string $subType
-     * @param string|null $boundary
-     */
-    public function __construct($subType = 'mixed', $boundary = null)
+    public function __construct(string $subType = 'mixed', ?string $boundary = null)
     {
         parent::__construct(null, null);
 
@@ -61,41 +50,26 @@ class Multipart extends Writer
         $this->parts    = [];
     }
 
-    /**
-     * @return string
-     */
-    public function getSubType()
+    public function getSubType(): string
     {
         return $this->subType;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getBoundary()
+    public function getBoundary(): ?string
     {
         return $this->boundary;
     }
 
-    /**
-     * @param \PSX\Http\ResponseInterface $response
-     */
     public function addPart(ResponseInterface $response)
     {
         $this->parts[] = $response;
     }
 
-    /**
-     * @return \PSX\Http\ResponseInterface[]
-     */
-    public function getParts()
+    public function getParts(): array
     {
         return $this->parts;
     }
 
-    /**
-     * @inheritdoc
-     */
     public function writeTo(ResponseInterface $response)
     {
         $response->setHeader('Content-Type', 'multipart/' . $this->subType . '; boundary="' . $this->boundary . '"');
@@ -110,7 +84,7 @@ class Multipart extends Writer
             }
 
             $out.= Http::NEW_LINE;
-            $out.= (string) $part->getBody();
+            $out.= $part->getBody();
             $out.= Http::NEW_LINE;
 
             $response->getBody()->write($out);
@@ -119,7 +93,7 @@ class Multipart extends Writer
         $response->getBody()->write('--' . $this->boundary . '--' . Http::NEW_LINE);
     }
 
-    private function generateBoundary()
+    private function generateBoundary(): string
     {
         return sha1(uniqid());
     }

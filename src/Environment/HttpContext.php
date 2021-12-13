@@ -31,78 +31,46 @@ use PSX\Http\RequestInterface;
  */
 class HttpContext implements HttpContextInterface
 {
-    /**
-     * @var \PSX\Http\RequestInterface
-     */
-    protected $request;
+    private RequestInterface $request;
+    private array $uriFragments;
 
-    /**
-     * @var array
-     */
-    protected $uriFragments;
-
-    /**
-     * @param \PSX\Http\RequestInterface $request
-     * @param array $uriFragments
-     */
     public function __construct(RequestInterface $request, array $uriFragments)
     {
-        $this->request      = $request;
+        $this->request = $request;
         $this->uriFragments = $uriFragments;
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function getMethod()
+    public function getMethod(): string
     {
         return $this->request->getMethod();
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function getHeader($name)
+    public function getHeader($name): ?string
     {
         return $this->request->getHeader($name);
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function getHeaders()
+    public function getHeaders(): array
     {
         return $this->request->getHeaders();
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function getUriFragment($name)
+    public function getUriFragment(string $name): ?string
     {
         return $this->uriFragments[$name] ?? null;
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function getUriFragments()
+    public function getUriFragments(): array
     {
         return $this->uriFragments;
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function getParameter($name)
+    public function getParameter($name): string|array
     {
         return $this->request->getUri()->getParameter($name);
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function getParameters()
+    public function getParameters(): array
     {
         return $this->request->getUri()->getParameters();
     }

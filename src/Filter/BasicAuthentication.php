@@ -37,18 +37,16 @@ use PSX\Http\ResponseInterface;
  */
 class BasicAuthentication implements FilterInterface
 {
-    protected $isValidCallback;
-    protected $successCallback;
-    protected $failureCallback;
-    protected $missingCallback;
+    protected Closure $isValidCallback;
+    protected Closure $successCallback;
+    protected Closure $failureCallback;
+    protected Closure $missingCallback;
 
     /**
      * The isValidCallback is called with the provided username and password
      * if an Authorization header is present. Depending on the result the
      * onSuccess or onFailure callback is called. If the header is missing the
      * onMissing callback is called
-     *
-     * @param Closure $isValidCallback
      */
     public function __construct(Closure $isValidCallback)
     {

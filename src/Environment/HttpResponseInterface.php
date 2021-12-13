@@ -33,31 +33,23 @@ interface HttpResponseInterface
      * Returns the status code of the HTTP response
      *
      * @see https://tools.ietf.org/html/rfc7231#section-6
-     * @return integer
      */
-    public function getStatusCode();
+    public function getStatusCode(): int;
 
     /**
      * Returns all available headers of the response. The header keys are all
      * lowercased
-     *
-     * @return array
      */
-    public function getHeaders();
+    public function getHeaders(): array;
 
     /**
      * Returns a single header based on the provided header name or null if the
      * header does not exist. The name is case insensitive
-     *
-     * @param string $name
-     * @return string|null
      */
-    public function getHeader($name);
+    public function getHeader(string $name): ?string;
 
     /**
      * Returns the body of the response
-     *
-     * @return mixed
      */
-    public function getBody();
+    public function getBody(): mixed;
 }

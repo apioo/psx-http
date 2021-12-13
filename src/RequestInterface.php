@@ -43,87 +43,62 @@ interface RequestInterface extends MessageInterface
 {
     /**
      * Returns the message's request-target
-     *
-     * @return string
      */
-    public function getRequestTarget();
+    public function getRequestTarget(): string;
 
     /**
      * Sets an specific request-target
      *
      * @link http://tools.ietf.org/html/rfc7230#section-2.7
-     * @param string $requestTarget
-     * @return void
      */
-    public function setRequestTarget($requestTarget);
+    public function setRequestTarget(string $requestTarget): void;
 
     /**
      * Retrieves the HTTP method of the request i.e. GET, POST
-     *
-     * @return string
      */
-    public function getMethod();
+    public function getMethod(): string;
 
     /**
      * Sets the provided HTTP method. While HTTP method names are typically all 
      * uppercase characters, HTTP method names are case-sensitive and thus 
      * implementations SHOULD NOT modify the given string.
-     *
-     * @param string $method
-     * @return void
-     * @throws \InvalidArgumentException
      */
-    public function setMethod($method);
+    public function setMethod(string $method): void;
 
     /**
      * Retrieves the URI instance.
      *
      * @link http://tools.ietf.org/html/rfc3986#section-4.3
-     * @return \PSX\Uri\UriInterface
      */
-    public function getUri();
+    public function getUri(): UriInterface;
 
     /**
      * Sets the provided URI.
      *
      * @link http://tools.ietf.org/html/rfc3986#section-4.3
-     * @param \PSX\Uri\UriInterface $uri
-     * @return void
      */
-    public function setUri(UriInterface $uri);
+    public function setUri(UriInterface $uri): void;
 
     /**
      * Retrieve attributes derived from the request. The request attributes 
      * should contain only additional information about the request i.e. 
      * "REMOTE_ADDR" from the $_SERVER variable which contains the ip address of
      * the client which has initiated the HTTP request
-     *
-     * @return array
      */
-    public function getAttributes();
+    public function getAttributes(): array;
 
     /**
      * Retrieve a single derived request attribute
-     *
-     * @param string $name
-     * @return mixed
      */
-    public function getAttribute($name);
+    public function getAttribute(string $name): mixed;
 
     /**
      * This method allows setting a single derived request attribute
-     *
-     * @param string $name
-     * @param mixed $value
-     * @return void
      */
-    public function setAttribute($name, $value);
+    public function setAttribute(string $name, mixed $value): void;
 
     /**
      * Removes the specified derived request attribute
-     *
-     * @param string $name
-     * @return void
      */
-    public function removeAttribute($name);
+    public function removeAttribute(string $name): void;
 }

@@ -21,6 +21,7 @@
 namespace PSX\Http\Server;
 
 use PSX\Http\Response;
+use PSX\Http\ResponseInterface;
 use PSX\Http\Stream\Stream;
 
 /**
@@ -32,23 +33,14 @@ use PSX\Http\Stream\Stream;
  */
 class ResponseFactory implements ResponseFactoryInterface
 {
-    /**
-     * @var array
-     */
-    protected $server;
+    private array $server;
 
-    /**
-     * @param array|null $server
-     */
     public function __construct(array $server = null)
     {
         $this->server = $server === null ? $_SERVER : $server;
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function createResponse()
+    public function createResponse(): ResponseInterface
     {
         $protocol = isset($this->server['SERVER_PROTOCOL']) ? $this->server['SERVER_PROTOCOL'] : 'HTTP/1.1';
         $response = new Response();
