@@ -3,117 +3,34 @@
 
 ## About
 
-This library contains well designed interfaces to describe HTTP message, 
-middleware and client classes. It contains also corresponding reference 
-implementations which can be used by every app which needs a solid HTTP stack.
-They are used by the [PSX](https://phpsx.org/) framework and 
-[Fusio](https://www.fusio-project.org/).
+This library contains well designed interfaces to describe HTTP message, middleware and client classes. It contains also
+corresponding reference implementations which can be used by every app which needs a solid HTTP stack.
 
 ### HTTP
 
-#### `RequestInterface`
-
-```
-+ getRequestTarget(): string
-+ setRequestTarget(string $requestTarget)
-+ getMethod(): string
-+ setMethod(string $method)
-+ getUri(): UriInterface
-+ setUri(UriInterface $uri)
-+ getAttributes(): string|null
-+ getAttribute(string $name)
-+ setAttribute(string $name, mixed $value)
-+ removeAttribute(string $name)
-```
-
-#### `ResponseInterface`
-
-```
-+ getStatusCode(): integer
-+ getReasonPhrase(): string
-+ setStatus(integer $code, string $reasonPhrase = null)
-```
-
-#### `MessageInterface`
-
-```
-+ getProtocolVersion(): string
-+ setProtocolVersion(string $protocol)
-+ getHeaders(): array
-+ setHeaders(array $headers)
-+ hasHeader(string $name): bool
-+ getHeader(string $name): string|null
-+ getHeaderLines(string $name): array
-+ setHeader(string $name, string $value)
-+ addHeader(string $name, string $value)
-+ removeHeader(string $name)
-+ getBody(): StreamInterface
-+ setBody(StreamInterface $body)
-```
+* [RequestInterface](./src/RequestInterface.php)
+* [ResponseInterface](./src/ResponseInterface.php)
+* [MessageInterface](./src/MessageInterface.php)
 
 ### HTTP Body
 
-#### `StreamInterface`
-
-```
-+ close()
-+ detach(): resource
-+ getSize(): integer
-+ tell(): integer
-+ eof(): boolean
-+ isSeekable(): boolean
-+ seek(integer $offset, $whence = SEEK_SET)
-+ rewind()
-+ isWritable(): boolean
-+ write(string $string): integer
-+ isReadable(): boolean
-+ read(integer $length): string
-+ getContents(): string
-+ getMetadata(string $key = null): string
-```
+* [StreamInterface](./src/StreamInterface.php)
 
 ### HTTP Middleware
 
-#### `FilterInterface`
-
-```
-+ handle(RequestInterface $request, ResponseInterface $response, FilterChainInterface $filterChain)
-```
-
-#### `FilterChainInterface`
-
-```
-+ on(FilterInterface|\Closure $filter)
-+ handle(RequestInterface $request, ResponseInterface $response)
-```
+* [FilterInterface](./src/FilterInterface.php)
+* [FilterChainInterface](./src/FilterChainInterface.php)
 
 ### HTTP Client
 
-#### `ClientInterface`
-
-```
-+ request(RequestInterface $request, OptionsInterface $options = null)
-```
-
-#### `OptionsInterface`
-
-```
-+ getAllowRedirects(): boolean
-+ getCert(): string
-+ getProxy(): string
-+ getSslKey(): string
-+ getVerify(): boolean
-+ getTimeout(): float
-+ getVersion(): float
-+ getSink(): string|resource
-```
+* [ClientInterface](./src/Client/ClientInterface.php)
+* [OptionsInterface](./src/Client/OptionsInterface.php)
 
 ## Examples
 
 ### Middleware
 
-The following shows a simple middleware which always returns the response body
-`Hello World!`:
+The following shows a simple middleware which always returns the response body `Hello World!`:
 
 ```php
 <?php
@@ -156,7 +73,7 @@ $chain->handle($request, $response);
 
 ### Client
 
-The following sends a HTTP GET request to google:
+The following sends an HTTP GET request to google:
 
 ```php
 <?php
