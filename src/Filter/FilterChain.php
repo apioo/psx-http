@@ -36,39 +36,32 @@ use PSX\Http\ResponseInterface;
  */
 class FilterChain implements FilterChainInterface, LoggerAwareInterface
 {
-    private iterable $filters;
-    private FilterChainInterface $filterChain;
-    private LoggerInterface $logger;
+    private array $filters;
+    private ?FilterChainInterface $filterChain;
+    private ?LoggerInterface $logger;
 
     public function __construct(iterable $filters = [], ?FilterChainInterface $filterChain = null)
     {
         $this->filters     = [];
         $this->filterChain = $filterChain;
+        $this->logger      = null;
 
         foreach ($filters as $filter) {
             $this->on($filter);
         }
     }
 
-    public function setLogger(LoggerInterface $logger)
+    public function setLogger(LoggerInterface $logger): void
     {
         $this->logger = $logger;
     }
 
-    public function on($filter)
+    public function on(FilterInterface|callable $filter): void
     {
-        if ($filter instanceof FilterInterface) {
-            $this->filters[] = $filter;
-        } elseif ($filter instanceof \Closure) {
-            $this->filters[] = $filter;
-        } elseif (is_callable($filter)) {
-            $this->filters[] = $filter;
-        } else {
-            throw new \InvalidArgumentException('Invalid filter must be either a \Closure or ' . FilterInterface::class);
-        }
+        $this->filters[] = $filter;
     }
 
-    public function handle(RequestInterface $request, ResponseInterface $response)
+    public function handle(RequestInterface $request, ResponseInterface $response): void
     {
         $filter = array_shift($this->filters);
 
@@ -84,8 +77,6 @@ class FilterChain implements FilterChainInterface, LoggerAwareInterface
             }
 
             $filter->handle($request, $response, $this);
-        } elseif ($filter instanceof \Closure) {
-            $filter($request, $response, $this);
         } elseif (is_callable($filter)) {
             call_user_func_array($filter, array($request, $response, $this));
         } else {

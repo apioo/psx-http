@@ -281,7 +281,7 @@ class StatusCodeExceptionTest extends TestCase
 
     private function getCodes(\Closure $filter)
     {
-        $codes = array_keys(Http::$codes);
+        $codes = array_keys(Http::CODES);
         $codes = array_filter($codes, $filter);
         $codes = array_map(function($code){ return [$code]; }, $codes);
 

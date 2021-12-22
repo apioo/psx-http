@@ -44,7 +44,7 @@ class Resource extends Writer
     /**
      * @inheritdoc
      */
-    public function writeTo(ResponseInterface $response)
+    public function writeTo(ResponseInterface $response): void
     {
         $response->setHeader('Content-Type', $this->contentType);
         $response->getBody()->write(stream_get_contents($this->data, -1, 0));

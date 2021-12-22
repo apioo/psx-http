@@ -45,7 +45,7 @@ class File extends Writer
         return $this->fileName;
     }
 
-    public function writeTo(ResponseInterface $response)
+    public function writeTo(ResponseInterface $response): void
     {
         $file = $this->data;
 

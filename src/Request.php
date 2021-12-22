@@ -20,6 +20,7 @@
 
 namespace PSX\Http;
 
+use PSX\Uri\Uri;
 use PSX\Uri\UriInterface;
 
 /**
@@ -36,9 +37,13 @@ class Request extends Message implements RequestInterface
     protected UriInterface $uri;
     protected array $attributes = [];
 
-    public function __construct(UriInterface $uri, string $method, array $headers = [], mixed $body = null)
+    public function __construct(UriInterface|string $uri, string $method, array $headers = [], mixed $body = null)
     {
         parent::__construct($headers, $body);
+
+        if (is_string($uri)) {
+            $uri = new Uri($uri);
+        }
 
         $this->uri = $uri;
         $this->method = $method;

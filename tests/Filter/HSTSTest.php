@@ -51,7 +51,7 @@ class HSTSTest extends FilterTestCase
     public function hstsProvider()
     {
         return [
-            [null, null, []],
+            [0, null, []],
             [8600, null, ['strict-transport-security' => ['max-age=8600']]],
             [8600, HSTS::INCLUDE_SUB_DOMAINS, ['strict-transport-security' => ['max-age=8600; includeSubDomains']]],
             [8600, HSTS::PRELOAD, ['strict-transport-security' => ['max-age=8600; preload']]],

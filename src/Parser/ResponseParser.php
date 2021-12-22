@@ -134,8 +134,8 @@ class ResponseParser extends ParserAbstract
 
         $protocol = !empty($protocol) ? $protocol : 'HTTP/1.1';
 
-        if (empty($phrase) && isset(Http::$codes[$code])) {
-            $phrase = Http::$codes[$code];
+        if (empty($phrase) && isset(Http::CODES[$code])) {
+            $phrase = Http::CODES[$code];
         }
 
         if (empty($phrase)) {

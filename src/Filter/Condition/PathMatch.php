@@ -43,7 +43,7 @@ class PathMatch implements FilterInterface
         $this->filter  = $filter;
     }
 
-    public function handle(RequestInterface $request, ResponseInterface $response, FilterChainInterface $filterChain)
+    public function handle(RequestInterface $request, ResponseInterface $response, FilterChainInterface $filterChain): void
     {
         if (preg_match('!' . $this->pattern . '!', $request->getUri()->getPath())) {
             $this->filter->handle($request, $response, $filterChain);

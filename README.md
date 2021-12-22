@@ -6,7 +6,7 @@
 This library contains well designed interfaces to describe HTTP message, 
 middleware and client classes. It contains also corresponding reference 
 implementations which can be used by every app which needs a solid HTTP stack.
-They are used by the [PSX](http://phpsx.org/) framework and 
+They are used by the [PSX](https://phpsx.org/) framework and 
 [Fusio](https://www.fusio-project.org/).
 
 ### HTTP

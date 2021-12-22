@@ -35,10 +35,6 @@ class PostRequest extends Request
 {
     public function __construct(UriInterface|string $uri, array $headers = [], mixed $body = null)
     {
-        if (!$uri instanceof UriInterface) {
-            $uri = new Uri((string) $uri);
-        }
-
         if (is_array($body)) {
             $headers['Content-Type'] = 'application/x-www-form-urlencoded';
 
@@ -47,9 +43,9 @@ class PostRequest extends Request
 
         parent::__construct($uri, 'POST', $headers, $body);
 
-        $host = $uri->getHost();
+        $host = $this->uri->getHost();
         if (!empty($host) && !$this->hasHeader('Host')) {
-            $this->setHeader('Host', $uri->getHost());
+            $this->setHeader('Host', $this->uri->getHost());
         }
     }
 }

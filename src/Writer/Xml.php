@@ -38,7 +38,7 @@ class Xml extends Writer
         parent::__construct($data, $contentType);
     }
 
-    public function writeTo(ResponseInterface $response)
+    public function writeTo(ResponseInterface $response): void
     {
         $response->setHeader('Content-Type', $this->contentType);
         $response->getBody()->write($this->toString());

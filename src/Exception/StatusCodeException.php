@@ -41,7 +41,7 @@ class StatusCodeException extends RuntimeException
     {
         parent::__construct($message, 0, $previous);
 
-        if (isset(Http::$codes[$statusCode])) {
+        if (isset(Http::CODES[$statusCode])) {
             $this->statusCode = $statusCode;
         } else {
             throw new InvalidArgumentException('Invalid http status code');

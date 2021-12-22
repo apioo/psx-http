@@ -60,7 +60,7 @@ class Multipart extends Writer
         return $this->boundary;
     }
 
-    public function addPart(ResponseInterface $response)
+    public function addPart(ResponseInterface $response): void
     {
         $this->parts[] = $response;
     }
@@ -70,7 +70,7 @@ class Multipart extends Writer
         return $this->parts;
     }
 
-    public function writeTo(ResponseInterface $response)
+    public function writeTo(ResponseInterface $response): void
     {
         $response->setHeader('Content-Type', 'multipart/' . $this->subType . '; boundary="' . $this->boundary . '"');
 

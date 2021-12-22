@@ -32,10 +32,10 @@ interface FilterChainInterface
     /**
      * Attaches a middleware to the chain
      */
-    public function on(FilterInterface|\Closure $filter);
+    public function on(FilterInterface|callable $filter): void;
 
     /**
      * Triggers the first middleware on the chain
      */
-    public function handle(RequestInterface $request, ResponseInterface $response);
+    public function handle(RequestInterface $request, ResponseInterface $response): void;
 }

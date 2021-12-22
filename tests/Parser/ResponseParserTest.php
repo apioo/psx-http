@@ -152,17 +152,6 @@ class ResponseParserTest extends TestCase
         $parser->parse($response);
     }
 
-    public function testParseInvalidMode()
-    {
-        $this->expectException(\InvalidArgumentException::class);
-
-        $response = 'HTTP/1.1 200 OK' . Http::NEW_LINE;
-        $response.= 'Vary: Accept-Encoding' . Http::NEW_LINE;
-
-        $parser = new ResponseParser('foo');
-        $parser->parse($response);
-    }
-
     public function testBuildResponseFromHeader()
     {
         $response = ResponseParser::buildResponseFromHeader(array(

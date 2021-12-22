@@ -71,11 +71,11 @@ class Sender implements SenderInterface
         }
 
         $code = $response->getStatusCode();
-        if (!isset(Http::$codes[$code])) {
+        if (!isset(Http::CODES[$code])) {
             $code = 200;
         }
 
-        $this->sendHeader($scheme . ' ' . $code . ' ' . Http::$codes[$code]);
+        $this->sendHeader($scheme . ' ' . $code . ' ' . Http::CODES[$code]);
     }
 
     private function sendHeaders(ResponseInterface $response)

@@ -58,12 +58,4 @@ class FilterChainTest extends TestCase
         $this->assertSame(true, $request->getAttribute('closure'));
         $this->assertSame(true, $request->getAttribute('class'));
     }
-
-    public function testFilterChainInvalid()
-    {
-        $this->expectException(\InvalidArgumentException::class);
-
-        $chain = new FilterChain();
-        $chain->on(new \stdClass());
-    }
 }

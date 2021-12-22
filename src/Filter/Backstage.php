@@ -44,7 +44,7 @@ class Backstage implements FilterInterface
         $this->file = $file;
     }
 
-    public function handle(RequestInterface $request, ResponseInterface $response, FilterChainInterface $filterChain)
+    public function handle(RequestInterface $request, ResponseInterface $response, FilterChainInterface $filterChain): void
     {
         $accept = $request->getHeader('Accept');
 

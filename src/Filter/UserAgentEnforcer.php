@@ -35,7 +35,7 @@ use PSX\Http\ResponseInterface;
  */
 class UserAgentEnforcer implements FilterInterface
 {
-    public function handle(RequestInterface $request, ResponseInterface $response, FilterChainInterface $filterChain)
+    public function handle(RequestInterface $request, ResponseInterface $response, FilterChainInterface $filterChain): void
     {
         $userAgent = $request->getHeader('User-Agent');
 

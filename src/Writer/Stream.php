@@ -37,7 +37,7 @@ class Stream extends Writer
         parent::__construct($stream, $contentType);
     }
 
-    public function writeTo(ResponseInterface $response)
+    public function writeTo(ResponseInterface $response): void
     {
         $response->setHeader('Content-Type', $this->contentType);
         $response->getBody()->write($this->data->__toString());

@@ -45,7 +45,7 @@ class IpFirewall implements FilterInterface
         $this->allowedIps = $allowedIps;
     }
 
-    public function handle(RequestInterface $request, ResponseInterface $response, FilterChainInterface $filterChain)
+    public function handle(RequestInterface $request, ResponseInterface $response, FilterChainInterface $filterChain): void
     {
         $ip = $request->getAttribute('REMOTE_ADDR');
 

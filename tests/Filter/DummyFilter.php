@@ -18,28 +18,35 @@
  * limitations under the License.
  */
 
-namespace PSX\Http\Client;
+namespace PSX\Http\Tests\Filter;
 
-use PSX\Http\Request;
-use PSX\Uri\Uri;
-use PSX\Uri\UriInterface;
+use PSX\Http\FilterChainInterface;
+use PSX\Http\FilterInterface;
+use PSX\Http\RequestInterface;
+use PSX\Http\ResponseInterface;
 
 /**
- * PutRequest
+ * DigestAuthenticationTest
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://phpsx.org
  */
-class PutRequest extends Request
+class DummyFilter implements FilterInterface
 {
-    public function __construct(UriInterface|string $uri, array $headers = [], $body = null)
-    {
-        parent::__construct($uri, 'PUT', $headers, $body);
+    public static array $calls = [];
 
-        $host = $this->uri->getHost();
-        if (!empty($host) && !$this->hasHeader('Host')) {
-            $this->setHeader('Host', $this->uri->getHost());
-        }
+    protected int $id;
+
+    public function __construct(int $id)
+    {
+        $this->id = $id;
+    }
+
+    public function handle(RequestInterface $request, ResponseInterface $response, FilterChainInterface $filterChain): void
+    {
+        self::$calls[] = $this->id;
+
+        $filterChain->handle($request, $response);
     }
 }

@@ -69,7 +69,7 @@ class BasicAuthentication implements FilterInterface
         });
     }
 
-    public function handle(RequestInterface $request, ResponseInterface $response, FilterChainInterface $filterChain)
+    public function handle(RequestInterface $request, ResponseInterface $response, FilterChainInterface $filterChain): void
     {
         $authorization = $request->getHeader('Authorization');
 

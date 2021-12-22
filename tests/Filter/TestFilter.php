@@ -34,7 +34,7 @@ use PSX\Http\ResponseInterface;
  */
 class TestFilter implements FilterInterface
 {
-    public function handle(RequestInterface $request, ResponseInterface $response, FilterChainInterface $filterChain)
+    public function handle(RequestInterface $request, ResponseInterface $response, FilterChainInterface $filterChain): void
     {
         $request->setAttribute('class', true);
 

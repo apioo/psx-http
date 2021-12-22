@@ -41,7 +41,7 @@ class Group implements FilterInterface
         $this->filters = $filters;
     }
 
-    public function handle(RequestInterface $request, ResponseInterface $response, FilterChainInterface $filterChain)
+    public function handle(RequestInterface $request, ResponseInterface $response, FilterChainInterface $filterChain): void
     {
         $filterChain = new FilterChain($this->filters, $filterChain);
         $filterChain->handle($request, $response);

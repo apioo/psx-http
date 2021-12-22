@@ -84,14 +84,14 @@ class RequestFactory implements RequestFactoryInterface
         }
 
         // create request
-        $uri     = new Uri($scheme, $host, $path, $query);
+        $uri     = Uri::create($scheme, $host, $path, $query, '');
         $method  = $this->getRequestMethod();
         $headers = $this->getRequestHeaders();
         $body    = null;
 
         // create body
         if (in_array($method, ['POST', 'PUT', 'DELETE', 'PATCH'])) {
-            if ($method == 'POST' && !empty($_FILES) && isset($headers['CONTENT-TYPE']) && strpos($headers['CONTENT-TYPE'], 'multipart/form-data') === 0) {
+            if ($method == 'POST' && !empty($_FILES) && isset($headers['CONTENT-TYPE']) && str_starts_with($headers['CONTENT-TYPE'], 'multipart/form-data')) {
                 // in case of file uploads use multipart stream
                 $body = new MultipartStream($_FILES, $_POST);
             } else {

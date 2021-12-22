@@ -35,15 +35,11 @@ class DeleteRequest extends Request
 {
     public function __construct(UriInterface|string $uri, array $headers = array(), mixed $body = null)
     {
-        if (!$uri instanceof UriInterface) {
-            $uri = new Uri((string) $uri);
-        }
-
         parent::__construct($uri, 'DELETE', $headers, $body);
 
-        $host = $uri->getHost();
+        $host = $this->uri->getHost();
         if (!empty($host) && !$this->hasHeader('Host')) {
-            $this->setHeader('Host', $uri->getHost());
+            $this->setHeader('Host', $this->uri->getHost());
         }
     }
 }

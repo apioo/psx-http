@@ -70,7 +70,7 @@ class BrowserCache implements FilterInterface
         $this->expires = $expires;
     }
 
-    public function handle(RequestInterface $request, ResponseInterface $response, FilterChainInterface $filterChain)
+    public function handle(RequestInterface $request, ResponseInterface $response, FilterChainInterface $filterChain): void
     {
         $cacheControl = array();
 

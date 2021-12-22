@@ -35,7 +35,7 @@ use PSX\Http\Stream\Util;
  */
 class ContentMd5 implements FilterInterface
 {
-    public function handle(RequestInterface $request, ResponseInterface $response, FilterChainInterface $filterChain)
+    public function handle(RequestInterface $request, ResponseInterface $response, FilterChainInterface $filterChain): void
     {
         $filterChain->handle($request, $response);
 

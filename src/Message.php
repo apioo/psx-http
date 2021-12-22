@@ -48,7 +48,7 @@ class Message implements MessageInterface
         return $this->protocol;
     }
 
-    public function setProtocolVersion(string $protocol)
+    public function setProtocolVersion(string $protocol): void
     {
         $this->protocol = $protocol;
     }
@@ -58,7 +58,7 @@ class Message implements MessageInterface
         return $this->headers;
     }
 
-    public function setHeaders(array $headers)
+    public function setHeaders(array $headers): void
     {
         $this->headers = $this->prepareHeaders($headers);
     }
@@ -68,11 +68,11 @@ class Message implements MessageInterface
         return array_key_exists(strtolower($name), $this->headers);
     }
 
-    public function getHeader(string $name): ?string
+    public function getHeader(string $name): string
     {
         $lines = $this->getHeaderLines($name);
 
-        return $lines ? implode(', ', $lines) : null;
+        return $lines ? implode(', ', $lines) : '';
     }
 
     public function getHeaderLines(string $name): array
@@ -116,7 +116,7 @@ class Message implements MessageInterface
         return $this->body;
     }
 
-    public function setBody(PsrStreamInterface $body)
+    public function setBody(PsrStreamInterface $body): void
     {
         $this->body = $body;
     }
@@ -140,7 +140,7 @@ class Message implements MessageInterface
         } elseif (is_string($body)) {
             return new Stream\StringStream($body);
         } elseif (is_resource($body)) {
-            return new Stream\TempStream($body);
+            return new Stream\Stream($body);
         } else {
             throw new InvalidArgumentException('Body must be either a PSX\Http\StreamInterface, string or resource');
         }

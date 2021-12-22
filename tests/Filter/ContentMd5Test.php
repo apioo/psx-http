@@ -24,6 +24,7 @@ use PSX\Http\Filter\ContentMd5;
 use PSX\Http\Filter\FilterChain;
 use PSX\Http\Request;
 use PSX\Http\Response;
+use PSX\Http\Stream\Stream;
 use PSX\Http\Stream\TempStream;
 use PSX\Uri\Url;
 
@@ -38,7 +39,7 @@ class ContentMd5Test extends FilterTestCase
 {
     public function testAddHeader()
     {
-        $body = new TempStream(fopen('php://memory', 'r+'));
+        $body = new Stream(fopen('php://memory', 'r+'));
         $body->write('foobar');
 
         $request  = new Request(new Url('http://localhost'), 'GET');
@@ -54,7 +55,7 @@ class ContentMd5Test extends FilterTestCase
 
     public function testHeaderExist()
     {
-        $body = new TempStream(fopen('php://memory', 'r+'));
+        $body = new Stream(fopen('php://memory', 'r+'));
         $body->write('foobar');
 
         $request  = new Request(new Url('http://localhost'), 'GET');

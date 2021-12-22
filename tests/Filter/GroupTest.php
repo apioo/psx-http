@@ -23,12 +23,8 @@ namespace PSX\Http\Tests\Filter;
 use PHPUnit\Framework\TestCase;
 use PSX\Http\Filter\FilterChain;
 use PSX\Http\Filter\Group;
-use PSX\Http\FilterChainInterface;
-use PSX\Http\FilterInterface;
 use PSX\Http\Request;
-use PSX\Http\RequestInterface;
 use PSX\Http\Response;
-use PSX\Http\ResponseInterface;
 use PSX\Uri\Url;
 
 /**
@@ -58,24 +54,5 @@ class GroupTest extends TestCase
         $filterChain->handle($request, $response);
 
         $this->assertEquals(array(1, 2, 3, 4, 5, 6), DummyFilter::$calls);
-    }
-}
-
-class DummyFilter implements FilterInterface
-{
-    public static $calls = array();
-
-    protected $id;
-
-    public function __construct($id)
-    {
-        $this->id = $id;
-    }
-
-    public function handle(RequestInterface $request, ResponseInterface $response, FilterChainInterface $filterChain)
-    {
-        self::$calls[] = $this->id;
-
-        $filterChain->handle($request, $response);
     }
 }

@@ -44,7 +44,7 @@ class RequestMethodChoice implements FilterInterface
         $this->filter         = $filter;
     }
 
-    public function handle(RequestInterface $request, ResponseInterface $response, FilterChainInterface $filterChain)
+    public function handle(RequestInterface $request, ResponseInterface $response, FilterChainInterface $filterChain): void
     {
         if (in_array($request->getMethod(), $this->requestMethods)) {
             $this->filter->handle($request, $response, $filterChain);

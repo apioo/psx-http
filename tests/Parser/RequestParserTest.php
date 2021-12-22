@@ -139,17 +139,6 @@ class RequestParserTest extends TestCase
         $parser->parse($request);
     }
 
-    public function testParseInvalidMode()
-    {
-        $this->expectException(\InvalidArgumentException::class);
-
-        $request = 'GET /foobar?foo=bar#fragment HTTP/1.1' . Http::NEW_LINE;
-        $request.= 'Content-Type: text/plain' . Http::NEW_LINE;
-
-        $parser = new RequestParser(new Url('http://localhost.com'), 'foo');
-        $parser->parse($request);
-    }
-
     public function testBuildStatusLine()
     {
         $request = new Request(new Url('http://127.0.0.1'), 'GET');

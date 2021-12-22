@@ -32,11 +32,15 @@ class Response extends Message implements ResponseInterface
     protected int $code;
     protected ?string $reasonPhrase;
 
-    public function __construct(int $code = null, array $headers = [], mixed $body = null)
+    public function __construct(?int $code = null, array $headers = [], mixed $body = null)
     {
         parent::__construct($headers, $body);
 
-        $this->code = $code;
+        if ($code !== null) {
+            $this->setStatus($code);
+        } else {
+            $this->setStatus(200);
+        }
     }
 
     /**
@@ -68,6 +72,8 @@ class Response extends Message implements ResponseInterface
             $this->reasonPhrase = $reasonPhrase;
         } elseif (isset(Http::CODES[$this->code])) {
             $this->reasonPhrase = Http::CODES[$this->code];
+        } else {
+            $this->reasonPhrase = null;
         }
     }
 
