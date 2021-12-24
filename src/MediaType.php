@@ -48,21 +48,13 @@ class MediaType
     private array $parameters;
     private ?float $quality = null;
 
-    public function __construct(string $type, ?string $subType = null, ?array $parameters = null)
+    public function __construct(string $mediaType)
     {
-        if ($subType !== null && $parameters !== null) {
-            $this->type = $type;
-            $this->subType = $subType;
-            $this->parameters = $parameters;
+        $this->type = '';
+        $this->subType = '';
+        $this->parameters = [];
 
-            $this->parseQuality($parameters['q'] ?? null);
-        } else {
-            $this->type = '';
-            $this->subType = '';
-            $this->parameters = [];
-
-            $this->parse($type);
-        }
+        $this->parse($mediaType);
     }
 
     public function getType(): string
@@ -200,6 +192,19 @@ class MediaType
         array_multisort($sortQuality, SORT_DESC, $sortIndex, SORT_ASC, $result);
 
         return $result;
+    }
+
+    public static function create(string $type, ?string $subType = null, ?array $parameters = null): self
+    {
+        $mediaType = $type . '/' . (!empty($subType) ? $subType : '*');
+
+        if (!empty($parameters)) {
+            foreach ($parameters as $key => $value) {
+                $mediaType .= '; ' . $key . '=' . $value;
+            }
+        }
+
+        return new self($mediaType);
     }
 
     public static function getPattern(): string

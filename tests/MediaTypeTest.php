@@ -148,7 +148,7 @@ class MediaTypeTest extends TestCase
 
     public function testFullConstructor()
     {
-        $mediaType = new MediaType('text', 'plain', array('q' => 0.5, 'encoding' => 'UTF-8'));
+        $mediaType = MediaType::create('text', 'plain', array('q' => 0.5, 'encoding' => 'UTF-8'));
 
         $this->assertEquals('text/plain; q=0.5; encoding=UTF-8', $mediaType->toString());
     }

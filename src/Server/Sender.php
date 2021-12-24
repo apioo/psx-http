@@ -58,7 +58,7 @@ class Sender implements SenderInterface
         $this->sendBody($response);
     }
 
-    private function shouldSendHeader(): bool
+    protected function shouldSendHeader(): bool
     {
         return PHP_SAPI != 'cli' && !headers_sent();
     }
@@ -87,7 +87,7 @@ class Sender implements SenderInterface
         }
     }
 
-    private function sendHeader($header)
+    protected function sendHeader($header)
     {
         header($header);
     }
