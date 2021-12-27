@@ -57,11 +57,10 @@ interface HttpContextInterface
     public function getUriFragments(): array;
 
     /**
-     * Returns a query parameter from the uri. Those are parsed by the parse_str
-     * function so the value is either a string or an array in case the
-     * parameter uses a "[]" notation
+     * Returns a query parameter from the uri. Those are parsed by the parse_str function so the value is either a
+     * string or an array in case the parameter uses a "[]" notation
      */
-    public function getParameter(string $name): string|array;
+    public function getParameter(string $name): string|array|null;
 
     /**
      * Returns all available query parameters

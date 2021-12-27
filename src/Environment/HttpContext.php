@@ -65,7 +65,7 @@ class HttpContext implements HttpContextInterface
         return $this->uriFragments;
     }
 
-    public function getParameter($name): string|array
+    public function getParameter($name): string|array|null
     {
         return $this->request->getUri()->getParameter($name);
     }
