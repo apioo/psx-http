@@ -22,6 +22,7 @@ namespace PSX\Http\Filter;
 
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
+use PSX\Http\Exception\InvalidFilterException;
 use PSX\Http\FilterChainInterface;
 use PSX\Http\FilterInterface;
 use PSX\Http\RequestInterface;
@@ -56,7 +57,7 @@ class FilterChain implements FilterChainInterface, LoggerAwareInterface
         $this->logger = $logger;
     }
 
-    public function on(FilterInterface|callable $filter): void
+    public function on(mixed $filter): void
     {
         $this->filters[] = $filter;
     }
@@ -73,14 +74,16 @@ class FilterChain implements FilterChainInterface, LoggerAwareInterface
             }
         } elseif ($filter instanceof FilterInterface) {
             if ($this->logger !== null) {
-                $this->logger->info('Filter execute ' . get_class($filter));
+                $this->logger->debug('Filter execute ' . get_class($filter));
             }
 
             $filter->handle($request, $response, $this);
+        } elseif ($filter instanceof FilterChainInterface) {
+            $filter->handle($request, $response);
         } elseif (is_callable($filter)) {
-            call_user_func_array($filter, array($request, $response, $this));
+            call_user_func_array($filter, [$request, $response, $this]);
         } else {
-            throw new \RuntimeException('Invalid filter value');
+            throw new InvalidFilterException('Invalid filter value');
         }
     }
 }
