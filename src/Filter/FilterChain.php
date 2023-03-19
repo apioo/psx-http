@@ -3,7 +3,7 @@
  * PSX is an open source PHP framework to develop RESTful APIs.
  * For the current version and information visit <https://phpsx.org>
  *
- * Copyright 2010-2022 Christoph Kappestein <christoph.kappestein@gmail.com>
+ * Copyright 2010-2023 Christoph Kappestein <christoph.kappestein@gmail.com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +24,7 @@ use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
 use PSX\Http\Exception\InvalidFilterException;
 use PSX\Http\FilterChainInterface;
+use PSX\Http\FilterCollectionInterface;
 use PSX\Http\FilterInterface;
 use PSX\Http\RequestInterface;
 use PSX\Http\ResponseInterface;
@@ -47,9 +48,7 @@ class FilterChain implements FilterChainInterface, LoggerAwareInterface
         $this->filterChain = $filterChain;
         $this->logger      = null;
 
-        foreach ($filters as $filter) {
-            $this->on($filter);
-        }
+        $this->addAll($filters);
     }
 
     public function setLogger(LoggerInterface $logger): void
@@ -60,6 +59,13 @@ class FilterChain implements FilterChainInterface, LoggerAwareInterface
     public function on(mixed $filter): void
     {
         $this->filters[] = $filter;
+    }
+
+    public function addAll(iterable $filters)
+    {
+        foreach ($filters as $filter) {
+            $this->on($filter);
+        }
     }
 
     public function handle(RequestInterface $request, ResponseInterface $response): void
@@ -78,8 +84,6 @@ class FilterChain implements FilterChainInterface, LoggerAwareInterface
             }
 
             $filter->handle($request, $response, $this);
-        } elseif ($filter instanceof FilterChainInterface) {
-            $filter->handle($request, $response);
         } elseif (is_callable($filter)) {
             call_user_func_array($filter, [$request, $response, $this]);
         } else {

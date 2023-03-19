@@ -18,15 +18,33 @@
  * limitations under the License.
  */
 
-namespace PSX\Http\Parser;
+namespace PSX\Http\Filter;
+
+use PSX\Http\FilterCollectionInterface;
+use Traversable;
 
 /**
- * ParseException
+ * FilterCollection
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://phpsx.org
  */
-class ParseException extends \Exception
+class FilterCollection implements FilterCollectionInterface
 {
+    private iterable $filters;
+
+    public function __construct(iterable $filters)
+    {
+        $this->filters = $filters;
+    }
+
+    public function getIterator(): Traversable
+    {
+        if ($this->filters instanceof Traversable) {
+            return $this->filters;
+        } else {
+            return new \ArrayObject($this->filters);
+        }
+    }
 }
