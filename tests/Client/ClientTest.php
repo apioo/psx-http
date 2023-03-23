@@ -53,7 +53,7 @@ class ClientTest extends TestCase
         $stack->push($history);
 
         $client   = new Client(['handler' => $stack]);
-        $request  = new GetRequest(new Url('http://localhost.com'));
+        $request  = new GetRequest(Url::parse('http://localhost.com'));
         $response = $client->request($request);
 
         $this->assertEquals(200, $response->getStatusCode());
@@ -80,7 +80,7 @@ class ClientTest extends TestCase
         $stack->push($history);
 
         $client   = new Client(['handler' => $stack]);
-        $request  = new PostRequest(new Url('http://localhost.com'), [], 'foobar');
+        $request  = new PostRequest(Url::parse('http://localhost.com'), [], 'foobar');
         $response = $client->request($request);
 
         $this->assertEquals(200, $response->getStatusCode());
@@ -113,7 +113,7 @@ class ClientTest extends TestCase
         $options->setSink($handle);
 
         $client   = new Client(['handler' => $stack]);
-        $request  = new PostRequest(new Url('http://localhost.com'), [], 'foobar');
+        $request  = new PostRequest(Url::parse('http://localhost.com'), [], 'foobar');
         $response = $client->request($request, $options);
 
         $this->assertEquals(200, $response->getStatusCode());

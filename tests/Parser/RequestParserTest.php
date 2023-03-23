@@ -45,7 +45,7 @@ class RequestParserTest extends TestCase
         $request.= Http::NEW_LINE;
         $request.= 'Google is built by a large team of engineers, designers, researchers, robots, and others in many different sites across the globe. It is updated continuously, and built with more tools and technologies than we can shake a stick at. If you\'d like to help us out, see google.com/jobs.';
 
-        $parser  = new RequestParser(new Url('http://localhost.com'), RequestParser::MODE_STRICT);
+        $parser  = new RequestParser(Url::parse('http://localhost.com'), RequestParser::MODE_STRICT);
         $request = $parser->parse($request);
 
         $this->assertInstanceOf(RequestInterface::class, $request);
@@ -61,7 +61,7 @@ class RequestParserTest extends TestCase
 
     public function testParseLooseMode()
     {
-        $parser     = new RequestParser(new Url('http://localhost.com'), RequestParser::MODE_LOOSE);
+        $parser     = new RequestParser(Url::parse('http://localhost.com'), RequestParser::MODE_LOOSE);
         $seperators = array("\r\n", "\n", "\r");
 
         foreach ($seperators as $newline) {
@@ -114,7 +114,7 @@ class RequestParserTest extends TestCase
         $request = 'foobar' . Http::NEW_LINE;
         $request.= 'Vary: Accept-Encoding' . Http::NEW_LINE;
 
-        $parser = new RequestParser(new Url('http://localhost.com'), RequestParser::MODE_STRICT);
+        $parser = new RequestParser(Url::parse('http://localhost.com'), RequestParser::MODE_STRICT);
         $parser->parse($request);
     }
 
@@ -124,7 +124,7 @@ class RequestParserTest extends TestCase
 
         $request = '';
 
-        $parser = new RequestParser(new Url('http://localhost.com'), RequestParser::MODE_STRICT);
+        $parser = new RequestParser(Url::parse('http://localhost.com'), RequestParser::MODE_STRICT);
         $parser->parse($request);
     }
 
@@ -135,13 +135,13 @@ class RequestParserTest extends TestCase
         $request = 'GET /foobar?foo=bar#fragment HTTP/1.1';
         $request.= 'Vary: Accept-Encoding';
 
-        $parser = new RequestParser(new Url('http://localhost.com'), RequestParser::MODE_STRICT);
+        $parser = new RequestParser(Url::parse('http://localhost.com'), RequestParser::MODE_STRICT);
         $parser->parse($request);
     }
 
     public function testBuildStatusLine()
     {
-        $request = new Request(new Url('http://127.0.0.1'), 'GET');
+        $request = new Request(Url::parse('http://127.0.0.1'), 'GET');
 
         $this->assertEquals('GET / HTTP/1.1', RequestParser::buildStatusLine($request));
     }
@@ -150,7 +150,7 @@ class RequestParserTest extends TestCase
     {
         $this->expectException(\RuntimeException::class);
 
-        $request = new Request(new Url('http://127.0.0.1'), 'GET');
+        $request = new Request(Url::parse('http://127.0.0.1'), 'GET');
         $request->setRequestTarget('');
 
         RequestParser::buildStatusLine($request);
@@ -163,7 +163,7 @@ class RequestParserTest extends TestCase
         $httpRequest.= Http::NEW_LINE;
         $httpRequest.= 'foobar';
 
-        $request = RequestParser::convert($httpRequest, new Url('http://psx.dev'));
+        $request = RequestParser::convert($httpRequest, Url::parse('http://psx.dev'));
 
         $this->assertEquals('http://psx.dev/foo/bar?foo=bar#test', $request->getUri()->toString());
         $this->assertEquals('GET', $request->getMethod());

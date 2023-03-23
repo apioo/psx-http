@@ -42,7 +42,7 @@ class ContentMd5Test extends FilterTestCase
         $body = new Stream(fopen('php://memory', 'r+'));
         $body->write('foobar');
 
-        $request  = new Request(new Url('http://localhost'), 'GET');
+        $request  = new Request(Url::parse('http://localhost'), 'GET');
         $response = new Response();
         $response->setBody($body);
 
@@ -58,7 +58,7 @@ class ContentMd5Test extends FilterTestCase
         $body = new Stream(fopen('php://memory', 'r+'));
         $body->write('foobar');
 
-        $request  = new Request(new Url('http://localhost'), 'GET');
+        $request  = new Request(Url::parse('http://localhost'), 'GET');
         $response = new Response();
         $response->setHeader('Content-MD5', 'foobar');
         $response->setBody($body);

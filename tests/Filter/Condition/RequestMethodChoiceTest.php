@@ -40,7 +40,7 @@ class RequestMethodChoiceTest extends FilterTestCase
 {
     public function testCorrectMethod()
     {
-        $request  = new Request(new Url('http://localhost'), 'GET');
+        $request  = new Request(Url::parse('http://localhost'), 'GET');
         $response = new Response();
         $response->setBody(new StringStream());
 
@@ -58,7 +58,7 @@ class RequestMethodChoiceTest extends FilterTestCase
 
     public function testWrongMethod()
     {
-        $request  = new Request(new Url('http://localhost'), 'GET');
+        $request  = new Request(Url::parse('http://localhost'), 'GET');
         $response = new Response();
         $response->setBody(new StringStream());
 

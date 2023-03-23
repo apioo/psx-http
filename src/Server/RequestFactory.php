@@ -84,7 +84,7 @@ class RequestFactory implements RequestFactoryInterface
         }
 
         // create request
-        $uri     = Uri::create($scheme, $host, $path, $query, '');
+        $uri     = Uri::of($scheme, $host, $path, $query, '');
         $method  = $this->getRequestMethod();
         $headers = $this->getRequestHeaders();
         $body    = null;

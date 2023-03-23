@@ -39,7 +39,7 @@ class HSTSTest extends FilterTestCase
      */
     public function testHandle($maxAge, $mode, array $expectHeaders)
     {
-        $request  = new Request(new Url('http://localhost'), 'GET', []);
+        $request  = new Request(Url::parse('http://localhost'), 'GET', []);
         $response = new Response();
 
         $handle = new HSTS($maxAge, $mode);

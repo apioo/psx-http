@@ -35,7 +35,7 @@ class PatchRequestTest extends TestCase
 {
     public function testConstruct()
     {
-        $request = new PatchRequest(new Url('http://localhost.com/foo'), array('X-Foo' => 'bar'), 'foo');
+        $request = new PatchRequest(Url::parse('http://localhost.com/foo'), array('X-Foo' => 'bar'), 'foo');
 
         $this->assertEquals('PATCH', $request->getMethod());
         $this->assertEquals('localhost.com', $request->getHeader('Host'));
@@ -45,7 +45,7 @@ class PatchRequestTest extends TestCase
 
     public function testConstructUrlHeader()
     {
-        $request = new PatchRequest(new Url('http://localhost.com/foo'), array('X-Foo' => 'bar'));
+        $request = new PatchRequest(Url::parse('http://localhost.com/foo'), array('X-Foo' => 'bar'));
 
         $this->assertEquals('PATCH', $request->getMethod());
         $this->assertEquals('localhost.com', $request->getHeader('Host'));
@@ -54,7 +54,7 @@ class PatchRequestTest extends TestCase
 
     public function testConstructUrl()
     {
-        $request = new PatchRequest(new Url('http://localhost.com/foo'));
+        $request = new PatchRequest(Url::parse('http://localhost.com/foo'));
 
         $this->assertEquals('PATCH', $request->getMethod());
         $this->assertEquals('localhost.com', $request->getHeader('Host'));

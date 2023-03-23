@@ -37,7 +37,7 @@ class HttpContextTest extends TestCase
 {
     public function testContext()
     {
-        $request = new Request(new Uri('/foo?baz=foo'), 'GET', ['X-Foo' => 'bar']);
+        $request = new Request(Uri::parse('/foo?baz=foo'), 'GET', ['X-Foo' => 'bar']);
         $context = new HttpContext($request, ['bar' => 'foo']);
 
         $this->assertInstanceOf(HttpContextInterface::class, $context);

@@ -38,7 +38,7 @@ class BackstageTest extends FilterTestCase
 {
     public function testFileExists()
     {
-        $request  = new Request(new Url('http://localhost'), 'GET', array(
+        $request  = new Request(Url::parse('http://localhost'), 'GET', array(
             'Accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8'
         ));
         $response = new Response();
@@ -52,7 +52,7 @@ class BackstageTest extends FilterTestCase
 
     public function testNoFittingAcceptHeader()
     {
-        $request  = new Request(new Url('http://localhost'), 'GET', array(
+        $request  = new Request(Url::parse('http://localhost'), 'GET', array(
             'Accept' => 'application/json'
         ));
         $response = new Response();
@@ -63,7 +63,7 @@ class BackstageTest extends FilterTestCase
 
     public function testFileNotExists()
     {
-        $request  = new Request(new Url('http://localhost'), 'GET', array(
+        $request  = new Request(Url::parse('http://localhost'), 'GET', array(
             'Accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8'
         ));
         $response = new Response();
@@ -74,7 +74,7 @@ class BackstageTest extends FilterTestCase
 
     public function testNoFittingAcceptHeaderAndFileNotExists()
     {
-        $request  = new Request(new Url('http://localhost'), 'GET', array(
+        $request  = new Request(Url::parse('http://localhost'), 'GET', array(
             'Accept' => 'application/json'
         ));
         $response = new Response();

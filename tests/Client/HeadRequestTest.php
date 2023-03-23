@@ -35,7 +35,7 @@ class HeadRequestTest extends TestCase
 {
     public function testConstruct()
     {
-        $request = new HeadRequest(new Url('http://localhost.com/foo'), array('X-Foo' => 'bar'));
+        $request = new HeadRequest(Url::parse('http://localhost.com/foo'), array('X-Foo' => 'bar'));
 
         $this->assertEquals('HEAD', $request->getMethod());
         $this->assertEquals('localhost.com', $request->getHeader('Host'));
@@ -44,7 +44,7 @@ class HeadRequestTest extends TestCase
 
     public function testConstructUrl()
     {
-        $request = new HeadRequest(new Url('http://localhost.com/foo'));
+        $request = new HeadRequest(Url::parse('http://localhost.com/foo'));
 
         $this->assertEquals('HEAD', $request->getMethod());
         $this->assertEquals('localhost.com', $request->getHeader('Host'));

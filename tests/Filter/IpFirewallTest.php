@@ -38,7 +38,7 @@ class IpFirewallTest extends FilterTestCase
 {
     public function testValidIp()
     {
-        $request  = new Request(new Url('http://localhost'), 'GET');
+        $request  = new Request(Url::parse('http://localhost'), 'GET');
         $response = new Response();
 
         $request->setAttribute('REMOTE_ADDR', '127.0.0.1');
@@ -51,7 +51,7 @@ class IpFirewallTest extends FilterTestCase
     {
         $this->expectException(ForbiddenException::class);
 
-        $request  = new Request(new Url('http://localhost'), 'GET');
+        $request  = new Request(Url::parse('http://localhost'), 'GET');
         $response = new Response();
 
         $request->setAttribute('REMOTE_ADDR', '127.0.0.1');
@@ -62,7 +62,7 @@ class IpFirewallTest extends FilterTestCase
 
     public function testNoIp()
     {
-        $request  = new Request(new Url('http://localhost'), 'GET');
+        $request  = new Request(Url::parse('http://localhost'), 'GET');
         $response = new Response();
 
         $filter = new IpFirewall(['127.0.0.2']);

@@ -35,7 +35,7 @@ class DeleteRequestTest extends TestCase
 {
     public function testConstruct()
     {
-        $request = new DeleteRequest(new Url('http://localhost.com/foo'), array('X-Foo' => 'bar'), 'foo');
+        $request = new DeleteRequest(Url::parse('http://localhost.com/foo'), array('X-Foo' => 'bar'), 'foo');
 
         $this->assertEquals('DELETE', $request->getMethod());
         $this->assertEquals('localhost.com', $request->getHeader('Host'));
@@ -45,7 +45,7 @@ class DeleteRequestTest extends TestCase
 
     public function testConstructUrlHeader()
     {
-        $request = new DeleteRequest(new Url('http://localhost.com/foo'), array('X-Foo' => 'bar'));
+        $request = new DeleteRequest(Url::parse('http://localhost.com/foo'), array('X-Foo' => 'bar'));
 
         $this->assertEquals('DELETE', $request->getMethod());
         $this->assertEquals('localhost.com', $request->getHeader('Host'));
@@ -54,7 +54,7 @@ class DeleteRequestTest extends TestCase
 
     public function testConstructUrl()
     {
-        $request = new DeleteRequest(new Url('http://localhost.com/foo'));
+        $request = new DeleteRequest(Url::parse('http://localhost.com/foo'));
 
         $this->assertEquals('DELETE', $request->getMethod());
         $this->assertEquals('localhost.com', $request->getHeader('Host'));

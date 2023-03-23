@@ -37,7 +37,7 @@ class RequestTest extends TestCase
 {
     public function testGetRequestTarget()
     {
-        $request = new Request(new Url('http://127.0.0.1'), 'GET');
+        $request = new Request(Url::parse('http://127.0.0.1'), 'GET');
 
         $this->assertEquals('/', $request->getRequestTarget());
 
@@ -48,11 +48,11 @@ class RequestTest extends TestCase
 
     public function testGetUri()
     {
-        $request = new Request(new Url('http://127.0.0.1'), 'GET');
+        $request = new Request(Url::parse('http://127.0.0.1'), 'GET');
 
         $this->assertEquals('http://127.0.0.1', $request->getUri()->toString());
 
-        $request->setUri(new Url('http://127.0.0.1/foo'));
+        $request->setUri(Url::parse('http://127.0.0.1/foo'));
 
         $this->assertEquals('http://127.0.0.1/foo', $request->getUri()->toString());
     }
@@ -62,7 +62,7 @@ class RequestTest extends TestCase
         $body = new StringStream();
         $body->write('foobar');
 
-        $request = new Request(new Url('http://127.0.0.1'), 'POST');
+        $request = new Request(Url::parse('http://127.0.0.1'), 'POST');
         $request->setHeader('Content-Type', 'text/html; charset=UTF-8');
         $request->setBody($body);
 
@@ -77,7 +77,7 @@ class RequestTest extends TestCase
 
     public function testGetSetAttributes()
     {
-        $request = new Request(new Url('http://127.0.0.1'), 'POST');
+        $request = new Request(Url::parse('http://127.0.0.1'), 'POST');
         $request->setAttribute('foo', 'bar');
 
         $this->assertEquals('bar', $request->getAttribute('foo'));

@@ -62,12 +62,12 @@ class MultipartStream extends StringStream implements \Countable, \IteratorAggre
         return $this->parts[$name] ?? null;
     }
 
-    public function count()
+    public function count(): int
     {
         return count($this->parts);
     }
 
-    public function getIterator()
+    public function getIterator(): \ArrayIterator
     {
         return new \ArrayIterator($this->parts);
     }

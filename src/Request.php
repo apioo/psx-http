@@ -42,7 +42,7 @@ class Request extends Message implements RequestInterface
         parent::__construct($headers, $body);
 
         if (is_string($uri)) {
-            $uri = new Uri($uri);
+            $uri = Uri::parse($uri);
         }
 
         $this->uri = $uri;

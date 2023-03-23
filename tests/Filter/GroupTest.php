@@ -38,7 +38,7 @@ class GroupTest extends TestCase
 {
     public function testGroup()
     {
-        $request  = new Request(new Url('http://localhost'), 'GET');
+        $request  = new Request(Url::parse('http://localhost'), 'GET');
         $response = new Response();
 
         $subFilters[] = new DummyFilter(3);

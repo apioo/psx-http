@@ -40,7 +40,7 @@ class FilterChainTest extends TestCase
 {
     public function testFilterChain()
     {
-        $request  = new Request(new Uri('/'), 'GET');
+        $request  = new Request(Uri::parse('/'), 'GET');
         $response = new Response();
 
         $chain = new FilterChain();

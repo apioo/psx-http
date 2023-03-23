@@ -40,7 +40,7 @@ class CORSTest extends FilterTestCase
      */
     public function testHandle($allowOrigin, array $allowMethods, array $allowHeaders, $allowCredentials, $method, array $headers, array $expectHeaders)
     {
-        $request  = new Request(new Url('http://localhost'), $method, $headers);
+        $request  = new Request(Url::parse('http://localhost'), $method, $headers);
         $response = new Response();
 
         $handle = new CORS($allowOrigin, $allowMethods, $allowHeaders, $allowCredentials);
@@ -211,7 +211,7 @@ class CORSTest extends FilterTestCase
 
     public function testAllowOrigin()
     {
-        $request  = new Request(new Url('http://localhost'), 'GET', ['Origin' => 'http://foo.example']);
+        $request  = new Request(Url::parse('http://localhost'), 'GET', ['Origin' => 'http://foo.example']);
         $response = new Response();
 
         $handle = CORS::allowOrigin('*');

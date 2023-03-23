@@ -40,7 +40,7 @@ class PathMatchTest extends FilterTestCase
 {
     public function testPath()
     {
-        $request  = new Request(new Url('http://localhost/foobar'), 'GET');
+        $request  = new Request(Url::parse('http://localhost/foobar'), 'GET');
         $response = new Response();
         $response->setBody(new StringStream());
 
@@ -58,7 +58,7 @@ class PathMatchTest extends FilterTestCase
 
     public function testWrongPath()
     {
-        $request  = new Request(new Url('http://localhost/baz'), 'GET');
+        $request  = new Request(Url::parse('http://localhost/baz'), 'GET');
         $response = new Response();
         $response->setBody(new StringStream());
 

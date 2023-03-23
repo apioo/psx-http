@@ -35,7 +35,7 @@ class PutRequestTest extends TestCase
 {
     public function testConstruct()
     {
-        $request = new PutRequest(new Url('http://localhost.com/foo'), array('X-Foo' => 'bar'), 'foo');
+        $request = new PutRequest(Url::parse('http://localhost.com/foo'), array('X-Foo' => 'bar'), 'foo');
 
         $this->assertEquals('PUT', $request->getMethod());
         $this->assertEquals('localhost.com', $request->getHeader('Host'));
@@ -45,7 +45,7 @@ class PutRequestTest extends TestCase
 
     public function testConstructUrlHeader()
     {
-        $request = new PutRequest(new Url('http://localhost.com/foo'), array('X-Foo' => 'bar'));
+        $request = new PutRequest(Url::parse('http://localhost.com/foo'), array('X-Foo' => 'bar'));
 
         $this->assertEquals('PUT', $request->getMethod());
         $this->assertEquals('localhost.com', $request->getHeader('Host'));
@@ -54,7 +54,7 @@ class PutRequestTest extends TestCase
 
     public function testConstructUrl()
     {
-        $request = new PutRequest(new Url('http://localhost.com/foo'));
+        $request = new PutRequest(Url::parse('http://localhost.com/foo'));
 
         $this->assertEquals('PUT', $request->getMethod());
         $this->assertEquals('localhost.com', $request->getHeader('Host'));

@@ -50,7 +50,7 @@ class BasicAuthenticationTest extends FilterTestCase
         $username = 'test';
         $password = 'test';
 
-        $request  = new Request(new Url('http://localhost'), 'GET', array('Authorization' => 'Basic ' . base64_encode($username . ':' . $password)));
+        $request  = new Request(Url::parse('http://localhost'), 'GET', array('Authorization' => 'Basic ' . base64_encode($username . ':' . $password)));
         $response = new Response();
 
         $handle->handle($request, $response, $this->getFilterChain(true, $request, $response));
@@ -67,7 +67,7 @@ class BasicAuthenticationTest extends FilterTestCase
         $username = 'foo';
         $password = 'bar';
 
-        $request  = new Request(new Url('http://localhost'), 'GET', array('Authorization' => 'Basic ' . base64_encode($username . ':' . $password)));
+        $request  = new Request(Url::parse('http://localhost'), 'GET', array('Authorization' => 'Basic ' . base64_encode($username . ':' . $password)));
         $response = new Response();
 
         $handle->handle($request, $response, $this->getFilterChain(false));
@@ -79,7 +79,7 @@ class BasicAuthenticationTest extends FilterTestCase
             return $username == 'test' && $password == 'test';
         });
 
-        $request  = new Request(new Url('http://localhost'), 'GET');
+        $request  = new Request(Url::parse('http://localhost'), 'GET');
         $response = new Response();
 
         try {
@@ -99,7 +99,7 @@ class BasicAuthenticationTest extends FilterTestCase
             return $username == 'test' && $password == 'test';
         });
 
-        $request  = new Request(new Url('http://localhost'), 'GET', array('Authorization' => 'Foo'));
+        $request  = new Request(Url::parse('http://localhost'), 'GET', array('Authorization' => 'Foo'));
         $response = new Response();
 
         try {

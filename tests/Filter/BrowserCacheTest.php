@@ -37,7 +37,7 @@ class BrowserCacheTest extends FilterTestCase
 {
     public function testExpires()
     {
-        $request  = new Request(new Url('http://localhost'), 'GET', array());
+        $request  = new Request(Url::parse('http://localhost'), 'GET', array());
         $response = new Response();
 
         $handle = BrowserCache::expires(new \DateTime('1986-10-09'));
@@ -48,7 +48,7 @@ class BrowserCacheTest extends FilterTestCase
 
     public function testCacheControl()
     {
-        $request  = new Request(new Url('http://localhost'), 'GET', array());
+        $request  = new Request(Url::parse('http://localhost'), 'GET', array());
         $response = new Response();
 
         $handle = BrowserCache::cacheControl(
@@ -65,7 +65,7 @@ class BrowserCacheTest extends FilterTestCase
 
     public function testCacheControlSpecific()
     {
-        $request  = new Request(new Url('http://localhost'), 'GET', array());
+        $request  = new Request(Url::parse('http://localhost'), 'GET', array());
         $response = new Response();
 
         $handle = BrowserCache::cacheControl(
@@ -81,7 +81,7 @@ class BrowserCacheTest extends FilterTestCase
 
     public function testPreventCache()
     {
-        $request  = new Request(new Url('http://localhost'), 'GET', array());
+        $request  = new Request(Url::parse('http://localhost'), 'GET', array());
         $response = new Response();
 
         $handle = BrowserCache::preventCache();

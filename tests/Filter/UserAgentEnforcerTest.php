@@ -38,7 +38,7 @@ class UserAgentEnforcerTest extends FilterTestCase
 {
     public function testUserAgent()
     {
-        $request  = new Request(new Url('http://localhost'), 'GET', ['User-Agent' => 'foobar']);
+        $request  = new Request(Url::parse('http://localhost'), 'GET', ['User-Agent' => 'foobar']);
         $response = new Response();
 
         $filter = new UserAgentEnforcer();
@@ -49,7 +49,7 @@ class UserAgentEnforcerTest extends FilterTestCase
     {
         $this->expectException(BadRequestException::class);
 
-        $request  = new Request(new Url('http://localhost'), 'GET');
+        $request  = new Request(Url::parse('http://localhost'), 'GET');
         $response = new Response();
 
         $filter = new UserAgentEnforcer();

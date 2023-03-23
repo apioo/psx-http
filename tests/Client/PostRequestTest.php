@@ -35,7 +35,7 @@ class PostRequestTest extends TestCase
 {
     public function testConstruct()
     {
-        $request = new PostRequest(new Url('http://localhost.com/foo'), array('X-Foo' => 'bar'), 'foo');
+        $request = new PostRequest(Url::parse('http://localhost.com/foo'), array('X-Foo' => 'bar'), 'foo');
 
         $this->assertEquals('POST', $request->getMethod());
         $this->assertEquals('localhost.com', $request->getHeader('Host'));
@@ -45,7 +45,7 @@ class PostRequestTest extends TestCase
 
     public function testConstructUrlHeader()
     {
-        $request = new PostRequest(new Url('http://localhost.com/foo'), array('X-Foo' => 'bar'));
+        $request = new PostRequest(Url::parse('http://localhost.com/foo'), array('X-Foo' => 'bar'));
 
         $this->assertEquals('POST', $request->getMethod());
         $this->assertEquals('localhost.com', $request->getHeader('Host'));
@@ -54,7 +54,7 @@ class PostRequestTest extends TestCase
 
     public function testConstructUrl()
     {
-        $request = new PostRequest(new Url('http://localhost.com/foo'));
+        $request = new PostRequest(Url::parse('http://localhost.com/foo'));
 
         $this->assertEquals('POST', $request->getMethod());
         $this->assertEquals('localhost.com', $request->getHeader('Host'));
@@ -70,7 +70,7 @@ class PostRequestTest extends TestCase
 
     public function testArrayBody()
     {
-        $request = new PostRequest(new Url('http://localhost.com/foo'), array(), array('foo' => 'bar'));
+        $request = new PostRequest(Url::parse('http://localhost.com/foo'), array(), array('foo' => 'bar'));
 
         $this->assertEquals('foo=bar', (string) $request->getBody());
     }

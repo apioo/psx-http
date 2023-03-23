@@ -35,7 +35,7 @@ class GetRequestTest extends TestCase
 {
     public function testConstruct()
     {
-        $request = new GetRequest(new Url('http://localhost.com/foo'), array('X-Foo' => 'bar'));
+        $request = new GetRequest(Url::parse('http://localhost.com/foo'), array('X-Foo' => 'bar'));
 
         $this->assertEquals('GET', $request->getMethod());
         $this->assertEquals('localhost.com', $request->getHeader('Host'));
@@ -44,7 +44,7 @@ class GetRequestTest extends TestCase
 
     public function testConstructUrl()
     {
-        $request = new GetRequest(new Url('http://localhost.com/foo'));
+        $request = new GetRequest(Url::parse('http://localhost.com/foo'));
 
         $this->assertEquals('GET', $request->getMethod());
         $this->assertEquals('localhost.com', $request->getHeader('Host'));

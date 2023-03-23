@@ -58,9 +58,9 @@ class RequestParser extends ParserAbstract
 
         // resolve uri path
         if ($this->baseUrl !== null) {
-            $path = UriResolver::resolve($this->baseUrl, new Uri($path));
+            $path = UriResolver::resolve($this->baseUrl, Uri::parse($path));
         } else {
-            $path = new Uri($path);
+            $path = Uri::parse($path);
         }
 
         $request = new Request($path, $method);
