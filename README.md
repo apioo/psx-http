@@ -3,7 +3,7 @@
 
 ## About
 
-This library contains well designed interfaces to describe HTTP message, middleware and client classes. It contains also
+This library contains elegant interfaces to describe HTTP message, middleware and client classes. It contains also
 corresponding reference implementations which can be used by every app which needs a solid HTTP stack.
 
 ### HTTP
@@ -85,7 +85,7 @@ use PSX\Http\Exception\StatusCodeException;
 $client = new Client\Client();
 
 // build request
-$request = new Client\GetRequest('http://google.com', ['Accept' => 'text/html']);
+$request = new Client\GetRequest('https://google.com', ['Accept' => 'text/html']);
 
 // send request
 $response = $client->request($request);
@@ -159,38 +159,3 @@ $chain->handle($request, $response);
 // send response
 (new Server\Sender())->send($response);
 ```
-
-## Distinction
-
-We are aware that this overlaps with PSR-7, PSR-15 and PSR-17 but we think that
-those specs have made some bad design decisions and this project provides an
-alternative.
-
-### PSR-7
-
-* The classes are mutable (`set*` instead of `with*`), you can change the state
-  of the object.
-* There is no `ServerRequestInterface` and `UploadedFileInterface`
-* There is only a single way to access query parameters. You can access a
-  query parameter from the URI instead of `getQueryParams`
-* `getHeader` returns a string instead of an array which is the 80% case
-
-### Thoughts
-
-* Because PSR-7 is immutable PSR-15 must have the `fn(req): res` signature since
-  it is not possible to change the response object.
-* The middleware needs to know how to create a HTTP response instance. Because
-  of this you can't inject a different response implementation into your 
-  middleware stack. To solve this there is PSR-17 but we think this is a bad
-  solution.
-* If your app uses a PHP server like Swoole you want to wrap the Swoole response 
-  object and pass it to the middleware to handle also streaming use cases.
-* Immutability forces a design on your application you have i.e. not the
-  option to use the double-pass middleware signature.
-* Since PHP has no immutability on the language level we must 
-  always copy the object and change a specific value which is bad for memory /
-  performance.
-* It is really difficult to migrate legacy applications to the
-  `fn(req): res` middleware style since most applications today work with a
-  mutable HTTP object.
-* PSR-7 is actually not fully immutable since the body is always mutable
