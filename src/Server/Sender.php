@@ -25,6 +25,7 @@ use PSX\Http\Http;
 use PSX\Http\Parser\ResponseParser;
 use PSX\Http\ResponseInterface;
 use PSX\Http\Stream\StringStream;
+use PSX\Http\StringBuilder;
 
 /**
  * Basic sender which handles file stream bodies, content encoding and transfer
@@ -80,7 +81,7 @@ class Sender implements SenderInterface
 
     private function sendHeaders(ResponseInterface $response)
     {
-        $headers = ResponseParser::buildHeaderFromMessage($response);
+        $headers = StringBuilder::headerFromMessage($response);
 
         foreach ($headers as $header) {
             $this->sendHeader($header);

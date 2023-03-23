@@ -51,10 +51,12 @@ class BufferedStream implements StreamInterface
         $source = $this->source->detach();
         $buffer = fopen('php://temp', 'r+');
 
-        stream_copy_to_stream($source, $buffer, -1, 0);
-        rewind($buffer);
+        if (is_resource($source)) {
+            stream_copy_to_stream($source, $buffer, -1, 0);
+            rewind($buffer);
 
-        $this->stream = new Stream($buffer);
-        $this->filled = true;
+            $this->stream = new Stream($buffer);
+            $this->filled = true;
+        }
     }
 }

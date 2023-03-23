@@ -38,7 +38,7 @@ class Json extends Writer
 
     public function writeTo(ResponseInterface $response): void
     {
-        $response->setHeader('Content-Type', $this->contentType);
+        $response->setHeader('Content-Type', $this->contentType ?? '');
         $response->getBody()->write(\json_encode($this->data));
     }
 }

@@ -23,6 +23,7 @@ namespace PSX\Http\Writer;
 use PSX\Http\Http;
 use PSX\Http\Parser\ResponseParser;
 use PSX\Http\ResponseInterface;
+use PSX\Http\StringBuilder;
 
 /**
  * Multipart
@@ -78,7 +79,7 @@ class Multipart extends Writer
         foreach ($parts as $part) {
             $out = '--' . $this->boundary . Http::NEW_LINE;
 
-            $headers = ResponseParser::buildHeaderFromMessage($part);
+            $headers = StringBuilder::headerFromMessage($part);
             foreach ($headers as $header) {
                 $out.= $header . Http::NEW_LINE;
             }

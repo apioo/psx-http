@@ -37,7 +37,7 @@ class JsonTest extends TestCase
      */
     public function testIsMediaType($mime, $expected)
     {
-        $this->assertSame($expected, MediaType\Json::isMediaType(new MediaType($mime)));
+        $this->assertSame($expected, MediaType\Json::isMediaType(MediaType::parse($mime)));
     }
 
     public function mediaTypeProvider()

@@ -43,7 +43,7 @@ class Authentication
 
             if (!empty($key)) {
                 $key   = strtolower($key);
-                $value = trim($value, '"');
+                $value = trim($value ?? '', '"');
 
                 $params[$key] = $value;
             }

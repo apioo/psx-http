@@ -82,8 +82,8 @@ class Response extends Message implements ResponseInterface
      */
     public function toString(): string
     {
-        $response = Parser\ResponseParser::buildStatusLine($this) . Http::NEW_LINE;
-        $headers  = Parser\ResponseParser::buildHeaderFromMessage($this);
+        $response = StringBuilder::responseStatusLine($this) . Http::NEW_LINE;
+        $headers  = StringBuilder::headerFromMessage($this);
 
         foreach ($headers as $header) {
             $response.= $header . Http::NEW_LINE;

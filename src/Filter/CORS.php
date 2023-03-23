@@ -71,12 +71,12 @@ class CORS implements FilterInterface
 
         if ($allow && $request->getMethod() == 'OPTIONS') {
             $method = $request->getHeader('Access-Control-Request-Method');
-            if (!empty($method)) {
+            if (!empty($method) && $this->allowMethods !== null) {
                 $response->setHeader('Access-Control-Allow-Methods', implode(', ', $this->allowMethods));
             }
 
             $headers = $request->getHeader('Access-Control-Request-Headers');
-            if (!empty($headers)) {
+            if (!empty($headers) && $this->allowHeaders !== null) {
                 $response->setHeader('Access-Control-Allow-Headers', implode(', ', $this->allowHeaders));
             }
 

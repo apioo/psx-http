@@ -37,7 +37,7 @@ class MediaTypeTest extends TestCase
      */
     public function testParse($mime, $type, $subType, $quality, array $parameters)
     {
-        $mediaType = new MediaType($mime);
+        $mediaType = MediaType::parse($mime);
 
         $this->assertEquals($type, $mediaType->getType());
         $this->assertEquals($subType, $mediaType->getSubType());
@@ -48,7 +48,7 @@ class MediaTypeTest extends TestCase
 
     public function mediaTypeProvider()
     {
-        return array(
+        return [
             ['application/xml', 'application', 'xml', 1, []],
             ['text/html; encoding=UTF-8', 'text', 'html', 1, ['encoding' => 'UTF-8']],
             ['text/html;encoding=UTF-8', 'text', 'html', 1, ['encoding' => 'UTF-8']],
@@ -71,12 +71,12 @@ class MediaTypeTest extends TestCase
             ['application/atom+xml', 'application', 'atom+xml', 1, []],
             ['text/plain; q=2', 'text', 'plain', 1, ['q' => '2']],
             ['application/xml;foo="bar/baz"', 'application', 'xml', 1, ['foo' => 'bar/baz']],
-        );
+        ];
     }
 
     public function testGetParameter()
     {
-        $mediaType = new MediaType('text/html; encoding=UTF-8');
+        $mediaType = MediaType::parse('text/html; encoding=UTF-8');
 
         $this->assertEquals('UTF-8', $mediaType->getParameter('encoding'));
         $this->assertEquals(null, $mediaType->getParameter('foo'));
@@ -85,18 +85,18 @@ class MediaTypeTest extends TestCase
     public function testParseListQuality()
     {
         $mediaTypes = MediaType::parseList('text/plain; q=0.5, text/html, text/x-dvi; q=0.8, text/x-c;q=0.9');
-        $actual     = array();
+        $actual = [];
 
         foreach ($mediaTypes as $mediaType) {
             $actual[] = $mediaType->getName();
         }
 
-        $expect = array(
+        $expect = [
             'text/html',
             'text/x-c',
             'text/x-dvi',
             'text/plain',
-        );
+        ];
 
         $this->assertEquals($expect, $actual);
     }
@@ -105,21 +105,21 @@ class MediaTypeTest extends TestCase
     {
         $this->expectException(\InvalidArgumentException::class);
 
-        new MediaType('');
+        MediaType::parse('');
     }
 
     public function testParseInvalid()
     {
         $this->expectException(\InvalidArgumentException::class);
 
-        new MediaType('foo');
+        MediaType::parse('foo');
     }
 
     public function testParseInvalidMediaType()
     {
         $this->expectException(\InvalidArgumentException::class);
 
-        new MediaType('foo/bar');
+        MediaType::parse('foo/bar');
     }
 
     /**
@@ -134,7 +134,7 @@ class MediaTypeTest extends TestCase
 
     public function acceptHeaderProvider()
     {
-        return array(
+        return [
             ['', 0],
             ['foo', 0],
             ['text/plain; q=0.5, ', 1],
@@ -143,19 +143,19 @@ class MediaTypeTest extends TestCase
             ['text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8', 4],
             ['application/xml;q=0.9,*/*;q=0.8', 2],
             ['image/jpeg, application/x-ms-application, image/gif, application/xaml+xml, image/pjpeg, application/x-ms-xbap, application/x-shockwave-flash, application/msword, */*', 9],
-        );
+        ];
     }
 
     public function testFullConstructor()
     {
-        $mediaType = MediaType::create('text', 'plain', array('q' => 0.5, 'encoding' => 'UTF-8'));
+        $mediaType = MediaType::of('text', 'plain', ['q' => 0.5, 'encoding' => 'UTF-8']);
 
         $this->assertEquals('text/plain; q=0.5; encoding=UTF-8', $mediaType->toString());
     }
 
     public function testToString()
     {
-        $mediaType = new MediaType('text/plain');
+        $mediaType = MediaType::parse('text/plain');
 
         $this->assertEquals('text/plain', (string) $mediaType);
     }
@@ -172,7 +172,7 @@ class MediaTypeTest extends TestCase
 
         foreach ($elements as $element) {
             if ($element->getAttribute('type') == 'template') {
-                $mediaType = new MediaType($element->textContent);
+                $mediaType = MediaType::parse($element->textContent);
 
                 $this->assertNotEmpty($mediaType->getType());
                 $this->assertNotEmpty($mediaType->getSubType());

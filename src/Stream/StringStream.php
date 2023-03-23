@@ -119,8 +119,8 @@ class StringStream implements StreamInterface
     {
         if ($this->isWritable()) {
             $length = mb_strlen($string);
-            $pre    = mb_substr($this->data, 0, $this->pointer);
-            $post   = mb_substr($this->data, $this->pointer + $length);
+            $pre    = mb_substr($this->data ?? '', 0, $this->pointer);
+            $post   = mb_substr($this->data ?? '', $this->pointer + $length);
 
             $this->data = $pre . $string . $post;
 
@@ -141,7 +141,7 @@ class StringStream implements StreamInterface
     public function read($length)
     {
         if ($this->isReadable()) {
-            $data = mb_substr($this->data, $this->pointer, $length);
+            $data = mb_substr($this->data ?? '', $this->pointer, $length);
 
             $this->pointer+= $length;
 

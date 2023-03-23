@@ -116,8 +116,8 @@ class Request extends Message implements RequestInterface
      */
     public function toString(): string
     {
-        $request = Parser\RequestParser::buildStatusLine($this) . Http::NEW_LINE;
-        $headers = Parser\RequestParser::buildHeaderFromMessage($this);
+        $request = StringBuilder::requestStatusLine($this) . Http::NEW_LINE;
+        $headers = StringBuilder::headerFromMessage($this);
 
         foreach ($headers as $header) {
             $request.= $header . Http::NEW_LINE;

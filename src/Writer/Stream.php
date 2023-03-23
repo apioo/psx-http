@@ -39,7 +39,7 @@ class Stream extends Writer
 
     public function writeTo(ResponseInterface $response): void
     {
-        $response->setHeader('Content-Type', $this->contentType);
+        $response->setHeader('Content-Type', $this->contentType ?? '');
         $response->getBody()->write($this->data->__toString());
     }
 }

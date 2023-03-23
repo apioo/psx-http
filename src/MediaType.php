@@ -46,15 +46,17 @@ class MediaType
     private string $type;
     private string $subType;
     private array $parameters;
-    private ?float $quality = null;
+    private float $quality = 1;
 
-    public function __construct(string $mediaType)
+    private function __construct(string $type, string $subType, array $parameters = [])
     {
-        $this->type = '';
-        $this->subType = '';
-        $this->parameters = [];
+        $this->type = $type;
+        $this->subType = $subType;
+        $this->parameters = $parameters;
 
-        $this->parse($mediaType);
+        if (isset($parameters['q'])) {
+            $this->quality = $this->parseQuality($parameters['q']);
+        }
     }
 
     public function getType(): string
@@ -77,7 +79,7 @@ class MediaType
         return $this->quality;
     }
 
-    public function getParameter($name): ?string
+    public function getParameter(string $name): ?string
     {
         return $this->parameters[$name] ?? null;
     }
@@ -118,7 +120,25 @@ class MediaType
             ($this->type == $mediaType->getType() && $this->subType == '*');
     }
 
-    protected function parse(string $mime)
+    private function parseQuality(mixed $quality): float
+    {
+        if (!empty($quality)) {
+            $q = (float) $quality;
+
+            if ($q >= 0 && $q <= 1) {
+                return $q;
+            }
+        }
+
+        return 1;
+    }
+
+    public static function of(string $type, string $subType, array $parameters = []): self
+    {
+        return new self($type, $subType, $parameters);
+    }
+
+    public static function parse(string $mime): self
     {
         $result = preg_match('/^' . self::getPattern() . '$/i', $mime, $matches);
         if (!$result) {
@@ -127,6 +147,10 @@ class MediaType
 
         $type = isset($matches[1]) ? strtolower($matches[1]) : null;
         $subType = isset($matches[2]) ? strtolower($matches[2]) : null;
+
+        if (empty($type) || empty($subType)) {
+            throw new InvalidArgumentException('Invalid media type given');
+        }
 
         if ($type != '*' && !in_array($type, self::TOP_LEVEL_MEDIA_TYPES)) {
             throw new InvalidArgumentException('Invalid media type given');
@@ -140,7 +164,7 @@ class MediaType
             foreach ($parts as $part) {
                 $kv    = explode('=', $part, 2);
                 $key   = trim($kv[0]);
-                $value = isset($kv[1]) ? trim($kv[1]) : null;
+                $value = isset($kv[1]) ? trim($kv[1]) : '';
 
                 if (!empty($key)) {
                     $parameters[$key] = trim($value, '"');
@@ -148,28 +172,10 @@ class MediaType
             }
         }
 
-        $this->type = $type;
-        $this->subType = $subType;
-        $this->parameters = $parameters;
-
-        $this->parseQuality($parameters['q'] ?? null);
+        return new self($type, $subType, $parameters);
     }
 
-    protected function parseQuality($quality)
-    {
-        if (!empty($quality)) {
-            $q = (float) $quality;
-
-            if ($q >= 0 && $q <= 1) {
-                $this->quality = $q;
-                return;
-            }
-        }
-
-        $this->quality = 1;
-    }
-
-    public static function parseList($mimeList): array
+    public static function parseList(string $mimeList): array
     {
         $types  = explode(',', $mimeList);
         $result = array();
@@ -179,7 +185,7 @@ class MediaType
 
         foreach ($types as $key => $mime) {
             try {
-                $mediaType = new self(trim($mime));
+                $mediaType = self::parse(trim($mime));
 
                 $sortQuality[] = $mediaType->getQuality();
                 $sortIndex[]   = $key;
@@ -192,19 +198,6 @@ class MediaType
         array_multisort($sortQuality, SORT_DESC, $sortIndex, SORT_ASC, $result);
 
         return $result;
-    }
-
-    public static function create(string $type, ?string $subType = null, ?array $parameters = null): self
-    {
-        $mediaType = $type . '/' . (!empty($subType) ? $subType : '*');
-
-        if (!empty($parameters)) {
-            foreach ($parameters as $key => $value) {
-                $mediaType .= '; ' . $key . '=' . $value;
-            }
-        }
-
-        return new self($mediaType);
     }
 
     public static function getPattern(): string

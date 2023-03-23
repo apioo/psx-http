@@ -37,7 +37,7 @@ class XmlTest extends TestCase
      */
     public function testIsMediaType($mime, $expected)
     {
-        $this->assertSame($expected, MediaType\Xml::isMediaType(new MediaType($mime)));
+        $this->assertSame($expected, MediaType\Xml::isMediaType(MediaType::parse($mime)));
     }
 
     public function mediaTypeProvider()

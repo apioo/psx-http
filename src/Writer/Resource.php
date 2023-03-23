@@ -46,7 +46,7 @@ class Resource extends Writer
      */
     public function writeTo(ResponseInterface $response): void
     {
-        $response->setHeader('Content-Type', $this->contentType);
+        $response->setHeader('Content-Type', $this->contentType ?? '');
         $response->getBody()->write(stream_get_contents($this->data, -1, 0));
     }
 }

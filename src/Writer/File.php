@@ -59,7 +59,7 @@ class File extends Writer
             $contentType = \mime_content_type($file);
         }
 
-        $response->setHeader('Content-Type', $contentType);
+        $response->setHeader('Content-Type', $contentType ?? '');
         $response->setHeader('Content-Disposition', 'attachment; filename="' . addcslashes($fileName, '"') . '"');
         $response->getBody()->write(file_get_contents($file));
     }
