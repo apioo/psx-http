@@ -29,7 +29,7 @@ use InvalidArgumentException;
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://phpsx.org
  */
-class MediaType
+class MediaType implements \JsonSerializable, \Stringable
 {
     protected const TOP_LEVEL_MEDIA_TYPES = [
         'application',
@@ -106,6 +106,11 @@ class MediaType
     }
 
     public function __toString()
+    {
+        return $this->toString();
+    }
+
+    public function jsonSerialize(): string
     {
         return $this->toString();
     }
