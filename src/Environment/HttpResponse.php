@@ -60,4 +60,11 @@ class HttpResponse implements HttpResponseInterface
     {
         return $this->body;
     }
+
+    public function withBody(mixed $body): self
+    {
+        $me = clone $this;
+        $me->body = $body;
+        return $me;
+    }
 }
