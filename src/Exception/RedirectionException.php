@@ -34,16 +34,16 @@ namespace PSX\Http\Exception;
  */
 class RedirectionException extends StatusCodeException
 {
-    protected $location;
+    private ?string $location;
 
-    public function __construct($statusCode, $location = null, \Throwable $previous = null)
+    public function __construct(int $statusCode, ?string $location = null, \Throwable $previous = null)
     {
         parent::__construct('Redirect exception', $statusCode, $previous);
 
         $this->location = $location;
     }
 
-    public function getLocation()
+    public function getLocation(): ?string
     {
         return $this->location;
     }

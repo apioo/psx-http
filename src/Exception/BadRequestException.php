@@ -21,8 +21,9 @@
 namespace PSX\Http\Exception;
 
 /**
- * The request could not be understood by the server due to malformed syntax.
- * The client SHOULD NOT repeat the request without modifications.
+ * The HyperText Transfer Protocol (HTTP) 400 Bad Request response status code indicates that the server cannot or will
+ * not process the request due to something that is perceived to be a client error (for example, malformed request
+ * syntax, invalid request message framing, or deceptive request routing).
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
@@ -30,7 +31,7 @@ namespace PSX\Http\Exception;
  */
 class BadRequestException extends ClientErrorException
 {
-    public function __construct($message, \Throwable $previous = null)
+    public function __construct(string $message, \Throwable $previous = null)
     {
         parent::__construct($message, 400, $previous);
     }

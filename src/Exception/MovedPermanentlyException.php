@@ -21,11 +21,9 @@
 namespace PSX\Http\Exception;
 
 /**
- * The requested resource has been assigned a new permanent URI and any future
- * references to this resource SHOULD use one of the returned URIs. Clients with
- * link editing capabilities ought to automatically re-link references to the
- * Request-URI to one or more of the new references returned by the server,
- * where possible. This response is cacheable unless indicated otherwise.
+ * The HyperText Transfer Protocol (HTTP) 301 Moved Permanently redirect status response code indicates that the
+ * requested resource has been definitively moved to the URL given by the Location headers. A browser redirects to the
+ * new URL and search engines update their links to the resource.
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
@@ -33,7 +31,7 @@ namespace PSX\Http\Exception;
  */
 class MovedPermanentlyException extends RedirectionException
 {
-    public function __construct($location, \Throwable $previous = null)
+    public function __construct(string $location, \Throwable $previous = null)
     {
         parent::__construct(301, $location, $previous);
     }

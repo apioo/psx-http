@@ -21,19 +21,21 @@
 namespace PSX\Http\Exception;
 
 /**
- * The HyperText Transfer Protocol (HTTP) 412 Precondition Failed client error response code indicates that access to
- * the target resource has been denied. This happens with conditional requests on methods other than GET or HEAD when
- * the condition defined by the If-Unmodified-Since or If-None-Match headers is not fulfilled. In that case, the
- * request, usually an upload or a modification of a resource, cannot be made and this error response is sent back.
+ * The HTTP 402 Payment Required is a nonstandard response status code that is reserved for future use. This status code
+ * was created to enable digital cash or (micro) payment systems and would indicate that the requested content is not
+ * available until the client makes a payment.
+ *
+ * Sometimes, this status code indicates that the request cannot be processed until the client makes a payment. However,
+ * no standard use convention exists and different entities use it in different contexts.
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://phpsx.org
  */
-class PreconditionFailedException extends ClientErrorException
+class PaymentRequiredException extends ClientErrorException
 {
     public function __construct(string $message, \Throwable $previous = null)
     {
-        parent::__construct($message, 412, $previous);
+        parent::__construct($message, 402, $previous);
     }
 }

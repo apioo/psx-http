@@ -21,12 +21,11 @@
 namespace PSX\Http\Exception;
 
 /**
- * The server understood the request, but is refusing to fulfill it.
- * Authorization will not help and the request SHOULD NOT be repeated. If the
- * request method was not HEAD and the server wishes to make public why the
- * request has not been fulfilled, it SHOULD describe the reason for the refusal
- * in the entity. If the server does not wish to make this information available
- * to the client, the status code 404 (Not Found) can be used instead.
+ * The HTTP 403 Forbidden response status code indicates that the server understands the request but refuses to
+ * authorize it.
+ *
+ * This status is similar to 401, but for the 403 Forbidden status code, re-authenticating makes no difference. The
+ * access is tied to the application logic, such as insufficient rights to a resource.
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
@@ -34,7 +33,7 @@ namespace PSX\Http\Exception;
  */
 class ForbiddenException extends ClientErrorException
 {
-    public function __construct($message, \Throwable $previous = null)
+    public function __construct(string $message, \Throwable $previous = null)
     {
         parent::__construct($message, 403, $previous);
     }

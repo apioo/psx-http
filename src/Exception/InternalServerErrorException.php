@@ -21,8 +21,12 @@
 namespace PSX\Http\Exception;
 
 /**
- * The server encountered an unexpected condition which prevented it from
- * fulfilling the request.
+ * The HyperText Transfer Protocol (HTTP) 500 Internal Server Error server error response code indicates that the server
+ * encountered an unexpected condition that prevented it from fulfilling the request.
+ *
+ * This error response is a generic "catch-all" response. Usually, this indicates the server cannot find a better 5xx
+ * error code to response. Sometimes, server administrators log error responses like the 500 status code with more
+ * details about the request to prevent the error from happening again in the future.
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
@@ -30,7 +34,7 @@ namespace PSX\Http\Exception;
  */
 class InternalServerErrorException extends ServerErrorException
 {
-    public function __construct($message, \Throwable $previous = null)
+    public function __construct(string $message, \Throwable $previous = null)
     {
         parent::__construct($message, 500, $previous);
     }

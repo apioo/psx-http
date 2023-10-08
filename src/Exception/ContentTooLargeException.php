@@ -21,19 +21,17 @@
 namespace PSX\Http\Exception;
 
 /**
- * The HyperText Transfer Protocol (HTTP) 412 Precondition Failed client error response code indicates that access to
- * the target resource has been denied. This happens with conditional requests on methods other than GET or HEAD when
- * the condition defined by the If-Unmodified-Since or If-None-Match headers is not fulfilled. In that case, the
- * request, usually an upload or a modification of a resource, cannot be made and this error response is sent back.
+ * The HTTP 413 Content Too Large response status code indicates that the request entity is larger than limits defined
+ * by server; the server might close the connection or return a Retry-After header field.
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://phpsx.org
  */
-class PreconditionFailedException extends ClientErrorException
+class ContentTooLargeException extends ClientErrorException
 {
     public function __construct(string $message, \Throwable $previous = null)
     {
-        parent::__construct($message, 412, $previous);
+        parent::__construct($message, 413, $previous);
     }
 }

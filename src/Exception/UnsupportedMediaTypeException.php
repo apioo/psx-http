@@ -21,9 +21,11 @@
 namespace PSX\Http\Exception;
 
 /**
- * The server is refusing to service the request because the entity of the
- * request is in a format not supported by the requested resource for the
- * requested method.
+ * The HTTP 415 Unsupported Media Type client error response code indicates that the server refuses to accept the
+ * request because the payload format is in an unsupported format.
+ *
+ * The format problem might be due to the request's indicated Content-Type or Content-Encoding, or as a result of
+ * inspecting the data directly.
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
@@ -31,7 +33,7 @@ namespace PSX\Http\Exception;
  */
 class UnsupportedMediaTypeException extends ClientErrorException
 {
-    public function __construct($message, \Throwable $previous = null)
+    public function __construct(string $message, \Throwable $previous = null)
     {
         parent::__construct($message, 415, $previous);
     }

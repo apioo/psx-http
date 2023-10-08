@@ -21,19 +21,18 @@
 namespace PSX\Http\Exception;
 
 /**
- * The HyperText Transfer Protocol (HTTP) 412 Precondition Failed client error response code indicates that access to
- * the target resource has been denied. This happens with conditional requests on methods other than GET or HEAD when
- * the condition defined by the If-Unmodified-Since or If-None-Match headers is not fulfilled. In that case, the
- * request, usually an upload or a modification of a resource, cannot be made and this error response is sent back.
+ * The HyperText Transfer Protocol (HTTP) 451 Unavailable For Legal Reasons client error response code indicates that
+ * the user requested a resource that is not available due to legal reasons, such as a web page for which a legal action
+ * has been issued.
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://phpsx.org
  */
-class PreconditionFailedException extends ClientErrorException
+class UnavailableForLegalReasonsException extends ClientErrorException
 {
     public function __construct(string $message, \Throwable $previous = null)
     {
-        parent::__construct($message, 412, $previous);
+        parent::__construct($message, 451, $previous);
     }
 }

@@ -21,19 +21,20 @@
 namespace PSX\Http\Exception;
 
 /**
- * The HyperText Transfer Protocol (HTTP) 412 Precondition Failed client error response code indicates that access to
- * the target resource has been denied. This happens with conditional requests on methods other than GET or HEAD when
- * the condition defined by the If-Unmodified-Since or If-None-Match headers is not fulfilled. In that case, the
- * request, usually an upload or a modification of a resource, cannot be made and this error response is sent back.
+ * The HTTP 407 Proxy Authentication Required client error status response code indicates that the request has not been
+ * applied because it lacks valid authentication credentials for a proxy server that is between the browser and the
+ * server that can access the requested resource.
+ *
+ * This status is sent with a Proxy-Authenticate header that contains information on how to authorize correctly.
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://phpsx.org
  */
-class PreconditionFailedException extends ClientErrorException
+class ProxyAuthenticationRequiredException extends ClientErrorException
 {
     public function __construct(string $message, \Throwable $previous = null)
     {
-        parent::__construct($message, 412, $previous);
+        parent::__construct($message, 407, $previous);
     }
 }

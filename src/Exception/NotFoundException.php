@@ -21,13 +21,11 @@
 namespace PSX\Http\Exception;
 
 /**
- * The server has not found anything matching the Request-URI. No indication is
- * given of whether the condition is temporary or permanent. The 410 (Gone)
- * status code SHOULD be used if the server knows, through some internally
- * configurable mechanism, that an old resource is permanently unavailable and
- * has no forwarding address. This status code is commonly used when the server
- * does not wish to reveal exactly why the request has been refused, or when no
- * other response is applicable.
+ * The HTTP 404 Not Found response status code indicates that the server cannot find the requested resource. Links that
+ * lead to a 404 page are often called broken or dead links and can be subject to link rot.
+ *
+ * A 404 status code only indicates that the resource is missing: not whether the absence is temporary or permanent. If
+ * a resource is permanently removed, use the 410 (Gone) status instead.
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
@@ -35,7 +33,7 @@ namespace PSX\Http\Exception;
  */
 class NotFoundException extends ClientErrorException
 {
-    public function __construct($message, \Throwable $previous = null)
+    public function __construct(string $message, \Throwable $previous = null)
     {
         parent::__construct($message, 404, $previous);
     }

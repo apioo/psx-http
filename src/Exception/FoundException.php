@@ -21,10 +21,15 @@
 namespace PSX\Http\Exception;
 
 /**
- * The requested resource resides temporarily under a different URI. Since the
- * redirection might be altered on occasion, the client SHOULD continue to use
- * the Request-URI for future requests. This response is only cacheable if
- * indicated by a Cache-Control or Expires header field.
+ * The HyperText Transfer Protocol (HTTP) 302 Found redirect status response code indicates that the resource requested
+ * has been temporarily moved to the URL given by the Location header. A browser redirects to this page but search
+ * engines don't update their links to the resource (in 'SEO-speak', it is said that the 'link-juice' is not sent to the
+ * new URL).
+ *
+ * Even if the specification requires the method (and the body) not to be altered when the redirection is performed, not
+ * all user-agents conform here - you can still find this type of bugged software out there. It is therefore recommended
+ * to set the 302 code only as a response for GET or HEAD methods and to use 307 Temporary Redirect instead, as the
+ * method change is explicitly prohibited in that case.
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
@@ -32,7 +37,7 @@ namespace PSX\Http\Exception;
  */
 class FoundException extends RedirectionException
 {
-    public function __construct($location, \Throwable $previous = null)
+    public function __construct(string $location, \Throwable $previous = null)
     {
         parent::__construct(302, $location, $previous);
     }

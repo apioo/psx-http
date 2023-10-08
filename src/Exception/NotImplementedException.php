@@ -21,9 +21,8 @@
 namespace PSX\Http\Exception;
 
 /**
- * The server does not support the functionality required to fulfill the
- * request. This is the appropriate response when the server does not recognize
- * the request method and is not capable of supporting it for any resource.
+ * The HyperText Transfer Protocol (HTTP) 501 Not Implemented server error response code means that the server does not
+ * support the functionality required to fulfill the request.
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
@@ -31,7 +30,7 @@ namespace PSX\Http\Exception;
  */
 class NotImplementedException extends ServerErrorException
 {
-    public function __construct($message, \Throwable $previous = null)
+    public function __construct(string $message, \Throwable $previous = null)
     {
         parent::__construct($message, 501, $previous);
     }

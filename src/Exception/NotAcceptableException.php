@@ -21,9 +21,9 @@
 namespace PSX\Http\Exception;
 
 /**
- * The resource identified by the request is only capable of generating response
- * entities which have content characteristics not acceptable according to the
- * accept headers sent in the request.
+ * The HyperText Transfer Protocol (HTTP) 406 Not Acceptable client error response code indicates that the server cannot
+ * produce a response matching the list of acceptable values defined in the request's proactive content negotiation
+ * headers, and that the server is unwilling to supply a default representation.
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
@@ -31,7 +31,7 @@ namespace PSX\Http\Exception;
  */
 class NotAcceptableException extends ClientErrorException
 {
-    public function __construct($message, \Throwable $previous = null)
+    public function __construct(string $message, \Throwable $previous = null)
     {
         parent::__construct($message, 406, $previous);
     }

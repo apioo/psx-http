@@ -21,19 +21,17 @@
 namespace PSX\Http\Exception;
 
 /**
- * The HyperText Transfer Protocol (HTTP) 412 Precondition Failed client error response code indicates that access to
- * the target resource has been denied. This happens with conditional requests on methods other than GET or HEAD when
- * the condition defined by the If-Unmodified-Since or If-None-Match headers is not fulfilled. In that case, the
- * request, usually an upload or a modification of a resource, cannot be made and this error response is sent back.
- *
+ * The HTTP 423 Locked error response code indicates that either the resources tentatively targeted by is locked,
+ * meaning it can't be accessed. Its content should contain some information in WebDAV's XML format.
+ * 
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://phpsx.org
  */
-class PreconditionFailedException extends ClientErrorException
+class LockedException extends ClientErrorException
 {
     public function __construct(string $message, \Throwable $previous = null)
     {
-        parent::__construct($message, 412, $previous);
+        parent::__construct($message, 423, $previous);
     }
 }

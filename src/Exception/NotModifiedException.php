@@ -21,10 +21,10 @@
 namespace PSX\Http\Exception;
 
 /**
- * If the client has performed a conditional GET request and access is allowed,
- * but the document has not been modified, the server SHOULD respond with this
- * status code. The 304 response MUST NOT contain a message-body, and thus is
- * always terminated by the first empty line after the header fields.
+ * The HTTP 304 Not Modified client redirection response code indicates that there is no need to retransmit the
+ * requested resources. It is an implicit redirection to a cached resource. This happens when the request method is a
+ * safe method, such as GET or HEAD, or when the request is conditional and uses an If-None-Match or an
+ * If-Modified-Since header.
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0

@@ -21,13 +21,10 @@
 namespace PSX\Http\Exception;
 
 /**
- * The requested resource is no longer available at the server and no forwarding
- * address is known. This condition is expected to be considered permanent.
- * Clients with link editing capabilities SHOULD delete references to the
- * Request-URI after user approval. If the server does not know, or has no
- * facility to determine, whether or not the condition is permanent, the status
- * code 404 (Not Found) SHOULD be used instead. This response is cacheable
- * unless indicated otherwise.
+ * The HyperText Transfer Protocol (HTTP) 410 Gone client error response code indicates that access to the target
+ * resource is no longer available at the origin server and that this condition is likely to be permanent.
+ *
+ * If you don't know whether this condition is temporary or permanent, a 404 status code should be used instead.
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
@@ -35,7 +32,7 @@ namespace PSX\Http\Exception;
  */
 class GoneException extends ClientErrorException
 {
-    public function __construct($message, \Throwable $previous = null)
+    public function __construct(string $message, \Throwable $previous = null)
     {
         parent::__construct($message, 410, $previous);
     }

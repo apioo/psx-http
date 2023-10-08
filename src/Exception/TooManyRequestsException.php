@@ -21,19 +21,29 @@
 namespace PSX\Http\Exception;
 
 /**
- * The HyperText Transfer Protocol (HTTP) 412 Precondition Failed client error response code indicates that access to
- * the target resource has been denied. This happens with conditional requests on methods other than GET or HEAD when
- * the condition defined by the If-Unmodified-Since or If-None-Match headers is not fulfilled. In that case, the
- * request, usually an upload or a modification of a resource, cannot be made and this error response is sent back.
+ * The precondition given in one or more of the request-header fields evaluated 
+ * to false when it was tested on the server. This response code allows the 
+ * client to place preconditions on the current resource metainformation (header 
+ * field data) and thus prevent the requested method from being applied to a 
+ * resource other than the one intended.
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://phpsx.org
  */
-class PreconditionFailedException extends ClientErrorException
+class TooManyRequestsException extends ClientErrorException
 {
-    public function __construct(string $message, \Throwable $previous = null)
+    private int $retryAfter;
+
+    public function __construct(string $message, int $retryAfter, \Throwable $previous = null)
     {
-        parent::__construct($message, 412, $previous);
+        parent::__construct($message, 429, $previous);
+
+        $this->retryAfter = $retryAfter;
+    }
+
+    public function getRetryAfter(): int
+    {
+        return $this->retryAfter;
     }
 }

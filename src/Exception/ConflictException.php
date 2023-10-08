@@ -21,13 +21,11 @@
 namespace PSX\Http\Exception;
 
 /**
- * The request could not be completed due to a conflict with the current state
- * of the resource. This code is only allowed in situations where it is expected
- * that the user might be able to resolve the conflict and resubmit the request.
- * The response body SHOULD include enough information for the user to recognize
- * the source of the conflict. Ideally, the response entity would include enough
- * information for the user or user agent to fix the problem; however, that
- * might not be possible and is not required.
+ * The HTTP 409 Conflict response status code indicates a request conflict with the current state of the target
+ * resource.
+ *
+ * Conflicts are most likely to occur in response to a PUT request. For example, you may get a 409 response when
+ * uploading a file that is older than the existing one on the server, resulting in a version control conflict.
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
@@ -35,7 +33,7 @@ namespace PSX\Http\Exception;
  */
 class ConflictException extends ClientErrorException
 {
-    public function __construct($message, \Throwable $previous = null)
+    public function __construct(string $message, \Throwable $previous = null)
     {
         parent::__construct($message, 409, $previous);
     }

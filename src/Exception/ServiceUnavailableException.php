@@ -21,12 +21,12 @@
 namespace PSX\Http\Exception;
 
 /**
- * The server is currently unable to handle the request due to a temporary
- * overloading or maintenance of the server. The implication is that this is a
- * temporary condition which will be alleviated after some delay. If known, the
- * length of the delay MAY be indicated in a Retry-After header. If no
- * Retry-After is given, the client SHOULD handle the response as it would for a
- * 500 response.
+ * The HyperText Transfer Protocol (HTTP) 503 Service Unavailable server error response code indicates that the server
+ * is not ready to handle the request.
+ *
+ * Common causes are a server that is down for maintenance or that is overloaded. This response should be used for
+ * temporary conditions and the Retry-After HTTP header should, if possible, contain the estimated time for the recovery
+ * of the service.
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
@@ -34,7 +34,7 @@ namespace PSX\Http\Exception;
  */
 class ServiceUnavailableException extends ServerErrorException
 {
-    public function __construct($message, \Throwable $previous = null)
+    public function __construct(string $message, \Throwable $previous = null)
     {
         parent::__construct($message, 503, $previous);
     }

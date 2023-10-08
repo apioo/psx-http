@@ -21,9 +21,11 @@
 namespace PSX\Http\Exception;
 
 /**
- * The method specified in the Request-Line is not allowed for the resource
- * identified by the Request-URI. The response MUST include an Allow header
- * containing a list of valid methods for the requested resource.
+ * The HyperText Transfer Protocol (HTTP) 405 Method Not Allowed response status code indicates that the server knows
+ * the request method, but the target resource doesn't support this method.
+ *
+ * The server must generate an Allow header field in a 405 status code response. The field must contain a list of
+ * methods that the target resource currently supports.
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
@@ -31,16 +33,16 @@ namespace PSX\Http\Exception;
  */
 class MethodNotAllowedException extends ClientErrorException
 {
-    protected $allowedMethods;
+    private array $allowedMethods;
 
-    public function __construct($message, array $allowedMethods, \Throwable $previous = null)
+    public function __construct(string $message, array $allowedMethods, \Throwable $previous = null)
     {
         parent::__construct($message, 405, $previous);
 
         $this->allowedMethods = $allowedMethods;
     }
 
-    public function getAllowedMethods()
+    public function getAllowedMethods(): array
     {
         return $this->allowedMethods;
     }

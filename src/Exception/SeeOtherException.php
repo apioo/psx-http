@@ -21,12 +21,10 @@
 namespace PSX\Http\Exception;
 
 /**
- * The response to the request can be found under a different URI and SHOULD be
- * retrieved using a GET method on that resource. This method exists primarily
- * to allow the output of a POST-activated script to redirect the user agent to
- * a selected resource. The new URI is not a substitute reference for the
- * originally requested resource. The 303 response MUST NOT be cached, but the
- * response to the second (redirected) request might be cacheable.
+ * The HyperText Transfer Protocol (HTTP) 303 See Other redirect status response code indicates that the redirects don't
+ * link to the requested resource itself, but to another page (such as a confirmation page, a representation of a
+ * real-world object — see HTTP range-14 — or an upload-progress page). This response code is often sent back as a
+ * result of PUT or POST. The method used to display this redirected page is always GET.
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
@@ -34,7 +32,7 @@ namespace PSX\Http\Exception;
  */
 class SeeOtherException extends RedirectionException
 {
-    public function __construct($location, \Throwable $previous = null)
+    public function __construct(string $location, \Throwable $previous = null)
     {
         parent::__construct(303, $location, $previous);
     }
