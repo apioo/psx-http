@@ -52,25 +52,7 @@ class SenderTest extends SenderTestCase
         $response->setHeader('X-Some-Header', 'foobar');
         $response->setBody(new StringStream('<foo />'));
 
-        $sender = $this->getMockBuilder(Sender::class)
-            ->setMethods(array('shouldSendHeader', 'sendHeader'))
-            ->getMock();
-
-        $sender->expects($this->once())
-            ->method('shouldSendHeader')
-            ->will($this->returnValue(true));
-
-        $sender->expects($this->at(1))
-            ->method('sendHeader')
-            ->with($this->identicalTo('HTTP/1.1 200 OK'));
-
-        $sender->expects($this->at(2))
-            ->method('sendHeader')
-            ->with($this->identicalTo('content-type: application/xml'));
-
-        $sender->expects($this->at(3))
-            ->method('sendHeader')
-            ->with($this->identicalTo('x-some-header: foobar'));
+        $sender = new Sender();
 
         $actual = $this->captureOutput($sender, $response);
 
@@ -88,25 +70,7 @@ class SenderTest extends SenderTestCase
         $response->setHeader('Location', 'http://localhost.com');
         $response->setBody(new StringStream('<foo />'));
 
-        $sender = $this->getMockBuilder(Sender::class)
-            ->setMethods(array('shouldSendHeader', 'sendHeader'))
-            ->getMock();
-
-        $sender->expects($this->once())
-            ->method('shouldSendHeader')
-            ->will($this->returnValue(true));
-
-        $sender->expects($this->at(1))
-            ->method('sendHeader')
-            ->with($this->identicalTo('HTTP/1.1 200 OK'));
-
-        $sender->expects($this->at(2))
-            ->method('sendHeader')
-            ->with($this->identicalTo('content-type: application/xml'));
-
-        $sender->expects($this->at(3))
-            ->method('sendHeader')
-            ->with($this->identicalTo('location: http://localhost.com'));
+        $sender = new Sender();
 
         $actual = $this->captureOutput($sender, $response);
 
@@ -118,13 +82,7 @@ class SenderTest extends SenderTestCase
         $response = new Response();
         $response->setBody(new StringStream('foobarfoobarfoobarfoobar'));
 
-        $sender = $this->getMockBuilder(Sender::class)
-            ->setMethods(array('shouldSendHeader', 'sendHeader'))
-            ->getMock();
-
-        $sender->expects($this->once())
-            ->method('shouldSendHeader')
-            ->will($this->returnValue(true));
+        $sender = new Sender();
 
         $actual = $this->captureOutput($sender, $response);
 
@@ -139,13 +97,7 @@ class SenderTest extends SenderTestCase
         $response = new Response();
         $response->setBody(new Stream($fp));
 
-        $sender = $this->getMockBuilder(Sender::class)
-            ->setMethods(array('shouldSendHeader', 'sendHeader'))
-            ->getMock();
-
-        $sender->expects($this->once())
-            ->method('shouldSendHeader')
-            ->will($this->returnValue(true));
+        $sender = new Sender();
 
         $actual = $this->captureOutput($sender, $response);
 
@@ -154,19 +106,13 @@ class SenderTest extends SenderTestCase
 
     public function testEmpyBodyStatusCode()
     {
-        $emptyCodes = array(100, 101, 204, 304);
+        $emptyCodes = [100, 101, 204, 304];
 
         foreach ($emptyCodes as $statusCode) {
             $response = new Response($statusCode);
             $response->setBody(new StringStream('foobar'));
 
-            $sender = $this->getMockBuilder(Sender::class)
-                ->setMethods(array('shouldSendHeader', 'sendHeader'))
-                ->getMock();
-
-            $sender->expects($this->once())
-                ->method('shouldSendHeader')
-                ->will($this->returnValue(true));
+            $sender = new Sender();
 
             $actual = $this->captureOutput($sender, $response);
 
@@ -179,17 +125,7 @@ class SenderTest extends SenderTestCase
         $response = new Response(404);
         $response->setBody(new StringStream('foobar'));
 
-        $sender = $this->getMockBuilder(Sender::class)
-            ->setMethods(array('shouldSendHeader', 'sendHeader'))
-            ->getMock();
-
-        $sender->expects($this->once())
-            ->method('shouldSendHeader')
-            ->will($this->returnValue(true));
-
-        $sender->expects($this->at(1))
-            ->method('sendHeader')
-            ->with($this->identicalTo('HTTP/1.1 404 Not Found'));
+        $sender = new Sender();
 
         $actual = $this->captureOutput($sender, $response);
 

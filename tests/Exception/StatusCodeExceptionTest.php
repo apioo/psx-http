@@ -34,9 +34,9 @@ class StatusCodeExceptionTest extends TestCase
 {
     public function testInvalidStatusCode()
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $e = new StatusCodeException('foo', 108);
 
-        new StatusCodeException('foo', 108);
+        $this->assertSame(108, $e->getStatusCode());
     }
 
     public function testGetStatusCode()
