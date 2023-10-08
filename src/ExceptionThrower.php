@@ -105,15 +105,15 @@ class ExceptionThrower
     public static function throwOnClientError(ResponseInterface $response): void
     {
         $code = $response->getStatusCode();
-        $message = $response->getReasonPhrase();
+        $message = $response->getReasonPhrase() ?? '';
 
         switch ($code) {
             case 400:
                 throw new BadRequestException($message);
             case 401:
                 $parts = explode(' ', $response->getHeader('WWW-Authenticate'), 2);
-                $type  = $parts[0] ?? null;
-                $data  = $parts[1] ?? null;
+                $type  = $parts[0] ?? '';
+                $data  = $parts[1] ?? '';
 
                 $params = [];
                 if (!empty($data)) {
@@ -152,7 +152,7 @@ class ExceptionThrower
     public static function throwOnServerError(ResponseInterface $response): void
     {
         $code = $response->getStatusCode();
-        $message = $response->getReasonPhrase();
+        $message = $response->getReasonPhrase() ?? '';
 
         switch ($code) {
             case 500:
