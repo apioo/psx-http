@@ -26,6 +26,8 @@ namespace PSX\Http\Stream;
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://phpsx.org
+ *
+ * @implements \IteratorAggregate<FileStream|string>
  */
 class MultipartStream extends StringStream implements \Countable, \IteratorAggregate
 {

@@ -37,6 +37,10 @@ use PSX\Uri\Uri;
 class RequestFactory implements RequestFactoryInterface
 {
     private ?string $baseUri;
+
+    /**
+     * @var array<string, string>
+     */
     private array $server;
 
     public function __construct(?string $baseUri = null, ?array $server = null)
@@ -137,11 +141,11 @@ class RequestFactory implements RequestFactoryInterface
      */
     protected function getRequestHeaders(): array
     {
-        $contentKeys = array('CONTENT_LENGTH' => true, 'CONTENT_MD5' => true, 'CONTENT_TYPE' => true);
-        $headers     = array();
+        $contentKeys = ['CONTENT_LENGTH' => true, 'CONTENT_MD5' => true, 'CONTENT_TYPE' => true];
+        $headers = [];
 
         foreach ($this->server as $key => $value) {
-            if (strpos($key, 'HTTP_') === 0) {
+            if (str_starts_with($key, 'HTTP_')) {
                 $headers[str_replace('_', '-', substr($key, 5))] = $value;
             } elseif (isset($contentKeys[$key])) {
                 $headers[str_replace('_', '-', $key)] = $value;
@@ -152,7 +156,7 @@ class RequestFactory implements RequestFactoryInterface
             if (isset($this->server['REDIRECT_HTTP_AUTHORIZATION'])) {
                 $headers['AUTHORIZATION'] = $this->server['REDIRECT_HTTP_AUTHORIZATION'];
             } elseif (isset($this->server['PHP_AUTH_USER'])) {
-                $headers['AUTHORIZATION'] = 'Basic ' . base64_encode($this->server['PHP_AUTH_USER'] . ':' . (isset($this->server['PHP_AUTH_PW']) ? $this->server['PHP_AUTH_PW'] : ''));
+                $headers['AUTHORIZATION'] = 'Basic ' . base64_encode($this->server['PHP_AUTH_USER'] . ':' . ($this->server['PHP_AUTH_PW'] ?? ''));
             } elseif (isset($this->server['PHP_AUTH_DIGEST'])) {
                 $headers['AUTHORIZATION'] = $this->server['PHP_AUTH_DIGEST'];
             }
