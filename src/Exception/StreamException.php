@@ -18,35 +18,17 @@
  * limitations under the License.
  */
 
-namespace PSX\Http\Writer;
+namespace PSX\Http\Exception;
 
-use InvalidArgumentException;
-use PSX\Http\ResponseInterface;
+use RuntimeException;
 
 /**
- * Resource
+ * StreamException
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
  * @link    https://phpsx.org
  */
-class Resource extends Writer
+class StreamException extends RuntimeException
 {
-    public function __construct($data, $contentType = 'application/octet-stream')
-    {
-        if (!is_resource($data)) {
-            throw new InvalidArgumentException('data must be a resource');
-        }
-
-        parent::__construct($data, $contentType);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function writeTo(ResponseInterface $response): void
-    {
-        $response->setHeader('Content-Type', $this->contentType ?? '');
-        $response->getBody()->write((string) stream_get_contents($this->data, -1, 0));
-    }
 }

@@ -45,7 +45,6 @@ class PathMatchTest extends FilterTestCase
         $response->setBody(new StringStream());
 
         $filter = $this->getMockBuilder(FilterInterface::class)
-            ->setMethods(array('handle'))
             ->getMock();
 
         $filter->expects($this->once())
@@ -63,7 +62,6 @@ class PathMatchTest extends FilterTestCase
         $response->setBody(new StringStream());
 
         $filter = $this->getMockBuilder(FilterInterface::class)
-            ->setMethods(array('handle'))
             ->getMock();
 
         $filter->expects($this->never())

@@ -43,7 +43,7 @@ class LazyStream implements StreamInterface
         $this->mode = $mode;
     }
 
-    protected function call()
+    protected function call(): void
     {
         if ($this->opened) {
             return;

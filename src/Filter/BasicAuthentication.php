@@ -60,7 +60,7 @@ class BasicAuthentication implements FilterInterface
             throw new BadRequestException('Invalid username or password');
         });
 
-        $this->onMissing(function (ResponseInterface $response) {
+        $this->onMissing(function () {
             $params = array(
                 'realm' => 'psx',
             );

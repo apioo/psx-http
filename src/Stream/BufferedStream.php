@@ -20,6 +20,7 @@
 
 namespace PSX\Http\Stream;
 
+use PSX\Http\Exception\StreamException;
 use PSX\Http\StreamInterface;
 
 /**
@@ -42,7 +43,7 @@ class BufferedStream implements StreamInterface
         $this->source = $stream;
     }
 
-    protected function call()
+    protected function call(): void
     {
         if ($this->filled) {
             return;
@@ -50,6 +51,9 @@ class BufferedStream implements StreamInterface
 
         $source = $this->source->detach();
         $buffer = fopen('php://temp', 'r+');
+        if ($buffer === false) {
+            throw new StreamException('Unable to open stream');
+        }
 
         if (is_resource($source)) {
             stream_copy_to_stream($source, $buffer, -1, 0);

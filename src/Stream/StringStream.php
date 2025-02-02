@@ -41,7 +41,7 @@ class StringStream implements StreamInterface
         $this->length = mb_strlen($data);
     }
 
-    public function close()
+    public function close(): void
     {
         $this->data   = null;
         $this->length = 0;
@@ -51,6 +51,10 @@ class StringStream implements StreamInterface
     {
         if ($this->data !== null) {
             $handle = fopen('php://memory', 'r+');
+            if ($handle === false) {
+                throw new \RuntimeException('Unable to open memory stream');
+            }
+
             fwrite($handle, $this->data);
             fseek($handle, 0);
 
@@ -62,17 +66,17 @@ class StringStream implements StreamInterface
         return null;
     }
 
-    public function getSize()
+    public function getSize(): ?int
     {
         return $this->length;
     }
 
-    public function tell()
+    public function tell(): int
     {
         return $this->pointer;
     }
 
-    public function eof()
+    public function eof(): bool
     {
         if ($this->data !== null) {
             return $this->pointer >= $this->length;
@@ -81,21 +85,19 @@ class StringStream implements StreamInterface
         return true;
     }
 
-    public function rewind()
+    public function rewind(): void
     {
         if ($this->data !== null) {
             $this->pointer = 0;
         }
-
-        return true;
     }
 
-    public function isSeekable()
+    public function isSeekable(): bool
     {
         return $this->data !== null;
     }
 
-    public function seek($offset, $whence = SEEK_SET)
+    public function seek(int $offset, int $whence = SEEK_SET): void
     {
         if ($this->isSeekable()) {
             if ($whence === SEEK_SET) {
@@ -106,16 +108,14 @@ class StringStream implements StreamInterface
                 $this->pointer = $this->length + $offset;
             }
         }
-
-        return false;
     }
 
-    public function isWritable()
+    public function isWritable(): bool
     {
         return $this->data !== null;
     }
 
-    public function write($string)
+    public function write(string $string): int
     {
         if ($this->isWritable()) {
             $length = mb_strlen($string);
@@ -133,12 +133,12 @@ class StringStream implements StreamInterface
         return 0;
     }
 
-    public function isReadable()
+    public function isReadable(): bool
     {
         return $this->data !== null;
     }
 
-    public function read($length)
+    public function read(int $length): string
     {
         if ($this->isReadable()) {
             $data = mb_substr($this->data ?? '', $this->pointer, $length);
@@ -151,7 +151,7 @@ class StringStream implements StreamInterface
         return '';
     }
 
-    public function getContents()
+    public function getContents(): string
     {
         if ($this->data === null) {
             return '';
@@ -164,12 +164,12 @@ class StringStream implements StreamInterface
         return $data;
     }
 
-    public function getMetadata($key = null)
+    public function getMetadata(?string $key = null): ?array
     {
         return $key === null ? array() : null;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         $this->pointer = $this->length;
 

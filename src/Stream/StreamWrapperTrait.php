@@ -33,7 +33,7 @@ trait StreamWrapperTrait
 {
     private StreamInterface $stream;
     
-    public function close()
+    public function close(): void
     {
         $this->call();
         
@@ -47,77 +47,77 @@ trait StreamWrapperTrait
         return $this->stream->detach();
     }
 
-    public function getSize()
+    public function getSize(): ?int
     {
         $this->call();
         
         return $this->stream->getSize();
     }
 
-    public function tell()
+    public function tell(): int
     {
         $this->call();
         
         return $this->stream->tell();
     }
 
-    public function eof()
+    public function eof(): bool
     {
         $this->call();
         
         return $this->stream->eof();
     }
 
-    public function rewind()
+    public function rewind(): void
     {
         $this->call();
-        
-        return $this->stream->rewind();
+
+        $this->stream->rewind();
     }
 
-    public function isSeekable()
+    public function isSeekable(): bool
     {
         $this->call();
         
         return $this->stream->isSeekable();
     }
 
-    public function seek($offset, $whence = SEEK_SET)
+    public function seek($offset, $whence = SEEK_SET): void
     {
         $this->call();
-        
-        return $this->stream->seek($offset, $whence);
+
+        $this->stream->seek($offset, $whence);
     }
 
-    public function isWritable()
+    public function isWritable(): bool
     {
         $this->call();
-        
+
         return $this->stream->isWritable();
     }
 
-    public function write($string)
+    public function write($string): int
     {
         $this->call();
-        
+
         return $this->stream->write($string);
     }
 
-    public function isReadable()
+    public function isReadable(): bool
     {
         $this->call();
         
         return $this->stream->isReadable();
     }
 
-    public function read($length)
+    public function read(int $length): string
     {
         $this->call();
         
         return $this->stream->read($length);
     }
 
-    public function getContents()
+    public function getContents(): string
     {
         $this->call();
         
@@ -131,7 +131,7 @@ trait StreamWrapperTrait
         return $this->stream->getMetadata($key);
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         $this->call();
 

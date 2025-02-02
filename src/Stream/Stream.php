@@ -21,6 +21,7 @@
 namespace PSX\Http\Stream;
 
 use InvalidArgumentException;
+use PSX\Http\Exception\StreamException;
 use PSX\Http\StreamInterface;
 
 /**
@@ -46,7 +47,7 @@ class Stream implements StreamInterface
         $this->setResource($resource);
     }
 
-    public function close()
+    public function close(): void
     {
         if ($this->resource) {
             fclose($this->resource);
@@ -65,10 +66,13 @@ class Stream implements StreamInterface
         return $handle;
     }
 
-    public function getSize()
+    public function getSize(): ?int
     {
         if ($this->resource) {
             $stat = fstat($this->resource);
+            if ($stat === false) {
+                throw new StreamException('Unable to get stats from stream');
+            }
 
             return $stat['size'] ?? null;
         }
@@ -76,16 +80,21 @@ class Stream implements StreamInterface
         return null;
     }
 
-    public function tell()
+    public function tell(): int
     {
         if ($this->resource) {
-            return ftell($this->resource);
+            $return = ftell($this->resource);
+            if ($return === false) {
+                throw new StreamException('Unable to tell the position from stream');
+            }
+
+            return $return;
         }
 
         return 0;
     }
 
-    public function eof()
+    public function eof(): bool
     {
         if ($this->resource) {
             return feof($this->resource);
@@ -94,58 +103,64 @@ class Stream implements StreamInterface
         return true;
     }
 
-    public function rewind()
+    public function rewind(): void
     {
         if ($this->resource) {
-            return rewind($this->resource);
+            rewind($this->resource);
         }
-
-        return true;
     }
 
-    public function isSeekable()
+    public function isSeekable(): bool
     {
         return $this->seekable;
     }
 
-    public function seek($offset, $whence = SEEK_SET)
+    public function seek(int $offset, int $whence = SEEK_SET): void
     {
         if ($this->resource && $this->seekable) {
-            return fseek($this->resource, $offset, $whence);
+            fseek($this->resource, $offset, $whence);
         }
-
-        return false;
     }
 
-    public function isWritable()
+    public function isWritable(): bool
     {
         return $this->writable;
     }
 
-    public function write($string)
+    public function write(string $string): int
     {
         if ($this->resource && $this->writable) {
-            return fwrite($this->resource, $string);
+            $result = fwrite($this->resource, $string);
+            if ($result === false) {
+                throw new StreamException('Unable to write stream');
+            }
+
+            return $result;
         }
 
         return 0;
     }
 
-    public function isReadable()
+    public function isReadable(): bool
     {
         return $this->readable;
     }
 
-    public function read($length)
+    public function read(int $length): string
     {
         if ($this->resource && $this->readable && $length > 0) {
-            return fread($this->resource, $length);
+            $content = fread($this->resource, $length);
+            if ($content === false) {
+                throw new StreamException('Unable to read stream');
+            }
+
+            return $content;
         }
 
         return '';
     }
 
-    public function getContents()
+    public function getContents(): string
     {
         if ($this->resource && $this->readable) {
             return (string) stream_get_contents($this->resource);
@@ -154,7 +169,7 @@ class Stream implements StreamInterface
         return '';
     }
 
-    public function getMetadata($key = null)
+    public function getMetadata(?string $key = null)
     {
         if ($this->resource) {
             $meta = stream_get_meta_data($this->resource);
@@ -162,14 +177,14 @@ class Stream implements StreamInterface
             if ($key === null) {
                 return $meta;
             } else {
-                return isset($meta[$key]) ? $meta[$key] : null;
+                return $meta[$key] ?? null;
             }
         }
 
         return $key === null ? array() : null;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         if ($this->resource && $this->readable) {
             return (string) stream_get_contents($this->resource, -1, 0);
@@ -178,7 +193,7 @@ class Stream implements StreamInterface
         return '';
     }
 
-    protected function setResource($resource)
+    protected function setResource($resource): void
     {
         $meta = stream_get_meta_data($resource);
         $mode = $meta['mode'] . ' ';

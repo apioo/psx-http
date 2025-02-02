@@ -50,7 +50,7 @@ class Backstage implements FilterInterface
 
         if (stripos($accept, 'text/html') !== false && is_file($this->file)) {
             $response->setHeader('Content-Type', 'text/html');
-            $response->getBody()->write(file_get_contents($this->file));
+            $response->getBody()->write((string) file_get_contents($this->file));
         } else {
             $filterChain->handle($request, $response);
         }

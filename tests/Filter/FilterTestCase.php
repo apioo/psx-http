@@ -44,7 +44,6 @@ abstract class FilterTestCase extends TestCase
     {
         $filterChain = $this->getMockBuilder(FilterChain::class)
             ->setConstructorArgs([[]])
-            ->setMethods(['handle'])
             ->getMock();
 
         if ($expectNextCall) {
