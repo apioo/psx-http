@@ -35,7 +35,7 @@ class MethodNotAllowedException extends ClientErrorException
 {
     private array $allowedMethods;
 
-    public function __construct(string $message, array $allowedMethods, \Throwable $previous = null)
+    public function __construct(string $message, array $allowedMethods, ?\Throwable $previous = null)
     {
         parent::__construct($message, 405, $previous);
 

@@ -40,7 +40,7 @@ namespace PSX\Http\Exception;
  */
 class TemporaryRedirectException extends RedirectionException
 {
-    public function __construct(string $location, \Throwable $previous = null)
+    public function __construct(string $location, ?\Throwable $previous = null)
     {
         parent::__construct(307, $location, $previous);
     }

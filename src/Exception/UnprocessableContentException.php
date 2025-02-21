@@ -31,7 +31,7 @@ namespace PSX\Http\Exception;
  */
 class UnprocessableContentException extends ClientErrorException
 {
-    public function __construct(string $message, \Throwable $previous = null)
+    public function __construct(string $message, ?\Throwable $previous = null)
     {
         parent::__construct($message, 422, $previous);
     }

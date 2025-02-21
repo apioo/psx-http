@@ -36,7 +36,7 @@ class RedirectionException extends StatusCodeException
 {
     private ?string $location;
 
-    public function __construct(int $statusCode, ?string $location = null, \Throwable $previous = null)
+    public function __construct(int $statusCode, ?string $location = null, ?\Throwable $previous = null)
     {
         parent::__construct('Redirect exception', $statusCode, $previous);
 

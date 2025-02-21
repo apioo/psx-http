@@ -37,7 +37,7 @@ namespace PSX\Http\Exception;
  */
 class FoundException extends RedirectionException
 {
-    public function __construct(string $location, \Throwable $previous = null)
+    public function __construct(string $location, ?\Throwable $previous = null)
     {
         parent::__construct(302, $location, $previous);
     }

@@ -35,7 +35,7 @@ namespace PSX\Http\Exception;
  */
 class PermanentRedirectException extends RedirectionException
 {
-    public function __construct(string $location, \Throwable $previous = null)
+    public function __construct(string $location, ?\Throwable $previous = null)
     {
         parent::__construct(308, $location, $previous);
     }

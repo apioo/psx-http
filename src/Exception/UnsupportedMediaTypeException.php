@@ -33,7 +33,7 @@ namespace PSX\Http\Exception;
  */
 class UnsupportedMediaTypeException extends ClientErrorException
 {
-    public function __construct(string $message, \Throwable $previous = null)
+    public function __construct(string $message, ?\Throwable $previous = null)
     {
         parent::__construct($message, 415, $previous);
     }

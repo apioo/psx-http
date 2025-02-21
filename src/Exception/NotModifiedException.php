@@ -32,7 +32,7 @@ namespace PSX\Http\Exception;
  */
 class NotModifiedException extends RedirectionException
 {
-    public function __construct(\Throwable $previous = null)
+    public function __construct(?\Throwable $previous = null)
     {
         parent::__construct(304, null, $previous);
     }

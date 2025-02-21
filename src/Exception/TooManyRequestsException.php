@@ -35,7 +35,7 @@ class TooManyRequestsException extends ClientErrorException
 {
     private int $retryAfter;
 
-    public function __construct(string $message, int $retryAfter, \Throwable $previous = null)
+    public function __construct(string $message, int $retryAfter, ?\Throwable $previous = null)
     {
         parent::__construct($message, 429, $previous);
 
