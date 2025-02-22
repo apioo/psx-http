@@ -35,14 +35,14 @@ class ResponseFactory implements ResponseFactoryInterface
 {
     private array $server;
 
-    public function __construct(array $server = null)
+    public function __construct(?array $server = null)
     {
         $this->server = $server === null ? $_SERVER : $server;
     }
 
     public function createResponse(): ResponseInterface
     {
-        $protocol = isset($this->server['SERVER_PROTOCOL']) ? $this->server['SERVER_PROTOCOL'] : 'HTTP/1.1';
+        $protocol = $this->server['SERVER_PROTOCOL'] ?? 'HTTP/1.1';
         $response = new Response();
         $response->setProtocolVersion($protocol);
         $response->setHeader('X-Powered-By', 'psx');
