@@ -22,6 +22,7 @@ namespace PSX\Http\Server;
 
 use PSX\Http\Http;
 use PSX\Http\ResponseInterface;
+use PSX\Http\Stream\Stream;
 use PSX\Http\Stream\StringStream;
 use PSX\Http\StringBuilder;
 
@@ -87,6 +88,15 @@ class Sender implements SenderInterface
 
     private function sendBody(ResponseInterface $response): void
     {
-        echo $response->getBody()->__toString();
+        $body = $response->getBody();
+        if ($body instanceof Stream) {
+            while (!$body->eof()) {
+                echo $body->read(8192);
+            }
+
+            $body->close();
+        } else {
+            echo $body->__toString();
+        }
     }
 }
