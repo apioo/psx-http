@@ -22,6 +22,7 @@ namespace PSX\Http\Writer;
 
 use InvalidArgumentException;
 use PSX\Http\ResponseInterface;
+use PSX\Http\Stream\Stream;
 
 /**
  * Resource
@@ -41,12 +42,9 @@ class Resource extends Writer
         parent::__construct($data, $contentType);
     }
 
-    /**
-     * @inheritdoc
-     */
     public function writeTo(ResponseInterface $response): void
     {
         $response->setHeader('Content-Type', $this->contentType ?? '');
-        $response->getBody()->write((string) stream_get_contents($this->data, -1, 0));
+        $response->setBody(new Stream($this->data));
     }
 }
