@@ -21,6 +21,8 @@
 namespace PSX\Http\Writer;
 
 use PSX\Http\ResponseInterface;
+use PSX\Http\Stream\Stream;
+use RuntimeException;
 
 /**
  * File
@@ -59,8 +61,18 @@ class File extends Writer
             $contentType = (string) \mime_content_type($file);
         }
 
-        $response->setHeader('Content-Type', $contentType ?? '');
+        $handler = fopen($file, 'rb');
+        if ($handler === false) {
+            throw new RuntimeException('Could not read file');
+        }
+
+        if (!empty($contentType)) {
+            $response->setHeader('Content-Type', $contentType);
+        } else {
+            $response->setHeader('Content-Type', 'application/octet-stream');
+        }
+
         $response->setHeader('Content-Disposition', 'attachment; filename="' . addcslashes($fileName, '"') . '"');
-        $response->getBody()->write((string) file_get_contents($file));
+        $response->setBody(new Stream($handler));
     }
 }
