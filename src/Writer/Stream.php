@@ -20,8 +20,8 @@
 
 namespace PSX\Http\Writer;
 
+use Psr\Http\Message\StreamInterface;
 use PSX\Http\ResponseInterface;
-use PSX\Http\StreamInterface;
 
 /**
  * Stream
@@ -40,6 +40,6 @@ class Stream extends Writer
     public function writeTo(ResponseInterface $response): void
     {
         $response->setHeader('Content-Type', $this->contentType ?? '');
-        $response->getBody()->write($this->data->__toString());
+        $response->setBody($this->data);
     }
 }
