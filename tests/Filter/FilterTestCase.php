@@ -27,7 +27,7 @@ use PSX\Http\RequestInterface;
 use PSX\Http\ResponseInterface;
 
 /**
- * CORSTest
+ * FilterTestCase
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.apache.org/licenses/LICENSE-2.0
