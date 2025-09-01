@@ -22,6 +22,7 @@ namespace PSX\Http\Tests\Filter;
 
 use PHPUnit\Framework\TestCase;
 use PSX\Http\Filter\FilterChain;
+use PSX\Http\FilterChainInterface;
 use PSX\Http\RequestInterface;
 use PSX\Http\ResponseInterface;
 
@@ -34,13 +35,7 @@ use PSX\Http\ResponseInterface;
  */
 abstract class FilterTestCase extends TestCase
 {
-    /**
-     * @param boolean $expectNextCall
-     * @param \PSX\Http\RequestInterface|null $expectRequest
-     * @param \PSX\Http\ResponseInterface|null $expectResponse
-     * @return \PSX\Http\FilterChainInterface
-     */
-    protected function getFilterChain($expectNextCall, RequestInterface $expectRequest = null, ResponseInterface $expectResponse = null)
+    protected function getFilterChain(bool $expectNextCall, ?RequestInterface $expectRequest = null, ?ResponseInterface $expectResponse = null): FilterChainInterface
     {
         $filterChain = $this->getMockBuilder(FilterChain::class)
             ->setConstructorArgs([[]])
