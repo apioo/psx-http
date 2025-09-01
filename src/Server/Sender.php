@@ -21,7 +21,9 @@
 namespace PSX\Http\Server;
 
 use PSX\Http\Http;
+use PSX\Http\MessageEvent;
 use PSX\Http\ResponseInterface;
+use PSX\Http\Stream\ServerSentEventStream;
 use PSX\Http\Stream\Stream;
 use PSX\Http\Stream\StringStream;
 use PSX\Http\StringBuilder;
@@ -90,11 +92,46 @@ class Sender implements SenderInterface
     {
         $body = $response->getBody();
         if ($body instanceof Stream) {
+            if ($body->isSeekable()) {
+                $body->seek(0);
+            }
+
             while (!$body->eof()) {
                 echo $body->read(8192);
             }
 
             $body->close();
+        } elseif ($body instanceof ServerSentEventStream) {
+            $producer = $body->getProducer();
+            foreach ($producer as $event) {
+                if (!$event instanceof MessageEvent) {
+                    continue;
+                }
+
+                if ($event->event !== null) {
+                    echo 'event: ' . $event->event . "\n";
+                }
+
+                echo 'data: ' . $event->data . "\n";
+
+                if ($event->id !== null) {
+                    echo 'id: ' . $event->id . "\n";
+                }
+
+                if ($event->retry !== null) {
+                    echo 'retry: ' . $event->retry . "\n";
+                }
+
+                echo "\n";
+
+                flush();
+
+                if (connection_aborted()) {
+                    break;
+                }
+
+                sleep(1);
+            }
         } else {
             echo $body->__toString();
         }
