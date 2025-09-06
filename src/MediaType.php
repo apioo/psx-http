@@ -105,7 +105,7 @@ class MediaType implements \JsonSerializable, \Stringable
         return $mediaType;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return $this->toString();
     }
