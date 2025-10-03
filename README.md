@@ -1,10 +1,10 @@
 
-# Http
-
-## About
+# HTTP
 
 This library contains elegant interfaces to describe HTTP message, middleware and client classes. It contains also
 corresponding reference implementations which can be used by every app which needs a solid HTTP stack.
+
+## Interfaces
 
 ### HTTP
 
