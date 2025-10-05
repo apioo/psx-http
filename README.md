@@ -8,23 +8,23 @@ corresponding reference implementations which can be used by every app which nee
 
 ### HTTP
 
-* [RequestInterface](./src/RequestInterface.php)
-* [ResponseInterface](./src/ResponseInterface.php)
-* [MessageInterface](./src/MessageInterface.php)
+* [RequestInterface](https://github.com/apioo/psx-http/blob/master/src/RequestInterface.php)
+* [ResponseInterface](https://github.com/apioo/psx-http/blob/master/src/ResponseInterface.php)
+* [MessageInterface](https://github.com/apioo/psx-http/blob/master/src/MessageInterface.php)
 
 ### HTTP Body
 
-* [StreamInterface](./src/StreamInterface.php)
+* [StreamInterface](https://github.com/apioo/psx-http/blob/master/src/StreamInterface.php)
 
 ### HTTP Middleware
 
-* [FilterInterface](./src/FilterInterface.php)
-* [FilterChainInterface](./src/FilterChainInterface.php)
+* [FilterInterface](https://github.com/apioo/psx-http/blob/master/src/FilterInterface.php)
+* [FilterChainInterface](https://github.com/apioo/psx-http/blob/master/src/FilterChainInterface.php)
 
 ### HTTP Client
 
-* [ClientInterface](./src/Client/ClientInterface.php)
-* [OptionsInterface](./src/Client/OptionsInterface.php)
+* [ClientInterface](https://github.com/apioo/psx-http/blob/master/src/Client/ClientInterface.php)
+* [OptionsInterface](https://github.com/apioo/psx-http/blob/master/src/Client/OptionsInterface.php)
 
 ## Examples
 
