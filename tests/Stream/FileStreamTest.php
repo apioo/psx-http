@@ -32,7 +32,7 @@ use PSX\Http\Stream\StringStream;
  */
 class FileStreamTest extends StreamTestCase
 {
-    protected function getStream()
+    protected function getStream(): FileStream
     {
         return new FileStream(new StringStream('foobar'), '/tmp/tmp_file', 'name', 'text/plain', 6, UPLOAD_ERR_OK);
     }

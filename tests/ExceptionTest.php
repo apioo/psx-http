@@ -21,6 +21,8 @@
 namespace PSX\Http\Tests;
 
 use PHPUnit\Framework\TestCase;
+use PSX\Http\Exception;
+use ReflectionClass;
 
 /**
  * ExceptionTest
@@ -33,31 +35,31 @@ class ExceptionTest extends TestCase
 {
     public function testBadRequestException()
     {
-        $this->assertRedirection(301, 'PSX\Http\Exception\MovedPermanentlyException', array('http://google.com'));
-        $this->assertRedirection(302, 'PSX\Http\Exception\FoundException', array('http://google.com'));
-        $this->assertRedirection(303, 'PSX\Http\Exception\SeeOtherException', array('http://google.com'));
-        $this->assertRedirection(304, 'PSX\Http\Exception\NotModifiedException');
+        $this->assertRedirection(301, Exception\MovedPermanentlyException::class, array('http://google.com'));
+        $this->assertRedirection(302, Exception\FoundException::class, array('http://google.com'));
+        $this->assertRedirection(303, Exception\SeeOtherException::class, array('http://google.com'));
+        $this->assertRedirection(304, Exception\NotModifiedException::class);
 
-        $this->assertClientError(400, 'PSX\Http\Exception\BadRequestException', array('foo'));
-        $this->assertClientError(401, 'PSX\Http\Exception\UnauthorizedException', array('foo', 'Basic', array('realm' => 'psx')));
-        $this->assertClientError(403, 'PSX\Http\Exception\ForbiddenException', array('foo'));
-        $this->assertClientError(404, 'PSX\Http\Exception\NotFoundException', array('foo'));
-        $this->assertClientError(405, 'PSX\Http\Exception\MethodNotAllowedException', array('foo', array('GET', 'POST')));
-        $this->assertClientError(406, 'PSX\Http\Exception\NotAcceptableException', array('foo'));
-        $this->assertClientError(409, 'PSX\Http\Exception\ConflictException', array('foo'));
-        $this->assertClientError(410, 'PSX\Http\Exception\GoneException', array('foo'));
-        $this->assertClientError(415, 'PSX\Http\Exception\UnsupportedMediaTypeException', array('foo'));
+        $this->assertClientError(400, Exception\BadRequestException::class, array('foo'));
+        $this->assertClientError(401, Exception\UnauthorizedException::class, array('foo', 'Basic', array('realm' => 'psx')));
+        $this->assertClientError(403, Exception\ForbiddenException::class, array('foo'));
+        $this->assertClientError(404, Exception\NotFoundException::class, array('foo'));
+        $this->assertClientError(405, Exception\MethodNotAllowedException::class, array('foo', array('GET', 'POST')));
+        $this->assertClientError(406, Exception\NotAcceptableException::class, array('foo'));
+        $this->assertClientError(409, Exception\ConflictException::class, array('foo'));
+        $this->assertClientError(410, Exception\GoneException::class, array('foo'));
+        $this->assertClientError(415, Exception\UnsupportedMediaTypeException::class, array('foo'));
 
-        $this->assertServerError(500, 'PSX\Http\Exception\InternalServerErrorException', array('foo'));
-        $this->assertServerError(501, 'PSX\Http\Exception\NotImplementedException', array('foo'));
-        $this->assertServerError(503, 'PSX\Http\Exception\ServiceUnavailableException', array('foo'));
+        $this->assertServerError(500, Exception\InternalServerErrorException::class, array('foo'));
+        $this->assertServerError(501, Exception\NotImplementedException::class, array('foo'));
+        $this->assertServerError(503, Exception\ServiceUnavailableException::class, array('foo'));
     }
 
-    protected function assertRedirection($statusCode, $className, array $arguments = array())
+    protected function assertRedirection($statusCode, $className, array $arguments = array()): void
     {
         $e = $this->getException($className, $arguments);
 
-        $this->assertInstanceOf('PSX\Http\Exception\RedirectionException', $e);
+        $this->assertInstanceOf(Exception\RedirectionException::class, $e);
         $this->assertGreaterThanOrEqual(300, $e->getStatusCode());
         $this->assertLessThan(400, $e->getStatusCode());
         $this->assertEquals($statusCode, $e->getStatusCode());
@@ -67,28 +69,30 @@ class ExceptionTest extends TestCase
         }
     }
 
-    protected function assertClientError($statusCode, $className, array $arguments = array())
+    protected function assertClientError($statusCode, $className, array $arguments = array()): void
     {
         $e = $this->getException($className, $arguments);
 
-        $this->assertInstanceOf('PSX\Http\Exception\ClientErrorException', $e);
+        $this->assertInstanceOf(Exception\ClientErrorException::class, $e);
         $this->assertGreaterThanOrEqual(400, $e->getStatusCode());
         $this->assertLessThan(500, $e->getStatusCode());
         $this->assertEquals($statusCode, $e->getStatusCode());
 
         if ($statusCode == 401) {
+            $this->assertInstanceOf(Exception\UnauthorizedException::class, $e);
             $this->assertEquals('Basic', $e->getType());
             $this->assertEquals(array('realm' => 'psx'), $e->getParameters());
         } elseif ($statusCode == 405) {
+            $this->assertInstanceOf(Exception\MethodNotAllowedException::class, $e);
             $this->assertEquals(array('GET', 'POST'), $e->getAllowedMethods());
         }
     }
 
-    protected function assertServerError($statusCode, $className, array $arguments = array())
+    protected function assertServerError($statusCode, $className, array $arguments = array()): void
     {
         $e = $this->getException($className, $arguments);
 
-        $this->assertInstanceOf('PSX\Http\Exception\ServerErrorException', $e);
+        $this->assertInstanceOf(Exception\ServerErrorException::class, $e);
         $this->assertGreaterThanOrEqual(500, $e->getStatusCode());
         $this->assertLessThan(600, $e->getStatusCode());
         $this->assertEquals($statusCode, $e->getStatusCode());
@@ -96,7 +100,7 @@ class ExceptionTest extends TestCase
 
     protected function getException($className, array $arguments = array())
     {
-        $class     = new \ReflectionClass($className);
+        $class     = new ReflectionClass($className);
         $exception = $class->newInstanceArgs($arguments);
 
         if (!$exception instanceof \Exception) {

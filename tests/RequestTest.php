@@ -50,11 +50,11 @@ class RequestTest extends TestCase
     {
         $request = new Request(Url::parse('http://127.0.0.1'), 'GET');
 
-        $this->assertEquals('http://127.0.0.1', $request->getUri()->toString());
+        $this->assertEquals('http://127.0.0.1', (string) $request->getUri());
 
         $request->setUri(Url::parse('http://127.0.0.1/foo'));
 
-        $this->assertEquals('http://127.0.0.1/foo', $request->getUri()->toString());
+        $this->assertEquals('http://127.0.0.1/foo', (string) $request->getUri());
     }
 
     public function testToString()

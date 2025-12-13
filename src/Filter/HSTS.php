@@ -34,16 +34,11 @@ use PSX\Http\ResponseInterface;
  */
 class HSTS implements FilterInterface
 {
-    const INCLUDE_SUB_DOMAINS = 1;
-    const PRELOAD = 2;
+    public const INCLUDE_SUB_DOMAINS = 1;
+    public const PRELOAD = 2;
 
-    private ?int $maxAge;
-    private ?int $mode;
-
-    public function __construct(int $maxAge, ?int $mode = null)
+    public function __construct(private int $maxAge, private ?int $mode = null)
     {
-        $this->maxAge = $maxAge;
-        $this->mode   = $mode;
     }
 
     public function handle(RequestInterface $request, ResponseInterface $response, FilterChainInterface $filterChain): void

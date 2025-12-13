@@ -20,6 +20,7 @@
 
 namespace PSX\Http\Tests\Exception;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use PSX\Http\Exception\ClientErrorException;
 use PSX\Http\Exception\FoundException;
@@ -41,9 +42,7 @@ use PSX\Http\Response;
  */
 class ExceptionThrowerTest extends TestCase
 {
-    /**
-     * @dataProvider redirectionCodeProvider
-     */
+    #[DataProvider('redirectionCodeProvider')]
     public function testThrowOnRedirection($statusCode)
     {
         $this->expectException(RedirectionException::class);
@@ -51,16 +50,14 @@ class ExceptionThrowerTest extends TestCase
         ExceptionThrower::throwOnRedirection(new Response($statusCode));
     }
 
-    public function redirectionCodeProvider(): array
+    public static function redirectionCodeProvider(): array
     {
-        return $this->getCodes(function($code){
+        return self::getCodes(function($code){
             return $code >= 300 && $code < 400;
         });
     }
 
-    /**
-     * @dataProvider noRedirectionCodeProvider
-     */
+    #[DataProvider('noRedirectionCodeProvider')]
     public function testThrowOnRedirectionNoRedirection($statusCode)
     {
         ExceptionThrower::throwOnRedirection(new Response($statusCode));
@@ -68,9 +65,9 @@ class ExceptionThrowerTest extends TestCase
         $this->assertTrue($statusCode >= 100 && $statusCode < 600);
     }
 
-    public function noRedirectionCodeProvider(): array
+    public static function noRedirectionCodeProvider(): array
     {
-        return $this->getCodes(function($code){
+        return self::getCodes(function($code){
             return !($code >= 300 && $code < 400);
         });
     }
@@ -86,9 +83,7 @@ class ExceptionThrowerTest extends TestCase
         }
     }
 
-    /**
-     * @dataProvider clientErrorCodeProvider
-     */
+    #[DataProvider('clientErrorCodeProvider')]
     public function testThrowOnClientError($statusCode)
     {
         $this->expectException(ClientErrorException::class);
@@ -96,16 +91,14 @@ class ExceptionThrowerTest extends TestCase
         ExceptionThrower::throwOnClientError(new Response($statusCode));
     }
 
-    public function clientErrorCodeProvider(): array
+    public static function clientErrorCodeProvider(): array
     {
-        return $this->getCodes(function($code){
+        return self::getCodes(function($code){
             return $code >= 400 && $code < 500;
         });
     }
 
-    /**
-     * @dataProvider noClientErrorCodeProvider
-     */
+    #[DataProvider('noClientErrorCodeProvider')]
     public function testThrowOnClientErrorNoClientError($statusCode)
     {
         ExceptionThrower::throwOnClientError(new Response($statusCode));
@@ -113,9 +106,9 @@ class ExceptionThrowerTest extends TestCase
         $this->assertTrue($statusCode >= 100 && $statusCode < 600);
     }
 
-    public function noClientErrorCodeProvider(): array
+    public static function noClientErrorCodeProvider(): array
     {
-        return $this->getCodes(function($code){
+        return self::getCodes(function($code){
             return !($code >= 400 && $code < 500);
         });
     }
@@ -143,9 +136,7 @@ class ExceptionThrowerTest extends TestCase
         }
     }
 
-    /**
-     * @dataProvider serverErrorCodeProvider
-     */
+    #[DataProvider('serverErrorCodeProvider')]
     public function testThrowOnServerError($statusCode)
     {
         $this->expectException(ServerErrorException::class);
@@ -153,16 +144,14 @@ class ExceptionThrowerTest extends TestCase
         ExceptionThrower::throwOnServerError(new Response($statusCode));
     }
 
-    public function serverErrorCodeProvider(): array
+    public static function serverErrorCodeProvider(): array
     {
-        return $this->getCodes(function($code){
+        return self::getCodes(function($code){
             return $code >= 500 && $code < 600;
         });
     }
 
-    /**
-     * @dataProvider noServerErrorCodeProvider
-     */
+    #[DataProvider('noServerErrorCodeProvider')]
     public function testThrowOnServerErrorNoServerError($statusCode)
     {
         ExceptionThrower::throwOnServerError(new Response($statusCode));
@@ -170,16 +159,14 @@ class ExceptionThrowerTest extends TestCase
         $this->assertTrue($statusCode >= 100 && $statusCode < 600);
     }
 
-    public function noServerErrorCodeProvider(): array
+    public static function noServerErrorCodeProvider(): array
     {
-        return $this->getCodes(function($code){
+        return self::getCodes(function($code){
             return !($code >= 500 && $code < 600);
         });
     }
 
-    /**
-     * @dataProvider errorCodeProvider
-     */
+    #[DataProvider('errorCodeProvider')]
     public function testThrowOnError($statusCode)
     {
         $this->expectException(StatusCodeException::class);
@@ -187,16 +174,14 @@ class ExceptionThrowerTest extends TestCase
         ExceptionThrower::throwOnError(new Response($statusCode));
     }
 
-    public function errorCodeProvider(): array
+    public static function errorCodeProvider(): array
     {
-        return $this->getCodes(function($code){
+        return self::getCodes(function($code){
             return $code >= 400 && $code < 600;
         });
     }
 
-    /**
-     * @dataProvider noErrorCodeProvider
-     */
+    #[DataProvider('noErrorCodeProvider')]
     public function testThrowOnErrorNoError($statusCode)
     {
         ExceptionThrower::throwOnError(new Response($statusCode));
@@ -204,14 +189,14 @@ class ExceptionThrowerTest extends TestCase
         $this->assertTrue($statusCode >= 100 && $statusCode < 600);
     }
 
-    public function noErrorCodeProvider(): array
+    public static function noErrorCodeProvider(): array
     {
-        return $this->getCodes(function($code){
+        return self::getCodes(function($code){
             return !(($code >= 400 && $code < 500) || ($code >= 500 && $code < 600));
         });
     }
 
-    private function getCodes(\Closure $filter): array
+    private static function getCodes(\Closure $filter): array
     {
         $codes = array_keys(Http::CODES);
         $codes = array_filter($codes, $filter);

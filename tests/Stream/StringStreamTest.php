@@ -31,7 +31,7 @@ use PSX\Http\Stream\StringStream;
  */
 class StringStreamTest extends StreamTestCase
 {
-    protected function getStream()
+    protected function getStream(): StringStream
     {
         return new StringStream('foobar');
     }

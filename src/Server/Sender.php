@@ -130,7 +130,7 @@ class Sender implements SenderInterface
                     break;
                 }
 
-                sleep(1);
+                usleep(1000);
             }
         } else {
             echo $body->__toString();

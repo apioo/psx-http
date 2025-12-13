@@ -20,6 +20,7 @@
 
 namespace PSX\Http\Tests\MediaType;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use PSX\Http\MediaType;
 
@@ -32,15 +33,13 @@ use PSX\Http\MediaType;
  */
 class JsonTest extends TestCase
 {
-    /**
-     * @dataProvider mediaTypeProvider
-     */
+    #[DataProvider('mediaTypeProvider')]
     public function testIsMediaType($mime, $expected)
     {
         $this->assertSame($expected, MediaType\Json::isMediaType(MediaType::parse($mime)));
     }
 
-    public function mediaTypeProvider()
+    public static function mediaTypeProvider(): array
     {
         return [
             ['application/json', true],

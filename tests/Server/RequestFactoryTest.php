@@ -20,6 +20,7 @@
 
 namespace PSX\Http\Tests\Server;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use PSX\Http\Server\RequestFactory;
 
@@ -34,9 +35,7 @@ use PSX\Http\Server\RequestFactory;
  */
 class RequestFactoryTest extends TestCase
 {
-    /**
-     * @dataProvider createRequestNoPathProvider
-     */
+    #[DataProvider('createRequestNoPathProvider')]
     public function testCreateRequestNoPath($uri, $server)
     {
         $factory = new RequestFactory('http://foo.com', $server);
@@ -45,7 +44,7 @@ class RequestFactoryTest extends TestCase
         $this->assertEquals($uri, (string) $request->getUri(), var_export($server, true));
     }
 
-    public function createRequestNoPathProvider()
+    public static function createRequestNoPathProvider(): array
     {
         return [
             ['http://foo.com/', ['REQUEST_URI' => null, 'SERVER_NAME' => 'foo.com']],
@@ -67,9 +66,7 @@ class RequestFactoryTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider createRequestNoProtocolNoPathProvider
-     */
+    #[DataProvider('createRequestNoProtocolNoPathProvider')]
     public function testCreateRequestNoProtocolNoPath($uri, $server)
     {
         $factory = new RequestFactory('//foo.com', $server);
@@ -78,7 +75,7 @@ class RequestFactoryTest extends TestCase
         $this->assertEquals($uri, (string) $request->getUri(), var_export($server, true));
     }
 
-    public function createRequestNoProtocolNoPathProvider()
+    public static function createRequestNoProtocolNoPathProvider(): array
     {
         return [
             ['http://foo.com/', ['REQUEST_URI' => null, 'SERVER_NAME' => 'foo.com']],
@@ -96,9 +93,7 @@ class RequestFactoryTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider createRequestPathProvider
-     */
+    #[DataProvider('createRequestPathProvider')]
     public function testCreateRequestPath($uri, $server)
     {
         $factory = new RequestFactory('http://foo.com/sub/folder', $server);
@@ -107,7 +102,7 @@ class RequestFactoryTest extends TestCase
         $this->assertEquals($uri, (string) $request->getUri(), var_export($server, true));
     }
 
-    public function createRequestPathProvider()
+    public static function createRequestPathProvider(): array
     {
         return [
             ['http://foo.com/', ['REQUEST_URI' => null, 'SERVER_NAME' => 'foo.com']],
@@ -144,9 +139,7 @@ class RequestFactoryTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider createRequestNoProtocolProvider
-     */
+    #[DataProvider('createRequestNoProtocolProvider')]
     public function testCreateRequestNoProtocol($uri, $server)
     {
         $factory = new RequestFactory('//foo.com', $server);
@@ -155,7 +148,7 @@ class RequestFactoryTest extends TestCase
         $this->assertEquals($uri, (string) $request->getUri(), var_export($server, true));
     }
 
-    public function createRequestNoProtocolProvider()
+    public static function createRequestNoProtocolProvider(): array
     {
         return [
             ['http://foo.com/', ['SERVER_NAME' => 'foo.com']],

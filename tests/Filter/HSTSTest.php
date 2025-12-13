@@ -20,6 +20,7 @@
 
 namespace PSX\Http\Tests\Filter;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PSX\Http\Filter\HSTS;
 use PSX\Http\Request;
 use PSX\Http\Response;
@@ -34,9 +35,7 @@ use PSX\Uri\Url;
  */
 class HSTSTest extends FilterTestCase
 {
-    /**
-     * @dataProvider hstsProvider
-     */
+    #[DataProvider('hstsProvider')]
     public function testHandle($maxAge, $mode, array $expectHeaders)
     {
         $request  = new Request(Url::parse('http://localhost'), 'GET', []);
@@ -48,7 +47,7 @@ class HSTSTest extends FilterTestCase
         $this->assertEquals($expectHeaders, $response->getHeaders());
     }
 
-    public function hstsProvider()
+    public static function hstsProvider(): array
     {
         return [
             [0, null, []],

@@ -31,7 +31,7 @@ use PSX\Http\Stream\LazyStream;
  */
 class LazyStreamTest extends StreamTestCase
 {
-    protected function getStream()
+    protected function getStream(): LazyStream
     {
         $file = __DIR__ . '/StreamTestLazy.txt';
         file_put_contents($file, 'foobar');

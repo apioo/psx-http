@@ -20,6 +20,7 @@
 
 namespace PSX\Http\Tests\Filter;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PSX\Http\Filter\CORS;
 use PSX\Http\Filter\FilterChain;
 use PSX\Http\Request;
@@ -35,9 +36,7 @@ use PSX\Uri\Url;
  */
 class CORSTest extends FilterTestCase
 {
-    /**
-     * @dataProvider corsProvider
-     */
+    #[DataProvider('corsProvider')]
     public function testHandle($allowOrigin, array $allowMethods, array $allowHeaders, $allowCredentials, $method, array $headers, array $expectHeaders)
     {
         $request  = new Request(Url::parse('http://localhost'), $method, $headers);
@@ -49,7 +48,7 @@ class CORSTest extends FilterTestCase
         $this->assertEquals($expectHeaders, $response->getHeaders());
     }
 
-    public function corsProvider()
+    public static function corsProvider(): array
     {
         $originTrue = function($origin) {
             return true;

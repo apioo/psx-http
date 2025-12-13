@@ -31,12 +31,17 @@ use PSX\Http\Stream\Stream;
  */
 class StreamWriteOnlyTest extends StreamTestCase
 {
-    protected function getStream()
+    protected function getStream(): Stream
     {
         $resource = fopen(__DIR__ . '/StreamTestWriteOnly.txt', 'w');
         fwrite($resource, 'foobar');
         rewind($resource);
 
         return new Stream($resource);
+    }
+
+    protected function expectStreamIsReadable(): bool
+    {
+        return false;
     }
 }

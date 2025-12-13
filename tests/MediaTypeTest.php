@@ -20,6 +20,7 @@
 
 namespace PSX\Http\Tests;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use PSX\Http\MediaType;
 
@@ -32,9 +33,7 @@ use PSX\Http\MediaType;
  */
 class MediaTypeTest extends TestCase
 {
-    /**
-     * @dataProvider mediaTypeProvider
-     */
+    #[DataProvider('mediaTypeProvider')]
     public function testParse($mime, $type, $subType, $quality, array $parameters)
     {
         $mediaType = MediaType::parse($mime);
@@ -46,7 +45,7 @@ class MediaTypeTest extends TestCase
         $this->assertEquals($parameters, $mediaType->getParameters());
     }
 
-    public function mediaTypeProvider()
+    public static function mediaTypeProvider(): array
     {
         return [
             ['application/xml', 'application', 'xml', 1, []],
@@ -122,9 +121,7 @@ class MediaTypeTest extends TestCase
         MediaType::parse('foo/bar');
     }
 
-    /**
-     * @dataProvider acceptHeaderProvider
-     */
+    #[DataProvider('acceptHeaderProvider')]
     public function testParseList($accept, $mediaTypeCount)
     {
         $mediaTypes = MediaType::parseList($accept);
@@ -132,7 +129,7 @@ class MediaTypeTest extends TestCase
         $this->assertEquals($mediaTypeCount, count($mediaTypes));
     }
 
-    public function acceptHeaderProvider()
+    public static function acceptHeaderProvider(): array
     {
         return [
             ['', 0],

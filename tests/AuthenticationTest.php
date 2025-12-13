@@ -20,6 +20,7 @@
 
 namespace PSX\Http\Tests;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use PSX\Http\Authentication;
 
@@ -32,15 +33,13 @@ use PSX\Http\Authentication;
  */
 class AuthenticationTest extends TestCase
 {
-    /**
-     * @dataProvider decodeParametersProvider
-     */
+    #[DataProvider('decodeParametersProvider')]
     public function testDecodeParameters($data, $expected)
     {
         $this->assertEquals($expected, Authentication::decodeParameters($data));
     }
 
-    public function decodeParametersProvider()
+    public static function decodeParametersProvider(): array
     {
         return [
             ['realm="http-auth@example.org", qop="auth", algorithm=SHA-256', ['realm' => 'http-auth@example.org', 'qop' => 'auth', 'algorithm' => 'SHA-256']],
@@ -50,15 +49,13 @@ class AuthenticationTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider encodeParametersProvider
-     */
+    #[DataProvider('encodeParametersProvider')]
     public function testEncodeParameters($data, $expected)
     {
         $this->assertEquals($expected, Authentication::encodeParameters($data));
     }
 
-    public function encodeParametersProvider()
+    public static function encodeParametersProvider(): array
     {
         return [
             [['realm' => 'http-auth@example.org', 'qop' => 'auth', 'algorithm' => 'SHA-256'], 'realm="http-auth@example.org", qop="auth", algorithm="SHA-256"'],

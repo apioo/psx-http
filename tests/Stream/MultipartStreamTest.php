@@ -31,7 +31,7 @@ use PSX\Http\Stream\MultipartStream;
  */
 class MultipartStreamTest extends StreamTestCase
 {
-    protected function getStream()
+    protected function getStream(): MultipartStream
     {
         $stream = new MultipartStream([], []);
         $stream->write('foobar');

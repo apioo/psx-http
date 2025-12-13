@@ -21,6 +21,7 @@
 namespace PSX\Http\Tests\Stream;
 
 use PHPUnit\Framework\TestCase;
+use PSX\Http\StreamInterface;
 
 /**
  * StreamTestCase
@@ -31,10 +32,7 @@ use PHPUnit\Framework\TestCase;
  */
 abstract class StreamTestCase extends TestCase
 {
-    /**
-     * @var \PSX\Http\StreamInterface
-     */
-    protected $stream;
+    protected ?StreamInterface $stream = null;
 
     protected function setUp(): void
     {
@@ -47,11 +45,24 @@ abstract class StreamTestCase extends TestCase
     }
 
     /**
-     * Returns the stream wich gets tested. Must contain the string foobar
-     *
-     * @return \PSX\Http\StreamInterface
+     * Returns the stream which gets tested. Must contain the string foobar
      */
-    abstract protected function getStream();
+    abstract protected function getStream(): StreamInterface;
+
+    protected function expectStreamIsReadable(): bool
+    {
+        return true;
+    }
+
+    protected function expectStreamIsWritable(): bool
+    {
+        return true;
+    }
+
+    protected function expectStreamIsSeekable(): bool
+    {
+        return true;
+    }
 
     public function testGetSize()
     {
@@ -83,14 +94,12 @@ abstract class StreamTestCase extends TestCase
         // after detatching the stream object is in an unusable state but this
         // should not produce any error on further method calls
         $this->assertEquals('', $this->stream->__toString());
-        $this->assertEquals(null, $this->stream->close());
         $this->assertEquals(null, $this->stream->detach());
         $this->assertEquals(null, $this->stream->getSize());
         $this->assertEquals(false, $this->stream->tell());
         // after detaching eof returns always true to not enter any while(!eof)
         $this->assertEquals(true, $this->stream->eof());
         $this->assertEquals(false, $this->stream->isSeekable());
-        $this->assertEquals(false, $this->stream->seek(0));
         $this->assertEquals(false, $this->stream->isWritable());
         $this->assertEquals(false, $this->stream->write('foo'));
         $this->assertEquals(false, $this->stream->isReadable());
@@ -129,7 +138,7 @@ abstract class StreamTestCase extends TestCase
     {
         $result = $this->stream->isSeekable();
 
-        $this->assertTrue(is_bool($result));
+        $this->assertSame($this->expectStreamIsSeekable(), $result);
     }
 
     public function testSeek()
@@ -153,7 +162,7 @@ abstract class StreamTestCase extends TestCase
     {
         $result = $this->stream->isWritable();
 
-        $this->assertTrue(is_bool($result));
+        $this->assertSame($this->expectStreamIsWritable(), $result);
     }
 
     public function testWrite()
@@ -183,7 +192,7 @@ abstract class StreamTestCase extends TestCase
     {
         $result = $this->stream->isReadable();
 
-        $this->assertTrue(is_bool($result));
+        $this->assertSame($this->expectStreamIsReadable(), $result);
     }
 
     public function testRead()

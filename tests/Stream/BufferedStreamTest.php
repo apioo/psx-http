@@ -32,7 +32,7 @@ use PSX\Http\Stream\Stream;
  */
 class BufferedStreamTest extends StreamTestCase
 {
-    protected function getStream()
+    protected function getStream(): BufferedStream
     {
         $resource = fopen('php://memory', 'r+');
         fwrite($resource, 'foobar');

@@ -31,7 +31,7 @@ use PSX\Http\Stream\Stream;
  */
 class StreamTest extends StreamTestCase
 {
-    protected function getStream()
+    protected function getStream(): Stream
     {
         $resource = fopen('php://memory', 'r+');
         fwrite($resource, 'foobar');
