@@ -35,6 +35,8 @@ class MediaType implements \JsonSerializable, \Stringable
         'application',
         'audio',
         'example',
+        'font',
+        'haptics',
         'image',
         'message',
         'model',
