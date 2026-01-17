@@ -97,4 +97,18 @@ class Http
         510 => 'Not Extended', // RFC2774
         511 => 'Network Authentication Required', // RFC6585
     ];
+
+    /**
+     * @see https://datatracker.ietf.org/doc/html/rfc2616#section-13.5.1
+     */
+    public const HOP_BY_HOP_HEADERS = [
+        'connection',
+        'keep-alive',
+        'proxy-authenticate',
+        'proxy-authorization',
+        'te',
+        'trailers',
+        'transfer-encoding',
+        'upgrade',
+    ];
 }
