@@ -47,6 +47,17 @@ class PsrFactoryTest extends TestCase
         $this->assertEquals('foobar', (string) $psrRequest->getBody());
     }
 
+    public function testToPsrServerRequest()
+    {
+        $request = new Request(Uri::parse('https://phpsx.org/foo?foo=bar'), 'POST', ['X-Custom' => 'test'], new StringStream('foobar'));
+        $psrRequest = (new PsrFactory())->toPsrServerRequest($request);
+
+        $this->assertEquals('POST', $psrRequest->getMethod());
+        $this->assertEquals('https://phpsx.org/foo?foo=bar', (string) $psrRequest->getUri());
+        $this->assertEquals('test', $psrRequest->getHeaderLine('X-Custom'));
+        $this->assertEquals('foobar', (string) $psrRequest->getBody());
+    }
+
     public function testFromPsrResponse()
     {
         $psrResponse = new PsrResponse(200, ['X-Custom' => 'test'], new StringStream('foobar'));

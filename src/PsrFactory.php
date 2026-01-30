@@ -39,6 +39,11 @@ class PsrFactory
         return new Psr7\Request($request->getMethod(), $request->getUri(), $request->getHeaders(), $request->getBody(), $request->getProtocolVersion() ?? '1.1');
     }
 
+    public function toPsrServerRequest(RequestInterface $request): PsrRequestInterface
+    {
+        return new Psr7\ServerRequest($request->getMethod(), $request->getUri(), $request->getHeaders(), $request->getBody(), $request->getProtocolVersion() ?? '1.1', $request->getAttributes());
+    }
+
     public function fromPsrResponse(PsrResponseInterface $response): ResponseInterface
     {
         return new Response($response->getStatusCode(), $response->getHeaders(), $response->getBody());
