@@ -22,8 +22,11 @@ namespace PSX\Http\Tests;
 
 use Nyholm\Psr7\Response as PsrResponse;
 use PHPUnit\Framework\TestCase;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use PSX\Http\PsrFactory;
 use PSX\Http\Request;
+use PSX\Http\ResponseInterface;
 use PSX\Http\Stream\StringStream;
 use PSX\Uri\Uri;
 
@@ -41,6 +44,7 @@ class PsrFactoryTest extends TestCase
         $request = new Request(Uri::parse('https://phpsx.org/foo?foo=bar'), 'POST', ['X-Custom' => 'test'], new StringStream('foobar'));
         $psrRequest = (new PsrFactory())->toPsrRequest($request);
 
+        $this->assertInstanceOf(RequestInterface::class, $psrRequest);
         $this->assertEquals('POST', $psrRequest->getMethod());
         $this->assertEquals('https://phpsx.org/foo?foo=bar', (string) $psrRequest->getUri());
         $this->assertEquals('test', $psrRequest->getHeaderLine('X-Custom'));
@@ -52,6 +56,7 @@ class PsrFactoryTest extends TestCase
         $request = new Request(Uri::parse('https://phpsx.org/foo?foo=bar'), 'POST', ['X-Custom' => 'test'], new StringStream('foobar'));
         $psrRequest = (new PsrFactory())->toPsrServerRequest($request);
 
+        $this->assertInstanceOf(ServerRequestInterface::class, $psrRequest);
         $this->assertEquals('POST', $psrRequest->getMethod());
         $this->assertEquals('https://phpsx.org/foo?foo=bar', (string) $psrRequest->getUri());
         $this->assertEquals('test', $psrRequest->getHeaderLine('X-Custom'));
@@ -63,6 +68,7 @@ class PsrFactoryTest extends TestCase
         $psrResponse = new PsrResponse(200, ['X-Custom' => 'test'], new StringStream('foobar'));
         $response = (new PsrFactory())->fromPsrResponse($psrResponse);
 
+        $this->assertInstanceOf(ResponseInterface::class, $response);
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals('test', $response->getHeader('X-Custom'));
         $this->assertEquals('foobar', (string) $response->getBody());

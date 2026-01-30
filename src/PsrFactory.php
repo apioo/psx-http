@@ -23,6 +23,7 @@ namespace PSX\Http;
 use Nyholm\Psr7;
 use Psr\Http\Message\RequestInterface as PsrRequestInterface;
 use Psr\Http\Message\ResponseInterface as PsrResponseInterface;
+use Psr\Http\Message\ServerRequestInterface as PsrServerRequestInterface;
 
 /**
  * Factory to convert incoming PSX requests to PSR and convert outgoing PSR responses to PSX.
@@ -39,7 +40,7 @@ class PsrFactory
         return new Psr7\Request($request->getMethod(), $request->getUri(), $request->getHeaders(), $request->getBody(), $request->getProtocolVersion() ?? '1.1');
     }
 
-    public function toPsrServerRequest(RequestInterface $request): PsrRequestInterface
+    public function toPsrServerRequest(RequestInterface $request): PsrServerRequestInterface
     {
         return new Psr7\ServerRequest($request->getMethod(), $request->getUri(), $request->getHeaders(), $request->getBody(), $request->getProtocolVersion() ?? '1.1', $request->getAttributes());
     }
