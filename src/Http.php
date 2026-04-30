@@ -111,4 +111,15 @@ class Http
         'transfer-encoding',
         'upgrade',
     ];
+
+    public const CORS_HEADERS = [
+        'access-control-allow-credentials',
+        'access-control-allow-headers',
+        'access-control-allow-methods',
+        'access-control-allow-origin',
+        'access-control-expose-headers',
+        'access-control-max-age',
+        'access-control-request-headers',
+        'access-control-request-method',
+    ];
 }
