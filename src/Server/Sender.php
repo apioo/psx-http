@@ -66,17 +66,12 @@ class Sender implements SenderInterface
 
     private function sendStatusLine(ResponseInterface $response): void
     {
-        $scheme = $response->getProtocolVersion();
-        if (empty($scheme)) {
-            $scheme = 'HTTP/1.1';
-        }
-
         $code = $response->getStatusCode();
         if (!isset(Http::CODES[$code])) {
             $code = 200;
         }
 
-        header($scheme . ' ' . $code . ' ' . Http::CODES[$code]);
+        http_response_code($code);
     }
 
     private function sendHeaders(ResponseInterface $response): void
